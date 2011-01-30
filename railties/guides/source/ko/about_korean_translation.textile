@@ -1,0 +1,35 @@
+h2. Ruby on Rails 가이드 번역을 위한 한국어 사전
+
+이 문서는 "Ruby on Rails Guides":http://guides.rubyonrails.org/ 번역을 위해 한국어 용어 사전입니다.
+
+endprologue.
+
+h3. English - Korean 용어 사전
+
+의미 전달을 위해 병행 표기하는 단어들도 있습니다.
+
+|_. 영문단어 |_. 한글단어 |
+| Guides | 가이드 |
+| Rails | 레일즈 |
+| Active Record | 엑티브 레코드 |
+| Migration | 마이그레이션 |
+| Validations | Validation(유효성 검증) |
+| Callback | Callback(콜백) |
+| Association | Association(관계) |
+| Layout | 레이아웃 |
+| Rendering | 랜더링 |
+| Action Controller | 액션 컨트롤러 |
+| Action View | 액션 뷰 |
+| Redirect(ing) | 리다이렉트 |
+| block | 블록 |
+| partial | partial |
+| form | 폼 |
+| helper | 핼퍼 |
+| built-in | 내장된 |
+| Controller | 컨트롤러 |
+| Model | 모델 |
+
+h3. Translation 진행 상태
+
+
+| index | 진행중 |
