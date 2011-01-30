@@ -3,7 +3,7 @@ Ruby on Rails 가이드
 <% end %>
 
 <% content_for :header_section do %>
-<h2>Ruby on Rails 가이드 (<%= ENV['RAILS_VERSION'] || 'edge' %>)</h2>
+<h2>루비 온 레일즈 가이드 (<%= ENV['RAILS_VERSION'] || 'edge' %>)</h2>
 
 <% if @edge %>
 <p>
@@ -30,8 +30,8 @@ Ruby on Rails 가이드
 <% content_for :index_section do %>
 <div id="subCol">
   <dl>
-    <dd class="warning">레일즈 가이든는 <a href="http://hackfest.rubyonrails.org">Guides hackfest</a> 결과의 일환이고 진행중입니다.</dd>
-    <dd class="work-in-progress">이 아이콘이 표시된 곳은 현재 '작성중'이라는 걸 의미하니다. 진행 중인 문서도 유용하겠지만, 불완전한 정보나 간혹, 잘못된 내용을 포함할 수 있습니다. 내용을 리뷰하고 저자에게 코멘트나 수정 제안으로 기여 할 수 있습니다.</dd>
+    <dd class="warning">레일즈 가이든는 <a href="http://hackfest.rubyonrails.org">Guides hackfest</a> 결과의 일환이며 진행 중입니다.</dd>
+    <dd class="work-in-progress">이 아이콘이 표시된 곳은 현재 '작성중'이라는 걸 의미하니다. 진행 중인 문서 역시 유용하지만, 불완전한 정보나 간혹, 잘못된 내용을 포함할 수 있습니다. 내용을 리뷰하고 저자에게 코멘트나 수정 제안으로 기여 할 수 있습니다.</dd>
   </dl>
 </div>
 <% end %>
@@ -67,7 +67,7 @@ Ruby on Rails 가이드
 <h3>뷰</h3>
 
 <dl>
-<%= guide("레일증에서 레이아웃(Layouts)과 렌더링(Rendering)", 'layouts_and_rendering.html') do %>
+<%= guide("레이아웃(Layouts)과 렌더링(Rendering)", 'layouts_and_rendering.html') do %>
   <p>이 가이드는 액션 컨트롤러와 액션 뷰의 레이아웃 기본 요소를 기술합니다. (랜더링과 리다이렉트, content_for 블록과 partial 활용을 포함합니다.)</p>
 <% end %>
 
@@ -79,91 +79,89 @@ Ruby on Rails 가이드
 <h3>컨트롤러</h3>
 
 <dl>
-<%= guide("Action Controller Overview", 'action_controller_overview.html') do %>
-  <p>This guide covers how controllers work and how they fit into the request cycle in your application. It includes sessions, filters, and cookies, data streaming, and dealing with exceptions raised by a request, among other topics.</p>
+<%= guide("액션 컨트롤러 둘러보기", 'action_controller_overview.html') do %>
+  <p>이 가이드는 어플리케이션에서 컨트롤러가 웹요청에 대하여 어떻게 동작하는지 기술합니다. 세션, 필터, 쿠키 데이터 스트리밍과 예외 발생관련 내용을 포함합니다.  </p>
 <% end %>
 
-<%= guide("Rails Routing from the Outside In", 'routing.html') do %>
-  <p>This guide covers the user-facing features of Rails routing. If you want to understand how to use routing in your own Rails applications, start here.</p>
-<% end %>
-</dl>
-
-<h3>Digging Deeper</h3>
-
-<dl>
-
-<%= guide("Active Support Core Extensions", 'active_support_core_extensions.html') do %>
-  <p>This guide documents the Ruby core extensions defined in Active Support.</p>
-<% end %>
-
-<%= guide("Rails Internationalization API", 'i18n.html') do %>
-  <p>This guide covers how to add internationalization to your applications. Your application will be able to translate content to different languages, change pluralization rules, use correct date formats for each country and so on.</p>
-<% end %>
-
-<%= guide("Action Mailer Basics", 'action_mailer_basics.html', :work_in_progress => true) do %>
-  <p>This guide describes how to use Action Mailer to send and receive emails.</p>
-<% end %>
-
-<%= guide("Testing Rails Applications", 'testing.html', :work_in_progress => true) do %>
-  <p>This is a rather comprehensive guide to doing both unit and functional tests in Rails. It covers everything from &quot;What is a test?&quot; to the testing APIs. Enjoy.</p>
-<% end %>
-
-<%= guide("Securing Rails Applications", 'security.html') do %>
-  <p>This guide describes common security problems in web applications and how to avoid them with Rails.</p>
-<% end %>
-
-<%= guide("Debugging Rails Applications", 'debugging_rails_applications.html') do %>
-  <p>This guide describes how to debug Rails applications. It covers the different ways of achieving this and how to understand what is happening "behind the scenes" of your code.</p>
-<% end %>
-
-<%= guide("Performance Testing Rails Applications", 'performance_testing.html') do %>
-  <p>This guide covers the various ways of performance testing a Ruby on Rails application.</p>
-<% end %>
-
-<%= guide("Configuring Rails Applications", 'configuring.html') do %>
-  <p>This guide covers the basic configuration settings for a Rails application.</p>
-<% end %>
-
-<%= guide("Rails Command Line Tools and Rake tasks", 'command_line.html', :work_in_progress => true) do %>
-  <p>This guide covers the command line tools and rake tasks provided by Rails.</p>
-<% end %>
-
-<%= guide("Caching with Rails", 'caching_with_rails.html', :work_in_progress => true) do %>
-  <p>Various caching techniques provided by Rails.</p>
+<%= guide("외부 요청에 대한 레일즈 라우팅", 'routing.html') do %>
+  <p>이 가이드는 고객이 접하는 레일즈 라우팅에 대한 내용을 기술합니다. 라우팅의 사용 방법을 알려면 이 가이드 부터 보세요.</p>
 <% end %>
 </dl>
 
-<h3>Extending Rails</h3>
+<h3>심화 내용</h3>
 
 <dl>
-  <%= guide("The Basics of Creating Rails Plugins", 'plugins.html', :work_in_progress => true) do %>
-    <p>This guide covers how to build a plugin to extend the functionality of Rails.</p>
+
+<%= guide("엑티브 서포트(Active Support) 확장(Core Extensions)", 'active_support_core_extensions.html') do %>
+  <p>이 가이드는 액티브 서포트에서 정의된 루비 확장에 대한 문서입니다. </p>
+<% end %>
+
+<%= guide("레일즈 국제화I(nternationalization) API", 'i18n.html') do %>
+  <p>이 가이드는 국제화 지원에 해단 내용을 다루고 있씁니다. 다른 언어의 지원과 복수형에 대한 규칙, 그리고 국가별 날짜/시간 포멧 등을 포함합니다.</p>
+<% end %>
+
+<%= guide("액션 메일러의 기본", 'action_mailer_basics.html', :work_in_progress => true) do %>
+  <p>이 가이드는 액션 메일러를 이용해서 메일을 주고 받는 방법을 다룹니다.</p>
+<% end %>
+
+<%= guide("레일즈 어플리케이션 테스트하기", 'testing.html', :work_in_progress => true) do %>
+  <p>이 가이드는 레일즈에서 더 이해하기 쉬운 유닛 테스트와 기능 테스트를 안내합니다. 이 글은 &quot;테스트란 무엇인가?&quot; 부터 테스트 관련 API까지의 모든것을 다룹니다.</p>
+<% end %>
+
+<%= guide("레일즈 어플리케이션의 보안", 'security.html') do %>
+  <p>이 가이드는 웹 어플리케이션에서 일반적인 보안 문제와 이를 레일즈에서 피하는 방법을 안내합니다.</p>
+<% end %>
+
+<%= guide("레일즈 어플리케이션 디버깅", 'debugging_rails_applications.html') do %>
+  <p>이 가이드는 레일즈 어플리케이션의 디버깅을 기술합니다. 이 문서는 몇가지 다른 방법과 여러분 코드의 "뒤편에서" 동작하는 방법을 다룹니다.</p>
+<% end %>
+
+<%= guide("레일즈 어플리케이션 성능 테스트하기", 'performance_testing.html') do %>
+  <p>이 가이드는 루비 온 레일즈 어플리케이션 상에서 다양한 성능 측정 방법을 다룹니다.</p>
+<% end %>
+
+<%= guide("레일즈 어플리케이션 설정", 'configuring.html') do %>
+  <p>이 문서는 레일즈 어플리케이션의 기본 설정에 대해 기술합니다.</p>
+<% end %>
+
+<%= guide("레일즈 커멘드라인 도구와 Rake 테스크", 'command_line.html', :work_in_progress => true) do %>
+  <p>이 문서는 레일즈가 제공하는 커멘드라인 도구와 rake 테스크를 다룹니다.</p>
+<% end %>
+
+<%= guide("레일즈를 이용한 캐싱", 'caching_with_rails.html', :work_in_progress => true) do %>
+  <p>레일즈 상에서 다양한 캐싱 기술</p>
+<% end %>
+</dl>
+
+<h3>레일즈 확장하기</h3>
+
+<dl>
+  <%= guide("레일즈 플러그인 작성의 기본", 'plugins.html', :work_in_progress => true) do %>
+    <p>이 가이드는 레일즈의 기능을 확장하는 플러그인 제작을 다룹니다.</p>
   <% end %>
 
-  <%= guide("Rails on Rack", 'rails_on_rack.html') do %>
-    <p>This guide covers Rails integration with Rack and interfacing with other Rack components.</p>
+  <%= guide("렉 위의 레일즈(Rails on Rack)", 'rails_on_rack.html') do %>
+    <p>이 문서는 렉을 이용한 레일즈 통합, 다른 렉 컴포넌트와 연결을 다룹니다.</p>
   <% end %>
 
-  <%= guide("Creating and Customizing Rails Generators", 'generators.html') do %>
-    <p>This guide covers the process of adding a brand new generator to your extension
-      or providing an alternative to an element of a built-in Rails generator (such as
-      providing alternative test stubs for the scaffold generator).</p>
+  <%= guide("레일즈 제너레이터(Generator) 제작과 수정", 'generators.html') do %>
+    <p>이 가이드는 새로운 제너레이터(Generator)를 추가하거나, 레일즈에 내장된 제너레이터를 교체하는 내용을 다룹니다.(예, scaffold(발판) 제너레이터의 테스트 부분을 교체하는 것)</p>
   <% end %>
 </dl>
 
-<h3>Contributing to Ruby on Rails</h3>
+<h3>루비 온 레이즈에 기여하기</h3>
 
 <dl>
-  <%= guide("Contributing to Ruby on Rails", 'contributing_to_ruby_on_rails.html') do %>
-    <p>Rails is not &quot;somebody else's framework.&quot; This guide covers a variety of ways that you can get involved in the ongoing development of Rails.</p>
+  <%= guide("루비 온 레이즈에 기여하기", 'contributing_to_ruby_on_rails.html') do %>
+    <p>레일즈는 &quot;다른 프레임워크와&quot; 다르지 않습니다. 이 가이드는 여러분이 레일즈 개발에 도움을 줄수 있는 다양한 방법들을 기술합니다. </p>
   <% end %>
 
-  <%= guide('API Documentation Guidelines', 'api_documentation_guidelines.html') do %>
-    <p>This guide documents the Ruby on Rails API documentation guidelines.</p>
+  <%= guide('API 문서 가이드라인', 'api_documentation_guidelines.html') do %>
+    <p>이 가이드는 루비 온 레일즈의 API 문서화 가이드 라인입니다.</p>
   <% end %>
 
-  <%= guide('Ruby on Rails Guides Guidelines', 'ruby_on_rails_guides_guidelines.html') do %>
-    <p>This guide documents the Ruby on Rails guides guidelines.</p>
+  <%= guide('루비 온 레일즈 가이드에 대한 가이드라인', 'ruby_on_rails_guides_guidelines.html') do %>
+    <p>이 가이드는 루비 온 레일즈 가이드에 대한 가이드라인입니다.</p>
   <% end %>
 </dl>
 
