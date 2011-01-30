@@ -4,20 +4,21 @@ h2. Ruby on Rails 가이드 번역을 위한 한국어 사전
 
 endprologue.
 
-h3. English - Korean 용어 사전
+h3(#word-dict). 영어 - 한국어 용어 사전
 
 의미 전달을 위해 병행 표기하는 단어들도 있습니다.
 
 |_. 영문단어 |_. 한글단어 |
 | Guides | 가이드 |
 | Rails | 레일즈 |
+| Ruby on Rails | 루비 온 레일즈 |
 | Active Record | 엑티브 레코드 |
 | Migration | 마이그레이션 |
 | Validations | Validation(유효성 검증) |
 | Callback | Callback(콜백) |
 | Association | Association(관계) |
 | Layout | 레이아웃 |
-| Rendering | 랜더링 |
+| Rendering | 렌더링 |
 | Action Controller | 액션 컨트롤러 |
 | Action View | 액션 뷰 |
 | Redirect(ing) | 리다이렉트 |
@@ -28,8 +29,15 @@ h3. English - Korean 용어 사전
 | built-in | 내장된 |
 | Controller | 컨트롤러 |
 | Model | 모델 |
+| Active Support | 엑티브 서포트 |
+| Action Mailer | 엑션 메일(메일러) |
+| routing | 라우팅 |
+| Generator | 제너레이터(Generator) |
+| RubyGems | 루비잼 |
+| Framework | 프레임워크 |
+| User Interface | 유저 인터페이스  |
 
 h3. Translation 진행 상태
 
 
-| index | 진행중 |
+| getting_started | 진행중 |

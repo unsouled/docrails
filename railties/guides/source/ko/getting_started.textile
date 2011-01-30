@@ -1,68 +1,68 @@
-h2. Getting Started with Rails
+h2. 레일즈 시작하기
 
-This guide covers getting up and running with Ruby on Rails. After reading it, you should be familiar with:
+이 가이드는 루비 온 레일즈를 설치, 실행을 다룹니다. 이 문서를 읽고나면 여러분은 다음 내용을 알 수 있습니다.
 
-* Installing Rails, creating a new Rails application, and connecting your application to a database
-* The general layout of a Rails application
-* The basic principles of MVC (Model, View Controller) and RESTful design
-* How to quickly generate the starting pieces of a Rails application.
+* 레일즈 설치, 새로운 레일즈 어플리케이션 만들기, 데이터베이스 연결하기
+* 레일즈 어플리케이션의 일반적인 레이아웃
+* MVC(모델, 뷰, 컨트롤러)와 RESTful 디자인에 대한 기본원리
+* 레일즈 어플리케이션 시작 요소 빨리 만드는 방법
 
 endprologue.
 
-WARNING. This Guide is based on Rails 3.0. Some of the code shown here will not work in earlier versions of Rails.
+WARNING. 이 가이드는 레일즈 3.0에 기초합니다. 기존 버전의 레일즈에서는 이 문서의 코드가 동작하지 않을 수 있습니다.
 
-h3. Guide Assumptions
+h3(#Rails-Assumptions). 가이드의 상황 설정
 
-This guide is designed for beginners who want to get started with a Rails application from scratch. It does not assume that you have any prior experience with Rails. However, to get the most out of it, you need to have some prerequisites installed:
+이 가이드는 레일즈 어플리케이션을 처음부터 시작하는 초보자 분들을 위해 구성되어 있습니다. 이 문서는 레일즈 경험이 없다고 가정합니다. 그렇지만, 반드시 미리 설치해야하는 요소는 있습니다.
 
-* The "Ruby":http://www.ruby-lang.org/en/downloads language version 1.8.7 or higher
+* "루비":http://www.ruby-lang.org/en/downloads 언어 버전 1.8.7 이상
 
-TIP: Note that Ruby 1.8.7 p248 and p249 have marshaling bugs that crash Rails 3.0. Ruby Enterprise Edition have these fixed since release 1.8.7-2010.02 though. On the 1.9 front, Ruby 1.9.1 is not usable because it outright segfaults on Rails 3.0, so if you want to use Rails 3 with 1.9.x jump on 1.9.2 for smooth sailing.
+TIP: 루비 버전 1.8.7 p248 과 p249 는 레일즈 3.0을 중단 시키는 마샬링 버그를 포함하고 있습니다. Ruby Enterprise Edition 은 1.8.7-2010.02 이후 버전부터 이 문제가 해결되었습니다. 루비 1.9 버전에서, 1.9.1 에서 레일즈 3.0을 사용하면 세그먼트 실패(segment fault)가 발생합니다. 그래서 레일즈 3.0과 1.9.x를 사용하려면 1.9.2를 이용하세요.
 
-* The "RubyGems":http://rubyforge.org/frs/?group_id=126 packaging system
-* A working installation of the "SQLite3 Database":http://www.sqlite.org
+* "루비잼(RubyGems)":http://rubyforge.org/frs/?group_id=126 패키징 시스템
+* "SQLite3 데이터베이스":http://www.sqlite.org
 
-Rails is a web application framework running on the Ruby programming language. If you have no prior experience with Ruby, you will find a very steep learning curve diving straight into Rails.  There are some good free resources on the internet for learning Ruby, including:
+레일즈는 루비 프로그램 언어에서 동작하는 웹 어플리케이션 프리임워크 입니다. 루비에 대한 경험이 없어도, 레일즈를 매우 빠르게 학습 할 수 있습니다. 아래는 인터넷에서 루비 언어를 배울 수 있는 좋은 무료 문서입니다.
 
 * "Mr. Neighborly's Humble Little Ruby Book":http://www.humblelittlerubybook.com
 * "Programming Ruby":http://www.ruby-doc.org/docs/ProgrammingRuby/
 * "Why's (Poignant) Guide to Ruby":http://mislav.uniqpath.com/poignant-guide/
 
-h3. What is Rails?
+h3(#What-is-Rails). 레일즈란 무엇인가?
 
-Rails is a web application development framework written in the Ruby language. It is designed to make programming web applications easier by making assumptions about what every developer needs to get started. It allows you to write less code while accomplishing more than many other languages and frameworks. Experienced Rails developers also report that it makes web application development more fun.
+레일즈는 루비 언어로 작성된 웹 어플리케이션 프레임워크 입니다. 레일즈는 모든 개발자가 개발을 시작 할때 필요한 초기 가정들을 지원하여 웹 어플리케이션 프로그래밍을 더 쉽게 만들수 있도록 설계 되어 있습니다. 레일즈는 다른 언어와 프레임웍에 비해서 더 적은 코드로 작성됩니다. 레일즈를 경험한 개발자들은 웹 어플리케이션 개발이 좀 더 재미있다고 이야기합니다.
 
-Rails is opinionated software. It makes the assumption that there is a "best" way to do things, and it's designed to encourage that way - and in some cases to discourage alternatives. If you learn "The Rails Way" you'll probably discover a tremendous increase in productivity. If you persist in bringing old habits from other languages to your Rails development, and trying to use patterns you learned elsewhere, you may have a less happy experience.
+레일즈는 주장이 확실한 소프트웨어 입니다. 레일즈는 "최고"의 방법을 가정하고, 그러한 방법을 격려하도록 설계되어 있습니다. 여러분이 "The Rails Way" 배우면, 아마도 굉장한 생산성 향상을 발견하실 겁니다. 다른 언어의 개발 습관들을 레일즈 개발시 고수하고 있다면, 아마 덜 행복한 경험을 하실 겁니다.
 
-The Rails philosophy includes several guiding principles:
+레일즈의 철학은 몇 가지 원칙을 포함합니다.
 
-* DRY - "Don't Repeat Yourself" - suggests that writing the same code over and over again is a bad thing.
-* Convention Over Configuration - means that Rails makes assumptions about what you want to do and how you're going to do it, rather than requiring you to specify every little thing through endless configuration files.
-* REST is the best pattern for web applications - organizing your application around resources and standard HTTP verbs is the fastest way to go.
+* DRY - "Don't Repeat Yourself (반복하지 말 것)" - 이 원칙은 같은 코드가 존재한다면 이는 나쁜 것임을 의미합니다.
+* 설정 보다 관습(Convention Over Configuration) - 이 원칙은 여러분이 원하는 기능들에 대해서 일정한 가정과 해결책을 제공하여 작은 단위의 끝없는 설정 파일을 줄여줍니다.
+* REST 는 웹 어플리케이션의 최고의 패턴이다.- 리소스와 표준 HTTP 요청(HTTP verb)에 적합한 웹 어플리케이션 개발은 가장 빠른 방법입니다. 
 
-h4. The MVC Architecture
+h4(#The-MVC-Architecture). MVC 아키텍쳐
 
-At the core of Rails is the Model, View, Controller architecture, usually just called MVC. MVC benefits include:
+레일즈의 중심에는 MVC 라고 불리는 모델, 뷰, 컨트롤러 아키텍쳐가 있습니다. MVC의 장점은 다음과 같습니다.
 
-* Isolation of business logic from the user interface
-* Ease of keeping code DRY
-* Making it clear where different types of code belong for easier maintenance
+* 유저 인터페이스와 비지니스 로직 분리
+* DRY 유지 편이성
+* 더 쉬운 유지보스를 위한 코드 관리 편이성
 
-h5. Models
+h5(#Models). 모델(Models)
 
-A model represents the information (data) of the application and the rules to manipulate that data. In the case of Rails, models are primarily used for managing the rules of interaction with a corresponding database table. In most cases, one table in your database will correspond to one model in your application. The bulk of your application's business logic will be concentrated in the models.
+모델은 어플리케이션의 정보(data)와 데이터를 다루는 규칙들을 의미합니다. 레일즈의 경우에, 모델은 주로 데이터베이스 데이블과 상호 작용하는 규칙들을 관리합니다. 대부분의 경우에 데이터베이스의 하나의 테이블은 어플리케이션의 하나의 모델과 대응합니다. 대부분의 비지니스 로직은 모델에 집중됩니다. 
 
-h5. Views
+h5(#Views). 뷰(Views)
 
-Views represent the user interface of your application. In Rails, views are often HTML files with embedded Ruby code that perform tasks related solely to the presentation of the data. Views handle the job of providing data to the web browser or other tool that is used to make requests from your application.
+뷰는 어플리케이션의 유저 인터페이스를 의미합니다. 레일즈에서 뷰는 주로 데이터 표현에 관련 된 루비 코드가 삽입되어 있는 HTML 파일입니다. 뷰는 데이터를 웹 브라우저나 다른 기기에게 데이터를 제공하는 일을 담당합니다.
 
-h5. Controllers
+h5(#Controllers). 컨트롤러(Controllers)
 
-Controllers provide the "glue" between models and views. In Rails, controllers are responsible for processing the incoming requests from the web browser, interrogating the models for data, and passing that data on to the views for presentation.
+컨트롤러는 모델과 뷰를 "연결"하는 역할을 합니다. 레일즈에서 컨트롤러는 웹브라우저의 요청 받아서, 모델을 통해서 데이터를 조회하여, 출력을 위해 뷰에게 데이터를 넘겨줍니다.
 
-h4. The Components of Rails
+h4(#The-Components-of-Rails). 레일즈의 컴포넌트
 
-Rails ships as many individual components.
+레일즈는 많은 개발 컴포넌트와 함께 제공됩니다.
 
 * Action Pack
   ** Action Controller
@@ -76,60 +76,60 @@ Rails ships as many individual components.
 * Railties
 
 
-h5. Action Pack
+h5(#Action-Pack). 액션 팩(Action Pack)
 
-Action Pack is a single gem that contains Action Controller, Action View and Action Dispatch.  The "VC" part of "MVC".
+액션 팩은 액션 컨트롤러과 액션 뷰를 포함하는 잼입니다. "MVC"에서 "VC"부분 입니다.
 
-h5. Action Controller
+h5(#Action Controller). 액션 컨트롤러(Action Controller)
 
-Action Controller is the component that manages the controllers in a Rails application. The Action Controller framework processes incoming requests to a Rails application, extracts parameters, and dispatches them to the intended action. Services provided by Action Controller include session management, template rendering, and redirect management.
+액션 컨트롤러는 레일즈 어플리케이션에서 컨트롤러를 담당하는 컴포넌트 입니다. 액션 컨트롤러 프레임워크는 레일즈 어플리케이션으로 들어오는 요청을 처리하고, 파라미터를 추출하고, 의도된 액션으로 보냅니다. 액션 컨트롤러는 세션(session)관리, 템플릿(template) 렌더링, 리다이렉트(redirect) 관리 서비스를 포함합니다.
 
-h5. Action View
+h5(#Action-View). 액션 뷰(Action View)
 
-Action View manages the views of your Rails application. It can create both HTML and XML output by default. Action View manages rendering templates, including nested and partial templates, and includes built-in AJAX support.
+액션 뷰는 레일즈 어플리케이션의 뷰를 관리합니다. 기본적으로 HTML, XML을 만들수 있습니다. 엑션 뷰는 템플릿 렌더링, Nested, Partial 템플릿, AJAX 지원을 관리합니다.
 
-h5. Action Dispatch
+h5(#Action-Dispatch). 액션 디스패치(Action Dispatch)
 
-Action Dispatch handles routing of web requests and dispatches them as you want, either to your application or any other Rack application.
+액션 디스패치는 웹의 요청을 받아들여서 원하는 곳으로 연결시킵니다.(다른 Rack 어플리케이션과 동일)
 
-h5. Action Mailer
+h5(#Action-Mailer). 액션 메일러(Action Mailer)
 
-Action Mailer is a framework for building e-mail services. You can use Action Mailer to receive and process incoming email and send simple plain text or complex multipart emails based on flexible templates.
+액션 메일러는 내장된 이메일 서비스 프레임워크 입니다. 엑션 메일러를 이용해서 유연한 템플릿을 기반으로 간단한 텍스트 부터 복잡한(multipart) 메일을 처리할수 있습니다.
 
-h5. Active Model
+h5(#Active-Model). 액티브 모델(Active Model)
 
-Active Model provides a defined interface between the Action Pack gem services and Object Relationship Mapping gems such as Active Record.  Active Model allows Rails to utilize other ORM frameworks in place of Active Record if your application needs this.
+엑티브 모델은 액션 팩(Action Pack) 서비스와 ORM(Object Relation Mapping) 잼과 인터페이스를 정의합니다.(ORM으로, 액티브 레코드(Active Record)가 있습니다.) 액티브 모델은 여러분이 원한다면, 다른 ORM 프레임워크를 사용할 수 있게 합니다.
 
-h5. Active Record
+h5(#Active-Record). 액티브 레코드(Active Record)
 
-Active Record is the base for the models in a Rails application. It provides database independence, basic CRUD functionality, advanced finding capabilities, and the ability to relate models to one another, among other services.
+엑티브 레코드는 레일즈 어플리케이션에서 모델의 기초입니다. 엑티브 레코드는 데이터베이스 추상화와 기본 CRUD 기능, 고급 검색 능력과 객체들 간의 관계를 정의하는 기능을 제공합니다.
 
-h5. Active Resource
+h5(#Active-Resource). 액티브 리소스(Active Resource)
 
-Active Resource provides a framework for managing the connection between business objects and RESTful web services. It implements a way to map web-based resources to local objects with CRUD semantics.
+액티브 리소스는 비지니스 객체와 RESTful 웹 서비스간의 연결 관리를 위한 프레임워크 입니다. 엑티브 리소스는 웹 기반의 자원을 로컬 객체의 CRUD 처럼 매핑시킵니다.
 
-h5. Active Support
+h5(#Active-Support). 액티브 서포트(Active Support)
 
-Active Support is an extensive collection of utility classes and standard Ruby library extensions that are used in Rails, both by the core code and by your applications.
+액티브 서포트는 레일즈가 사용하는  유틸리티 클레스와 표준 루비 확장 모음입니다. 
 
-h5. Railties
+h5(#Railties). 레일티즈(Railties)
 
-Railties is the core Rails code that builds new Rails applications and glues the various frameworks and plugins together in any Rails application.
+레일티즈는 새로운 레일즈 어플리케이션을 만들고 다양한 프레임워크와 플러그인을 이어주는 레일즈의 핵심 코드입니다.
 
 h4. REST
 
-Rest stands for Representational State Transfer and is the foundation of the RESTful architecture. This is generally considered to be Roy Fielding's doctoral thesis, "Architectural Styles and the Design of Network-based Software Architectures":http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm. While you can read through the thesis, REST in terms of Rails boils down to two main principles:
+REST는 Representational State Transfer 를 의미하고 RESTful 아키택쳐의 근간이 됩니다. REST는 Roy Fielding의 박사의 이론, "Architectural Styles and the Design of Network-based Software Architectures":http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm 에서 논의되었습니다. While you can read through the thesis, REST in terms of Rails boils down to two main principles:
 
-* Using resource identifiers such as URLs to represent resources.
-* Transferring representations of the state of that resource between system components.
+* 자원 표현을 위해 자원 식별자 사용 (가령 URL)
+* 시스템 컴포넌트 간에 자원 상태 교환
 
-For example, to a Rails application a request such as this:
+예제로, 레일즈 어플리케이션에서 요청은 다음과 같습니다.
 
 <tt>DELETE /photos/17</tt>
 
-would be understood to refer to a photo resource with the ID of 17, and to indicate a desired action - deleting that resource. REST is a natural style for the architecture of web applications, and Rails hooks into this shielding you from many of the RESTful complexities and browser quirks.
+이 것은 photo 리소스 ID 17번 참조하고, 원하는 액션은 삭제라고 이해할 수 있습니다. REST는 웹 어플리케이션의 아키텍쳐상 자연스로운 형태이고, 레일즈는 어플리케이션을 RESTful 복잡성과 브라우저의 변덕스러운 요청에서 보호합니다.
 
-If you'd like more details on REST as an architectural style, these resources are more approachable than Fielding's thesis:
+REST를 아키텍텨 관점에서 자세히 알고 싶다면 다음의 자료 참고하세요. 
 
 * "A Brief Introduction to REST":http://www.infoq.com/articles/rest-introduction by Stefan Tilkov
 * "An Introduction to REST":http://bitworking.org/news/373/An-Introduction-to-REST (video tutorial) by Joe Gregorio
