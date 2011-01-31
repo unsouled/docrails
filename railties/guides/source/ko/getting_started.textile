@@ -80,7 +80,7 @@ h5(#Action-Pack). 액션 팩(Action Pack)
 
 액션 팩은 액션 컨트롤러과 액션 뷰를 포함하는 잼입니다. "MVC"에서 "VC"부분 입니다.
 
-h5(#Action Controller). 액션 컨트롤러(Action Controller)
+h5(#Action-Controller). 액션 컨트롤러(Action Controller)
 
 액션 컨트롤러는 레일즈 어플리케이션에서 컨트롤러를 담당하는 컴포넌트 입니다. 액션 컨트롤러 프레임워크는 레일즈 어플리케이션으로 들어오는 요청을 처리하고, 파라미터를 추출하고, 의도된 액션으로 보냅니다. 액션 컨트롤러는 세션(session)관리, 템플릿(template) 렌더링, 리다이렉트(redirect) 관리 서비스를 포함합니다.
 
@@ -259,7 +259,7 @@ development:
 
 마찬가지로 username과 password를 +development+(개발) 환경에 맞도록 변경하세요.
 
-TIP: 데이터베이스의 설정들을 수동으로 갱신할 필요는 없습니다. 어플리케이션 제너레이터의 설정에서 <tt>--database</tt> 항목을 읽어보세요. 이 설정들은 주로 사용되는 관계형 데이터베이스 어뎁터 설정에 도움을 줍니다. 반복해서 <tt>cd .. && rails new blog --database=mysql</tt> 명령을 실행할 수 있습니다. +config/database.yml+ 파일 덥어쓰기를 허용하면 어플리케이션을 SQLite 대신에 MySQL 로 설정할 수 있습니다.
+TIP: 데이터베이스의 설정들을 수동으로 갱신할 필요는 없습니다. 어플리케이션 제너레이터의 설정에서 <tt>--database</tt> 항목을 읽어보세요. 이 설정들은 주로 사용되는 관계형 데이터베이스 어뎁터 설정에 도움을 줍니다. 반복해서 <tt>cd .. && rails new blog --database=mysql</tt> 명령을 실행할 수 있습니다. +config/database.yml+ 파일 덮어쓰기를 허용하면 어플리케이션을 SQLite 대신에 MySQL 로 설정할 수 있습니다.
 
 h4(#Creating-the-Database). 데이터베이스 생성
 
@@ -289,31 +289,31 @@ $ rails server
 
 !images/rails_welcome.png(Welcome Aboard screenshot)!
 
-TIP: 웹서버를 멈추기 위해서, Ctrl+C 를 실행중인 터미널 윈도우에서 누르세요. development(개발) 모드라면, 보통은 서버를 중단시킬 필요는 없습니다.; 변경된 파일을 서버가 자동으로 반영하기 대문이죠. 
+TIP: 웹서버를 멈추기 위해서, Ctrl+C 를 실행중인 터미널 윈도우에서 누르세요. development(개발) 모드라면, 보통은 서버를 중단시킬 필요는 없습니다.; 변경된 파일을 서버가 자동으로 반영하기 때문이죠. 
 
 "Welcome Aboard" 페이지는 새로운 레일즈 어플리케이션을 위한 _스모크 테스트_입니다.: 이는  소프트웨어의 설정이 정확히 되어있는 확인하는데 사용됩니다. _About your application’s environment_ 링크를 클릭해서 어플리케이션의 환경 값들을 요약한 내용을 확인할 수 있습니다.
 
-h4. Say "Hello", Rails
+h4(#Say-Hello-Rails). "Hello", Rails 라고 말하기
 
-To get Rails saying "Hello", you need to create at minimum a controller and a view. Fortunately, you can do that in a single command. Enter this command in your terminal:
+레일즈가 "Hello"라고 말하게 하려면, 최소한 컨트롤러와 뷰정도는 만들어야 합니다. 다행스럽게도, 명령어 한줄이면 충분합니다. 다음의 명령어를 터미널에서 입력하세요.:
 
 <shell>
 $ rails generate controller home index
 </shell>
 
-TIP: If you're on Windows, or your Ruby is set up in some non-standard fashion, you may need to explicitly pass Rails +rails+ commands to Ruby: <tt>ruby \path\to\your\application\script\rails generate controller home index</tt>.
+TIP: 윈도우즈나 루비가 비표준의 방법으로 설치되어 있다면, 아마도 레일즈의 +rails+ 커멘드에 대한 정확한 패스 정보를 루비에게 넘겨야 합니다. :<tt>ruby \path\to\your\application\script\rails generate controller home index</tt>.
 
-Rails will create several files for you, including +app/views/home/index.html.erb+. This is the template that will be used to display the results of the +index+ action (method) in the +home+ controller. Open this file in your text editor and edit it to contain a single line of code:
+레일즈는 +app/views/home/index.html.erb+ 포함해서 몇가지 파일을 만들겁니다. 아 파일은 +home+ 컨트롤러의 +index+ 액션(메소드)를 위한 템플릿으로 이용됩니다. 이 파일을 텍스트 에디터로 열어서 이 한줄을 포함하도록 수정해 주세요.
 
 <code class="html">
 <h1>Hello, Rails!</h1>
 </code>
 
-h4. Setting the Application Home Page
+h4(Setting-the-Application-Home-Page). 어플리케이션 홈페이지 설정
 
-Now that we have made the controller and view, we need to tell Rails when we want "Hello Rails" to show up.  In our case, we want it to show up when we navigate to the root URL of our site, "http://localhost:3000":http://localhost:3000, instead of the "Welcome Aboard" smoke test.
-
-The first step to doing this is to delete the default page from your application:
+컨트롤러와 뷰를 만들었습니다. "Hello Rails"를 보기위해 레일즈에게 요청을 할 차례 입니다. 이번 경우에는 root URL 에다가 "Welcome Aboard" 스모트 테스트 데신에 "http://localhost:3000":http://localhost:3000 에서 나타나게 해보죠. 
+ 
+첫 단계는 기본 페이지를 어플리케이션에서 삭제하는 겁니다.
 
 <shell>
 $ rm public/index.html
