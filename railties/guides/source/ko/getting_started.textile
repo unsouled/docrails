@@ -153,9 +153,9 @@ TIP. 만약 윈도우 상에서 작업 중이라면, 레일즈 개발 대다수�
 
 h4(#Creating-the-Blog-Application). 블로그 어플리케이션 만들기
 
-이 가이드를 이용하는 가장 좋은 방법은 단계에 기술된 대로, 따라가는 것 입니다. (코드가 없는 부분, 예제 어플리케이션이 없는 부분도 마찬가지 입니다.) 그래서 작성 된대로 각 단계를 따라갈 수 있습니다. 완성된 코드가 필요하면, "Getting Started Code":http://github.com/mikel/getting-started-code 에서 다운로드 받으세요.
+이 가이드를 이용하는 가장 좋은 방법은 단계에 기술된 대로, 따라가는 것 입니다. (코드가 없는 부분, 예제 어플리케이션이 없는 부분도 마찬가지 입니다.) 작성 된대로 각 단계를 따라갈 수 있습니다. 완성된 코드가 필요하면, "Getting Started Code":http://github.com/mikel/getting-started-code 에서 다운로드 받으세요.
 
-시작하기 위해 터미널을 여시고 파일을 만들고자 하는 폴더로 이동해사 다음을 치세요.:
+시작하기 위해 터미널을 여시고 파일을 만들고자 하는 폴더로 이동해서 다음을 입력하세요.:
 
 <shell>
 $ rails new blog
@@ -171,7 +171,7 @@ blog 어플리케이션을 만들고 난후 해당 폴더로 작업을 위해 �
 $ cd blog
 </shell>
 
-어떠한 경우라도, 레일즈는 <tt>blog</tt>라는 작업 디렉토리를 만듭니다. 이 폴더를 열고 내용을 살펴보세요. 이 튜토리얼의 대부분의 작업은 <tt>app</tt> 폴더 내부에서 이루어 집니다. 하지만 아래에 내용은 새로은 어플리케이션을 위해서 레일즈가 기본 생성한 각각의 폴더가 어떤 기능을 가지는지 설명합니다.
+레일즈는 <tt>blog</tt>라는 작업 디렉토리를 만듭니다. 이 폴더를 열고 내용을 살펴보세요. 이 튜토리얼의 대부분의 작업은 <tt>app</tt> 폴더 내부에서 이루어 집니다. 하지만 아래에 내용은 새로운 플리케이션을 위해서 레일즈가 기본 생성한 각각의 폴더가 어떤 기능을 가지는지 설명합니다.
 
 |_.파일/폴더|_.목적|
 |Gemfile|이 파일은 여러분의 레일즈 어플리케이션에게 필요한 잼의 의존성 정보를 기술하는데 사용됩니다.|
@@ -203,6 +203,7 @@ h4(#Installing-the-Required-Gems). 필요한 잼 설치하기
 
 h4(#Configuring-a-Database). 데이터베이스 설정
 
+모든 레일즈 어플리케이션은 데이터베이스와 통신하게 됩니다. 
 Just about every Rails application will interact with a database. The database to use is specified in a configuration file, +config/database.yml+.
 If you open this file in a new Rails application, you'll see a default database configuration using SQLite3. The file contains sections for three different environments in which Rails can run by default:
 
