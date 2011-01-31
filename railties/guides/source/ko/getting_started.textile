@@ -22,7 +22,7 @@ TIP: 루비 버전 1.8.7 p248 과 p249 는 레일즈 3.0을 중단 시키는 마
 * "루비잼(RubyGems)":http://rubyforge.org/frs/?group_id=126 패키징 시스템
 * "SQLite3 데이터베이스":http://www.sqlite.org
 
-레일즈는 루비 프로그램 언어에서 동작하는 웹 어플리케이션 프리임워크 입니다. 루비에 대한 경험이 없어도, 레일즈를 매우 빠르게 학습 할 수 있습니다. 아래는 인터넷에서 루비 언어를 배울 수 있는 좋은 무료 문서입니다.
+레일즈는 루비 프로그램 언어에서 동작하는 웹 어플리케이션 프레임워크 입니다. 루비에 대한 경험이 없어도, 레일즈를 매우 빠르게 학습 할 수 있습니다. 아래는 인터넷에서 루비 언어를 배울 수 있는 좋은 무료 문서입니다.
 
 * "Mr. Neighborly's Humble Little Ruby Book":http://www.humblelittlerubybook.com
 * "Programming Ruby":http://www.ruby-doc.org/docs/ProgrammingRuby/
@@ -118,7 +118,7 @@ h5(#Railties). 레일티즈(Railties)
 
 h4. REST
 
-REST는 Representational State Transfer 를 의미하고 RESTful 아키택쳐의 근간이 됩니다. REST는 Roy Fielding의 박사의 이론, "Architectural Styles and the Design of Network-based Software Architectures":http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm 에서 논의되었습니다. While you can read through the thesis, REST in terms of Rails boils down to two main principles:
+REST는 Representational State Transfer 를 의미하고 RESTful 아키택쳐의 근간이 됩니다. REST는 Roy Fielding의 박사의 이론, "Architectural Styles and the Design of Network-based Software Architectures":http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm 에서 논의되었습니다. 여러분이 저 문서에서 읽을 수 있는 내용 중에서, 레일즈의  존재하는 REST 두가지 중요한 원리는 다음과 같습니다.:
 
 * 자원 표현을 위해 자원 식별자 사용 (가령 URL)
 * 시스템 컴포넌트 간에 자원 상태 교환
@@ -129,78 +129,79 @@ REST는 Representational State Transfer 를 의미하고 RESTful 아키택쳐의
 
 이 것은 photo 리소스 ID 17번 참조하고, 원하는 액션은 삭제라고 이해할 수 있습니다. REST는 웹 어플리케이션의 아키텍쳐상 자연스로운 형태이고, 레일즈는 어플리케이션을 RESTful 복잡성과 브라우저의 변덕스러운 요청에서 보호합니다.
 
-REST를 아키텍텨 관점에서 자세히 알고 싶다면 다음의 자료 참고하세요. 
+REST를 아키텍쳐 관점에서 자세히 알고 싶다면 다음의 자료 참고하세요. 
 
 * "A Brief Introduction to REST":http://www.infoq.com/articles/rest-introduction by Stefan Tilkov
 * "An Introduction to REST":http://bitworking.org/news/373/An-Introduction-to-REST (video tutorial) by Joe Gregorio
 * "Representational State Transfer":http://en.wikipedia.org/wiki/Representational_State_Transfer article in Wikipedia
 * "How to GET a Cup of Coffee":http://www.infoq.com/articles/webber-rest-workflow by Jim Webber, Savas Parastatidis & Ian Robinson
 
-h3. Creating a New Rails Project
+h3(#Creating-a-New-Rails-Project). 새로운 레일즈 프로젝트 만들기
 
-If you follow this guide, you'll create a Rails project called <tt>blog</tt>, a (very) simple weblog. Before you can start building the application, you need to make sure that you have Rails itself installed.
+이 가이드를 따라가면, 여러분은 <tt>blog</tt>라는 이름의 (매우) 단순한 웹블로그 레일즈 프로젝트를 만들게 될 것 입니다. 어플리케이션을 만들기 전에, 먼저 레일즈 그 자체를 설치하는 절차가 필요하죠.
 
-h4. Installing Rails
+h4(#Installing-Rails). 레일즈 설치하기
 
-In most cases, the easiest way to install Rails is to take advantage of RubyGems:
+대부분의 경우, 가장 쉬운 레일즈 설치는 RubyGem을 통하는 방법입니다.
 
 <shell>
-Usually run this as the root user:
+보통 root 유저로 이를 실행합니다.
 # gem install rails
 </shell>
 
-TIP. If you're working on Windows, you should be aware that the vast majority of Rails development is done in Unix environments. While Ruby and Rails themselves install easily using for example "Ruby Installer":http://rubyinstaller.org/, the supporting ecosystem often assumes you are able to build C-based rubygems and work in a command window. If at all possible, we suggest that you install a Linux virtual machine and use that for Rails development, instead of using Windows.
+TIP. 만약 윈도우 상에서 작업 중이라면, 레일즈 개발 대다수가 유닉스(Unix) 환경에서 이루어지고 있다는걸 생각해 주세요. 루비 온 레일즈를 "루비 인스톨러":http://rubyinstaller.org/ 같은 방법으로 손쉽게 설치할지라도, 레일즈 생태계는 여러분이 C 기반의 루비잼과 명령행(command) 기반의 환경에서 작업한다고 가정합니다. 가능하다면, 윈도우 대신에 Linux 가상 머신에 레일즈 설치하고 사용하는 것을 권장합니다.
 
-h4. Creating the Blog Application
+h4(#Creating-the-Blog-Application). 블로그 어플리케이션 만들기
 
-The best way to use this guide is to follow each step as it happens, no code or step needed to make this example application has been left out, so you can literally follow along step by step.  If you need to see the completed code, you can download it from "Getting Started Code":http://github.com/mikel/getting-started-code.
+이 가이드를 이용하는 가장 좋은 방법은 단계에 기술된 대로, 따라가는 것 입니다. (코드가 없는 부분, 예제 어플리케이션이 없는 부분도 마찬가지 입니다.) 그래서 작성 된대로 각 단계를 따라갈 수 있습니다. 완성된 코드가 필요하면, "Getting Started Code":http://github.com/mikel/getting-started-code 에서 다운로드 받으세요.
 
-To begin, open a terminal, navigate to a folder where you have rights to create files, and type:
+시작하기 위해 터미널을 여시고 파일을 만들고자 하는 폴더로 이동해사 다음을 치세요.:
 
 <shell>
 $ rails new blog
 </shell>
 
-This will create a Rails application called Blog in a directory called blog.
+이 명령은 '블로그(Blog)' 레일즈 어플리케이션을 blog 디렉토리에 만들 것입니다. 
 
-TIP: You can see all of the switches that the Rails application builder accepts by running <tt>rails new -h</tt>.
+TIP: 레일즈 어플리케이션 생성에 대한 모든 스위치(옵션)들은 <tt>rails new -h</tt>로 확인할 수 있습니다.
 
-After you create the blog application, switch to its folder to continue work directly in that application:
+blog 어플리케이션을 만들고 난후 해당 폴더로 작업을 위해 해당 폴더로 이동합니다.
 
 <shell>
 $ cd blog
 </shell>
 
-In any case, Rails will create a folder in your working directory called <tt>blog</tt>. Open up that folder and explore its contents. Most of the work in this tutorial will happen in the <tt>app/</tt> folder, but here's a basic rundown on the function of each folder that Rails creates in a new application by default:
+어떠한 경우라도, 레일즈는 <tt>blog</tt>라는 작업 디렉토리를 만듭니다. 이 폴더를 열고 내용을 살펴보세요. 이 튜토리얼의 대부분의 작업은 <tt>app</tt> 폴더 내부에서 이루어 집니다. 하지만 아래에 내용은 새로은 어플리케이션을 위해서 레일즈가 기본 생성한 각각의 폴더가 어떤 기능을 가지는지 설명합니다.
 
-|_.File/Folder|_.Purpose|
-|Gemfile|This file allows you to specify what gem dependencies are needed for your Rails application.|
-|README|This is a brief instruction manual for your application. Use it to tell others what your application does, how to set it up, and so on.|
-|Rakefile|This file contains batch jobs that can be run from the terminal.|
-|app/|Contains the controllers, models, and views for your application. You'll focus on this folder for the remainder of this guide.|
-|config/|Configure your application's runtime rules, routes, database, and more.|
-|config.ru|Rack configuration for Rack based servers used to start the application.|
-|db/|Shows your current database schema, as well as the database migrations. You'll learn about migrations shortly.|
-|doc/|In-depth documentation for your application.|
-|lib/|Extended modules for your application (not covered in this guide).|
-|log/|Application log files.|
-|public/|The only folder seen to the world as-is.  This is where your images, JavaScript files, stylesheets (CSS), and other static files go.|
-|script/|Contains the rails script that starts your app and can contain other scripts you use to deploy or run your application.|
-|test/|Unit tests, fixtures, and other test apparatus. These are covered in "Testing Rails Applications":testing.html|
+|_.파일/폴더|_.목적|
+|Gemfile|이 파일은 여러분의 레일즈 어플리케이션에게 필요한 잼의 의존성 정보를 기술하는데 사용됩니다.|
+|README|이 파일은 어플리케이션을 위한 짧막한 설명입니다. 설치, 사용 방법 기술에 쓰입니다.|
+|Rakefile|이 파일은 터미널에서 실행할 수 있는 배치잡들을 포함합니다.|
+|app/|어플리케이션을 위한 컨트롤러, 모델, 뷰를 포함합니다. 이 가이드에서는 이 폴더에 집중할 것 입니다. |
+|config/|어플리케이션의 실행 시간의 규칙, 라우팅, 데이터베이스 등 설정을 저장합니다. |
+|config.ru|랙(Rack) 기반의 서버들이 시작할때 필요한 설정 입니다. |
+|db/|현재 데이터베이스의 스키마를 볼 수 있습니다.(데이터베이스 마이그레이션으로 잘 알려져 있습니다.) 여러분은 마이그레이션에 대해서 간단하게 배우게 됩니다.|
+|doc/|어플리케이션에 대한 자세한 설명 문서입니다.|
+|lib/|어플리케이션을 위한 확장 모듈입니다. (이 문서에서 다루지 않습니다.)|
+|log/|어플리케이션의 로그 파일입니다.|
+|public/|외부에서 볼수 있는 유일한 폴더 입니다.이미지, 자바스크립트, 스타일시트나 그외 정적인 파일들은 이곳에 두세요. |
+|script/|레일즈 스크립트를 포함합니다. 여러분의 어플리케이션을 실행시키거나, 배포, 실행 관련한 스크립트를 두세요.|
+|test/|유닛 테스트, 픽스쳐, 그와 다른 테스트 도구들 입니다. 이 부분은 "레일즈 어플리케이션 테스트하기":testing.html 가 담당합니다.|
 |tmp/|Temporary files|
-|vendor/|A place for all third-party code. In a typical Rails application, this includes Ruby Gems, the Rails source code (if you install it into your project) and plugins containing additional prepackaged functionality.|
+|tmp/|임시 파일|
+|vendor/|서드 파티 코드들을 위한 공간입니다. 일반적인 레일즈 어플리케이션은 루비 잼과 레일즈 소스-프로젝트 내에 설치시-와 미리 패키징된 추가 플러그인들이 위치합니다.  |
 
-h4. Installing the Required Gems
+h4(#Installing-the-Required-Gems). 필요한 잼 설치하기
 
-Rails applications manage gem dependencies with "Bundler":http://gembundler.com/v1.0/index.html by default. As we don't need any other gems beyond the ones in the generated +Gemfile+ we can directly run
+레일즈 어플리케이션을 잼의 의존성을 기본적으로 "번들러(Bundler)":http://gembundler.com/v1.0/index.html 를 통해서 관리합니다. 생성된 +Gemfile+ 에 기술된 잼 외에 다른 잼은 필요없습니다. 다음의 명령을 직접 실행할 수 있습니다.
 
 <shell>
 # bundle install
 </shell>
 
-to have them ready.
+이제 준비되었습니다.
 
-h4. Configuring a Database
+h4(#Configuring-a-Database). 데이터베이스 설정
 
 Just about every Rails application will interact with a database. The database to use is specified in a configuration file, +config/database.yml+.
 If you open this file in a new Rails application, you'll see a default database configuration using SQLite3. The file contains sections for three different environments in which Rails can run by default:
