@@ -46,6 +46,7 @@ h3(#word-dict). 영어 - 한국어 용어 사전
 | third-party | 서드파티 |
 | batch job | 배치잡 |
 | Bunlder | 번들러(Bundler) |
+| Rake | Rake |
 
 h3. Translation 진행 상태
 

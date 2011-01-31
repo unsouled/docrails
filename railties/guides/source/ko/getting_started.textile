@@ -203,19 +203,18 @@ h4(#Installing-the-Required-Gems). 필요한 잼 설치하기
 
 h4(#Configuring-a-Database). 데이터베이스 설정
 
-모든 레일즈 어플리케이션은 데이터베이스와 통신하게 됩니다. 
-Just about every Rails application will interact with a database. The database to use is specified in a configuration file, +config/database.yml+.
-If you open this file in a new Rails application, you'll see a default database configuration using SQLite3. The file contains sections for three different environments in which Rails can run by default:
+모든 레일즈 어플리케이션은 데이터베이스와 통신하게 됩니다. 데이터페이스의 사용하기 위해서 +config/database.yml+ 설정 파일이 필요합니다. 
+새로운 레일즈 어플리케이션에서 이 파일을 열어보면, SQLite3  기본 데이터베이스로 설정되어 있는걸 볼 수 있습니다.기본적값으로 레일즈상에서 이 파일은 세가지의 환경 설정으로 구성되어 있습니다. :
 
-* The +development+ environment is used on your development computer as you interact manually with the application
-* The +test+ environment is used to run automated tests
-* The +production+ environment is used when you deploy your application for the world to use.
+* +development+(개발) 환경은 여러분의 개발 컴퓨터에서 사용됩니다. 
+* +test+(테스트) 환경은 자동화된 테스트를 위해 사용됩니다.
+* +production+(제품) 환경은 어플리케이션을 실제 서비스에 배포할때 사용됩니다.
 
-h5. Configuring an SQLite3 Database
+h5(#Configureing-an-SQLite3-Database). SQLite3 데이터베이스 설정하기
 
-Rails comes with built-in support for "SQLite3":http://www.sqlite.org, which is a lightweight serverless database application. While a busy production environment may overload SQLite, it works well for development and testing. Rails defaults to using an SQLite database when creating a new project, but you can always change it later.
+레일즈는 가볍고 별도의 서버가 필요하지 않은 "SQLite3":http://www.sqlite.org 내장해서 배포됩니다. 바쁜 실제 서비스 환경에서 SQLite는 부족하지만, 개발하거나 테스트하는 환경에서는 충분합니다. 새로운 프로젝트를 생성할때 레일즈는 SQLite 를 기본값으로 삼지만, 언제든지 나중에 변경할 수 있습니다. 
 
-Here's the section of the default configuration file (<tt>config/database.yml</tt>) with connection information for the development environment:
+여기에 기본 설정 파일(<tt>config/database.yml</tt>)의 development(개발) 환경 접속 정보가 있습니다.
 
 <yaml>
 development:
@@ -225,11 +224,11 @@ development:
   timeout: 5000
 </yaml>
 
-NOTE: In this guide we are using an SQLite3 database for data storage, because it is a zero configuration database that just works. Rails also supports MySQL and PostgreSQL "out of the box", and has plugins for many database systems. If you are using a database in a production environment Rails most likely has an adapter for it.
+NOTE: 이 가이드에서는 데이터 저장을 위해서 SQLite3 데이터베이스를 사용합니다. 왜냐하면, 데이터베이스를 위한 설정이 필요없기 때문이죠. 레일즈는 MySQL과 PostgreSQL도 별도로 지원합니다. 그리고 많은 데이터베이스 시스템을 플러그인으로 가지고 있습니다. production(제품) 환경에서 데이터베이스를 사용하기 위해, 레일즈는 대부분의 어뎁터(adapter) 가지고 있습니다.
 
-h5. Configuring a MySQL Database
+h5(#Configuring-a-MySQL-Database). MySQL 데이터베이스 설정
 
-If you choose to use MySQL instead of the shipped SQLite3 database, your +config/database.yml+ will look a little different. Here's the development section:
+레일즈와 함께 제공되는 SQLite3 데이터베이스 대신에 MySQL을 사용하려면, +config/database.yml+을 아래와 같이 약간 다른 모습으로 변경해야합니다. development(개발) 환경 부분 설정예제 입니다.:
 
 <yaml>
 development:
@@ -242,11 +241,11 @@ development:
   socket: /tmp/mysql.sock
 </yaml>
 
-If your development computer's MySQL installation includes a root user with an empty password, this configuration should work for you. Otherwise, change the username and password in the +development+ section as appropriate.
+개발 컴퓨터의 MySQL 설치본이 root 사용자를 가지고 암호가 비어 있다면, 이 설정은 유효하게 동작합니다. 그렇지 않다면, username과 password 를 환경에 맞게 변경해 주세요. 
 
-h5. Configuring a PostgreSQL Database
+h5(#Configuring-a-PostgreSQL-Database). PostgreSQL 데이터베이스 설정
 
-Finally if you choose to use PostgreSQL, your +config/database.yml+ will be customized to use PostgreSQL databases:
+마지막으로, PostgreSQL 사용을 선택했다면, +config/database.yml+를 PostgreSQL에 적합하게 수정해주세요.:
 
 <yaml>
 development:
@@ -258,41 +257,41 @@ development:
   password:
 </yaml>
 
-Change the username and password in the +development+ section as appropriate.
+마찬가지로 username과 password를 +development+(개발) 환경에 맞도록 변경하세요.
 
-TIP: You don't have to update the database configurations manually. If you had a look at the options of application generator, you have seen that one of them is named <tt>--database</tt>. It lets you choose an adapter for couple of most used relational databases. You can even run the generator repeatedly: <tt>cd .. && rails new blog --database=mysql</tt>. When you confirm the overwriting of the +config/database.yml+ file, your application will be configured for MySQL instead of SQLite.
+TIP: 데이터베이스의 설정들을 수동으로 갱신할 필요는 없습니다. 어플리케이션 제너레이터의 설정에서 <tt>--database</tt> 항목을 읽어보세요. 이 설정들은 주로 사용되는 관계형 데이터베이스 어뎁터 설정에 도움을 줍니다. 반복해서 <tt>cd .. && rails new blog --database=mysql</tt> 명령을 실행할 수 있습니다. +config/database.yml+ 파일 덥어쓰기를 허용하면 어플리케이션을 SQLite 대신에 MySQL 로 설정할 수 있습니다.
 
-h4. Creating the Database
+h4(#Creating-the-Database). 데이터베이스 생성
 
-Now that you have your database configured, it's time to have Rails create an empty database for you. You can do this by running a rake command:
+데이터베이스 설정은 완료되었고, 이제 레일즈로 빈 데이터베이스를 만들차레입니다. 다음의 rake 명령어로 수행할수 있습니다.:
 
 <shell>
 $ rake db:create
 </shell>
 
-This will create your development and test SQLite3 databases inside the <tt>db/</tt> folder.
+이 명령어는 여러분의 개발(development)와 테스트를 위한 SQLite3 데이터베이스를 <tt>db</tt> 폴더에 만들 것입니다.
 
-TIP: Rake is a general-purpose command-runner that Rails uses for many things. You can see the list of available rake commands in your application by running +rake -T+.
+TIP: Rake는 레일즈가 여러 목적으로 사용하는 범용 명령 실행 도구 입니다. +rake -T+ 명령어로 실행할 수 있는 rake 명령어를 확인할 수 있습니다.
 
-h3. Hello, Rails!
+h3(#Hello-Rails). Hello, Rails!
 
-One of the traditional places to start with a new language is by getting some text up on screen quickly, to do this, you need to get your Rails application server running.
+새로운 언어를 시작하는 전통적인 방법의 하나로 화면에 빨리 텍스트를 띄워보는 것이죠. 이를 위해서는 레일즈 어플리케이션 서버를 실행시켜야합니다.
 
-h4. Starting up the Web Server
+h4(#Starting-up-the-Web-Server). 웹서버 시작하기
 
-You actually have a functional Rails application already. To see it, you need to start a web server on your development machine. You can do this by running:
+위의 가정을 통해서 이미 레일즈 어플리케이션을 가지고 있습니다. 이를 보려면 개발 환경에서 웹서버 시작이 필요합니다. 다음의 명령어로 실행할 수 있습니다.
 
 <shell>
 $ rails server
 </shell>
 
-This will fire up an instance of the WEBrick web server by default (Rails can also use several other web servers). To see your application in action, open a browser window and navigate to "http://localhost:3000":http://localhost:3000. You should see Rails' default information page:
+기본적으로 WEBrick 웹서버 인스턴스를 실행합니다. (레일즈는 다른 웹서버를 사용할 수도 있습니다.) 어플리케이션의 동작을 확인하려면 브라우저를 실행해서 "http://localhost:3000":http://localhost:3000 d에 접속해보세요. 레일즈의 기본 정보 페이지를 볼 수 있습니다.
 
 !images/rails_welcome.png(Welcome Aboard screenshot)!
 
-TIP: To stop the web server, hit Ctrl+C in the terminal window where it's running. In development mode, Rails does not generally require you to stop the server; changes you make in files will be automatically picked up by the server.
+TIP: 웹서버를 멈추기 위해서, Ctrl+C 를 실행중인 터미널 윈도우에서 누르세요. development(개발) 모드라면, 보통은 서버를 중단시킬 필요는 없습니다.; 변경된 파일을 서버가 자동으로 반영하기 대문이죠. 
 
-The "Welcome Aboard" page is the _smoke test_ for a new Rails application: it makes sure that you have your software configured correctly enough to serve a page.  You can also click on the _About your application’s environment_ link to see a summary of your Application's environment.
+"Welcome Aboard" 페이지는 새로운 레일즈 어플리케이션을 위한 _스모크 테스트_입니다.: 이는  소프트웨어의 설정이 정확히 되어있는 확인하는데 사용됩니다. _About your application’s environment_ 링크를 클릭해서 어플리케이션의 환경 값들을 요약한 내용을 확인할 수 있습니다.
 
 h4. Say "Hello", Rails
 
