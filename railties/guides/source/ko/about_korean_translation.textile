@@ -47,6 +47,10 @@ h3(#word-dict). 영어 - 한국어 용어 사전
 | batch job | 배치잡 |
 | Bunlder | 번들러(Bundler) |
 | Rake | Rake |
+| Scaffolding | 발판(Scaffolding) |
+| Resources | 리소스 |
+| Dummy | 더미 |
+| Adapter | 어댑터 |
 
 h3. Translation 진행 상태
 
