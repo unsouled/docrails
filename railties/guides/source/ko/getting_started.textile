@@ -285,7 +285,7 @@ h4(#Starting-up-the-Web-Server). 웹서버 시작하기
 $ rails server
 </shell>
 
-기본적으로 WEBrick 웹서버 인스턴스를 실행합니다. (레일즈는 다른 웹서버를 사용할 수도 있습니다.) 어플리케이션의 동작을 확인하려면 브라우저를 실행해서 "http://localhost:3000":http://localhost:3000 d에 접속해보세요. 레일즈의 기본 정보 페이지를 볼 수 있습니다.
+기본적으로 WEBrick 웹서버 인스턴스를 실행합니다. (레일즈는 다른 웹서버를 사용할 수도 있습니다.) 어플리케이션의 동작을 확인하려면 브라우저를 실행해서 "http://localhost:3000":http://localhost:3000 에 접속해보세요. 레일즈의 기본 정보 페이지를 볼 수 있습니다.
 
 !images/rails_welcome.png(Welcome Aboard screenshot)!
 
@@ -446,11 +446,11 @@ class Post < ActiveRecord::Base
 end
 </ruby>
 
-There isn't much to this file - but note that the +Post+ class inherits from +ActiveRecord::Base+. Active Record supplies a great deal of functionality to your Rails models for free, including basic database CRUD (Create, Read, Update, Destroy) operations, data validation, as well as sophisticated search support and the ability to relate multiple models to one another.
+이 파일에는 별 내용이 없습니다. - 그러나 +Post+ 클레스는 +ActiveRecord::Base+를 상속합니다. 엑티브 레코드(Active Record)는 레일즈 모델을 자유롭게 다루는데 훌륭한 기능을 제공합니다. 기본 데이터베이스 CRUD(생성(Create), 읽기(Read), 갱신(Update), 삭제(Destroy) 기능, 데이터 유효성 검사, 복잡한 검색과 복합적인 모델 관계 지원  이런 것들을 포함합니다.
 
-h4. Adding Some Validation
+h4(#Adding-Some-Validataion). 몇 가지 유효성 검사(Validation) 추가하기
 
-Rails includes methods to help you validate the data that you send to models. Open the +app/models/post.rb+ file and edit it:
+레일즈는 데이터를 저장할때 데이터가 적합한지 확인하는 유효성 검사 메소드를 가지고 있습니다. +app/models/post.rb+ 파일을 열어서 다음과 같이 수정하세요.:
 
 <ruby>
 class Post < ActiveRecord::Base
@@ -460,17 +460,17 @@ class Post < ActiveRecord::Base
 end
 </ruby>
 
-These changes will ensure that all posts have a name and a title, and that the title is at least five characters long. Rails can validate a variety of conditions in a model, including the presence or uniqueness of columns, their format, and the existence of associated objects.
+이 수정 사항은 모든 글(post)은 이름(name)과 제목(title)을 가지고 있어야하고, 제목(title)은 최소 5글자 이상이라는걸 보장(확인)합니다. 레일즈는 모델에 대해서 다양한 조건의 유효성 검사를 할수 있습니다. 컬럼의 값의 존재여부, 유일성, 포맷, 그리고 관계된 객체의 존재 여부 검사 같은 것을 포함합니다.
 
-h4. Using the Console
+h4(#Using-the-Console). 콘솔 사용하기
 
-To see your validations in action, you can use the console. The console is a command-line tool that lets you execute Ruby code in the context of your application:
+액션에서 유효성 검사를 확인해보려면, 콘솔을 사용할 수 있습니다. 콘솔은 여러분의 어플리케이션 컨텍스트에서 루비 코드를 실행시킬 수 있는 커멘드-라인 도구입니다. 
 
 <shell>
 $ rails console
 </shell>
 
-After the console loads, you can use it to work with your application's models:
+콘솔을 구동 시킨후에, 다음과 같이 어플리케이션의 모델을 수행할 수 있습니다.:
 
 <shell>
 >> p = Post.new(:content => "A new post")
@@ -485,15 +485,15 @@ After the console loads, you can use it to work with your application's models:
                    :name=>["can't be blank"] }>
 </shell>
 
-This code shows creating a new +Post+ instance, attempting to save it and getting +false+ for a return value (indicating that the save failed), and inspecting the +errors+ of the post.
+이 코드는 새로운 +Post+ 인스턴스를 생성하고, 저장을 시도하는 과정에서 +false+가 반환되는걸 보여줍니다. (이는 저장이 실패한 것을 의미합니다.) 그리고 글(post)의 +errors+를 검사(inspecting)하는 코드입니다.
 
-When you're finished, type +exit+ and hit +return+ to exit the console.
+할일을 모두 마쳤으면, +exit+를 치고 +return+키를 눌러서 콘솔을 빠져나오세요.
 
-TIP: Unlike the development web server, the console does not automatically load your code afresh for each line. If you make changes to your models while the console is open, type +reload!+ at the console prompt to load them.
+TIP: 개발 웹서버와 다르게, 콘솔에서는 각 라인마다 자원을 다시 읽어들이지는 않습니다. 콘솔을 열어둔 상태에서 코드를 변경하였으면 이를 콘솔의 환경에 반영하기 위해서 +reload!+ 입력하세요.
 
-h4. Listing All Posts
+h4(#Listing-All-Posts). 모든 글(Posts) 목록 보기 
 
-The easiest place to start looking at functionality is with the code that lists all posts. Open the file +app/controllers/posts_controller.rb+ and look at the +index+ action:
+기능 확인하기 가장 쉬운 곳은, 모든 글(posts)의 목록을 출력하는 부분입니다.  +app/controllers/posts_controller.rb+ 파일을 열고 +index+ 액션을 보세요.:
 
 <ruby>
 def index
@@ -506,11 +506,11 @@ def index
 end
 </ruby>
 
-+Post.all+ calls the +Post+ model to return all of the posts currently in the database. The result of this call is an array of posts that we store in a instance variable called +@posts+.
++Post.all+은 현재 데이터베이스에 있는 모든 글(posts) 정보를 +Post+ 모델로 반환하는 메소드 입니다. 이 호출의 결과는 글(post)의 배열이고 +@posts+ 변수에 저장됩니다.
 
-TIP: For more information on finding records with Active Record, see "Active Record Query Interface":active_record_querying.html.
+TIP: 엑티브 레코드(Active Record)에 관한 더 자세한 정보는 "엑티브 레코드 쿼리 인터페이스":active_record_querying.html 글을 참고하세요.
 
-The +respond_to+ block handles both HTML and XML calls to this action. If you browse to "http://localhost:3000/posts.xml":http://localhost:3000/posts.xml, you'll see all of the posts in XML format. The HTML format looks for a view in +app/views/posts/+ with a name that corresponds to the action name. Rails makes all of the instance variables from the action available to the view. Here's +app/views/posts/index.html.erb+:
++respond_to+ 블록은 이 액션에 대한 HTML과 XML 양쪽 모두 취급합니다. 브라우저에게 "http://localhost:3000/posts.xml":http://localhost:3000/posts.xml 요청하게 하면, XML 포멧의 글 목록(posts)을 확인할 수 있습니다. 액션 이름에 연결되는 HTML 포멧은 +app/views/posts/+ 폴더 안에서 찾을 수 있습니다. 레일즈는 액션에서 사용되는 모든 인스턴스 변수를 뷰안에서 사용할 수 있게 구성되어 있습니다. +app/views/posts/index.html.erb+ 내용 입니다.:
 
 <erb>
 <h1>Listing posts</h1>
@@ -542,18 +542,20 @@ The +respond_to+ block handles both HTML and XML calls to this action. If you br
 <%= link_to 'New post', new_post_path %>
 </erb>
 
-This view iterates over the contents of the +@posts+ array to display content and links. A few things to note in the view:
+이 뷰는 +@posts+ 배열을 순환하면서 내용과 링크를 보여줍니다. 뷰 안에 몇 가지 요소에 대한 설명입니다.:
 
+* +link_to+는 세부 항목에 대한 링크를 만듭니다.
 * +link_to+ builds a hyperlink to a particular destination
-* +edit_post_path+ and +new_post_path+ are helpers that Rails provides as part of RESTful routing. You'll see a variety of these helpers for the different actions that the controller includes.
+* +edit_post_path+ 와 +new_post_path+ 는 레일즈가 제공하는 RESTfule 라우팅 부분입니다. 이 헬퍼들의 다양한 모습을 컨트롤러가 포함한  다른 액션들에서 볼 수 있습니다.
 
-NOTE. In previous versions of Rails, you had to use +&lt;%=h post.name %&gt;+ so that any HTML would be escaped before being inserted into the page.  In Rails 3.0, this is now the default.  To get unescaped HTML, you now use +&lt;%= raw post.name %&gt;+.
+NOTE. 이번 버전의 레일즈에서는, 반드시 +&lt;%=h post.name %&gt;+ 사용해서 페이지에 출력할때 HTML에 적합하도록 변환(escape)해야 했습니다. 레일즈 3.0에서 이것은 기본 값입니다. 만약 변환을 원하지 않는다면 (unescape) +&lt;%= raw post.name %&gt;+ 이렇게 사용해 주세요.
 
-TIP: For more details on the rendering process, see "Layouts and Rendering in Rails":layouts_and_rendering.html.
+TIP: 랜더링 과정에 관한 더 자세한 내용은 "레이아웃(Layouts)과 렌더링(Rendering)":layouts_and_rendering.html 을 참고하세요.
 
-h4. Customizing the Layout
+h4(#Customizing-the-Layout). 레이아웃 수정하기(Customizing)
 
-The view is only part of the story of how HTML is displayed in your web browser. Rails also has the concept of +layouts+, which are containers for views. When Rails renders a view to the browser, it does so by putting the view's HTML into a layout's HTML. In previous versions of Rails, the +rails generate scaffold+ command would automatically create a controller specific layout, like +app/views/layouts/posts.html.erb+, for the posts controller. However this has been changed in Rails 3.0. An application specific +layout+ is used for all the controllers and can be found in +app/views/layouts/application.html.erb+. Open this layout in your editor and modify the +body+ tag:
+뷰는 오직 웹 브라우저에 HTML을 보여주기 위한 부분입니다. 레일즈는 뷰를 포함하는 +레이아웃(layouts)+라는 개념을 가지고 있습니다. 레일즈가 브라우저에 뷰를 보여줄때, 뷰의 HTML을 레이아웃의 HTML에 집어 넣습니다. 이전 버전의 레일즈에서는 +rails generate scaffold+
+ 명령어는 posts 컨트롤러에 대한 +app/views/layouts/posts.html.erb+ 같이, 컨트롤러마다 레이아웃(layout) HTML을 생성했습니다. 그러나 레일즈 3.0에서는 어플리케이션 전체에 사용되는 +레이아웃(layout)+을 모든 컨트롤러에 사용하고, +app/views/layouts/application.html.erb+ 파일에서 확인할 수 있습니다. 에디터로 이 레이아웃을 열어서 +body+ 테그를 수정해 보세요.:
 
 <erb>
 <!DOCTYPE html>
@@ -572,11 +574,11 @@ The view is only part of the story of how HTML is displayed in your web browser.
 </html>
 </erb>
 
-Now when you refresh the +/posts+ page, you'll see a gray background to the page. This same gray background will be used throughout all the views for posts.
+이제 +/posts+ 페이지를 갱신하면, 페이지의 배경색이 회색인걸 볼 수 있습니다. 이와 동일한 회색 배경색이 posts를 위한 모든 뷰에 사용됩니다.
 
-h4. Creating New Posts
+h4(#Creating-New-Posts). 새 포스트 만들기
 
-Creating a new post involves two actions. The first is the +new+ action, which instantiates an empty +Post+ object:
+새로운 포스트 만들기는 두개의 액션과 관련있습니다. 첫번째는 빈 +Post+ 객체를 이용하는 +new+ 액션입니다.:
 
 <ruby>
 def new
@@ -589,7 +591,7 @@ def new
 end
 </ruby>
 
-The +new.html.erb+ view displays this empty Post to the user:
++new.html.erb+ 뷰는 이 비어있는 Post를 사용자에게 보여줍니다.
 
 <erb>
 <h1>New post</h1>
@@ -599,9 +601,9 @@ The +new.html.erb+ view displays this empty Post to the user:
 <%= link_to 'Back', posts_path %>
 </erb>
 
-The +&lt;%= render 'form' %&gt;+ line is our first introduction to _partials_ in Rails.  A partial is a snippet of HTML and Ruby code that can be reused in multiple locations.  In this case, the form used to make a new post, is basically identical to a form used to edit a post, both have text fields for the name and title and a text area for the content with a button to make a new post or update the existing post.
++&lt;%= render 'form' %&gt;+ 줄은 레일즈의 _partials_를 처음 소개하는 거네요. partial은 HTML과 루비 코드의 조각으로 여러 장소에서 재사용할 수 있습니다. 이 경우에는 새로운 글(post)를 만드는 폼이 글(post)를 수정하는 폼과 동일합니다. 양쪽 모두 이름(name)과 제목(title)을 위한 텍스트 필드(text field)와 본문(content)를 위한 텍스트 영역(text area)을 가지고 새로운 글(post)을 만들거나 존재하는 글을 수정합니다. 
 
-If you take a look at +views/posts/_form.html.erb+ file, you will see the following:
++views/posts/_form.html.erb+ 파일을 보면 다음과 같습니다.:
 
 <erb>
 <%= form_for(@post) do |f| %>

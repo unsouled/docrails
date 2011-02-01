@@ -51,6 +51,10 @@ h3(#word-dict). 영어 - 한국어 용어 사전
 | Resources | 리소스 |
 | Dummy | 더미 |
 | Adapter | 어댑터 |
+| Validation | 유효성 검사 |
+| Context | 컨텍스트 |
+| hyperlink | 하이퍼링크, 링크 |
+| escape | 이스케이프 |
 
 h3. Translation 진행 상태
 
