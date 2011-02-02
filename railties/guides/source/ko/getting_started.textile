@@ -13,7 +13,7 @@ WARNING. 이 가이드는 레일즈 3.0에 기초합니다. 기존 버전의 레
 
 h3(#Rails-Assumptions). 이 가이드를 시작하기 위해서
 
-이 가이드는 레일즈 어플리케이션을 처음부터 시작하는 초보자 분들을 위해 구성되어 있습니다. 이 문서는 레일즈 경험이 전혀 없다고 가정합니다. 그러나 미리 준비 할 몇가지가 있습니다.
+이 가이드는 레일즈 어플리케이션을 처음부터 시작하는 초보자 분들을 위해 구성되어 있습니다. 이 문서는 레일즈 경험이 전혀 없다고 가정합니다. 그러나 미리 준비 할 몇 가지가 있습니다.
 
 * "루비":http://www.ruby-lang.org/en/downloads 언어 버전 1.8.7 이상
 
@@ -545,7 +545,6 @@ TIP: 엑티브 레코드(Active Record)에 관한 더 자세한 정보는 "엑�
 이 뷰는 +@posts+ 배열을 순환하면서 내용과 링크를 보여줍니다. 뷰 안에 몇 가지 요소에 대한 설명입니다.:
 
 * +link_to+는 세부 항목에 대한 링크를 만듭니다.
-* +link_to+ builds a hyperlink to a particular destination
 * +edit_post_path+ 와 +new_post_path+ 는 레일즈가 제공하는 RESTfule 라우팅 부분입니다. 이 헬퍼들의 다양한 모습을 컨트롤러가 포함한  다른 액션들에서 볼 수 있습니다.
 
 NOTE. 이번 버전의 레일즈에서는, 반드시 +&lt;%=h post.name %&gt;+ 사용해서 페이지에 출력할때 HTML에 적합하도록 변환(escape)해야 했습니다. 레일즈 3.0에서 이것은 기본 값입니다. 만약 변환을 원하지 않는다면 (unescape) +&lt;%= raw post.name %&gt;+ 이렇게 사용해 주세요.
@@ -636,17 +635,17 @@ end
 <% end %>
 </erb>
 
-This partial receives all the instance variables defined in the calling view file, so in this case, the controller assigned the new Post object to +@post+ and so, this is available in both the view and partial as +@post+.
+이 partial은 뷰 파일이 호출될때 정의된 모든 인스턴스 변수를 받습니다. 그래서 이 경우에 컨트롤러는 새로운 Post 객체를 +@post+에 할당했기 때문에 뷰와 partial은 모두 +@post+을 사용할 수 있습니다.
 
-For more information on partials, refer to the "Layouts and Rendering in Rails":layouts_and_rendering.html#using-partials guide.
+partial 에 대한 더많은 정보를 원하시면 "레이아웃(Layouts)과 렌더링(Rendering)"::layouts_and_rendering.html#using-partials guide 를 참고하세요.
 
-The +form_for+ block is used to create an HTML form. Within this block, you have access to methods to build various controls on the form. For example, +f.text_field :name+ tells Rails to create a text input on the form, and to hook it up to the +name+ attribute of the instance being displayed. You can only use these methods with attributes of the model that the form is based on (in this case +name+, +title+, and +content+). Rails uses +form_for+ in preference to having you write raw HTML because the code is more succinct, and because it explicitly ties the form to a particular model instance.
++form_for+ 블록은 HTML 폼을 만드는데 사용됩니다. 이 블럭 안에서 폼에 대한 다양한 컨트롤을 만든는 메소드를 사용할 수 있습니다. 예를들어서 +f.text_field :name+은 레일즈에게 폼 위에 텍스트 인풋(text input) 만들고, +name+ 속성(attribute)을 다루게 만듭니다. 오직 이 폼 메소드(+form_for+)와 관련된 모델이 가지고 있는 속성(attribute)값으로만 이러한 메소드를 사용할 수 있습니다. (이 경우에는 +name+과 +title+ 그리고 +content+ 속성만 사용할 수 있네요.) 코드가 좀 더 간결해지고, 특정한 모델 인스턴스와 폼이 명확하게 연결되기 때문에, 레일즈에서는 +form_for+를 여러분이 작성한 HTML 코드내에 사용하는걸 권장합니다.
 
-The +form_for+ block is also smart enough to work out if you are doing a _New Post_ or an _Edit Post_ action, and will set the form +action+ tags and submit button names appropriately in the HTML output.
+또한 +form_for+ 블록은 _새글(New Post)_ 이나 _글수정(Edit Post)_ 액션을 수행할때, 출력될 HTML에 폼의 +action+ 태그와 submit 버튼의 이름을 채워넣을 만큼 충분히 영리합니다.
 
-TIP: If you need to create an HTML form that displays arbitrary fields, not tied to a model, you should use the +form_tag+ method, which provides shortcuts for building forms that are not necessarily tied to a model instance.
+TIP: 모델과 묶여있지 않는, 임의의 필드를 출력하는 HTML 폼을 만들때, 모델 인스턴스와 관계없는 폼을 만드는 기능을 가진 +form_tag+ 메소드를 사용하세요.
 
-When the user clicks the +Create Post+ button on this form, the browser will send information back to the +create+ method of the controller (Rails knows to call the +create+ method because the form is sent with an HTTP POST request; that's one of the conventions that I mentioned earlier):
+사용자가 +Create Post+버튼을 폼에서 클릭하면, 브라우저는 컨트롤러의 +create+에 정보를 보낼 것 입니다. (레일즈는 HTTP의 POST 요청을 통해서 +create+ 메소드를 불러야 한다는걸 알 수 있습니다.; 이것은 위에 언급된 레일즈의 관습 중에 하나입니다.)
 
 <ruby>
 def create
@@ -667,11 +666,11 @@ def create
 end
 </ruby>
 
-The +create+ action instantiates a new Post object from the data supplied by the user on the form, which Rails makes available in the +params+ hash. After successfully saving the new post, +create+ returns the appropriate format that the user has requested (HTML in our case). It then redirects the user to the resulting post +show+ action and sets a notice to the user that the Post was successfully created.
++create+ 액션은 폼에서 사용자가 제공한 정보로부터 레일즈가 만들어낸 +param+ 해쉬를 기반해서,  새로운 Post 객체를 생성합니다. 새로운 글(post)가 성공적으로 저장된 이후에, +create+는 사용자 요청에 적합한 포멧을 반환합니다. 이 경우에 사용자는 +show+ 액션으로 리다이렉트되어서 글(Post)이 성공적으로 작성된 것을 확인할 수 있습니다.
 
-If the post was not successfully saved, due to a validation error, then the controller returns the user back to the +new+ action with any error messages so that the user has the chance to fix the error and try again.
+글의 저장이 성공하지 못하면, 유효성 검사관련 에러를 발생하고 컨트롤러는 +new+ 액션으로 사용자를 안내한 후에 에러 메세지를 출력해서 사용자에게 옳바르게 에러를 수정할 기회를 제공합니다.
 
-The "Post was successfully created." message is stored inside of the Rails +flash+ hash, (usually just called _the flash_) so that messages can be carried over to another action, providing the user with useful information on the status of their request. In the case of +create+, the user never actually sees any page rendered during the Post creation process, because it immediately redirects to the new Post as soon Rails saves the record. The Flash carries over a message to the next action, so that when the user is redirected back to the +show+ action, they are presented with a message saying "Post was successfully created."
+"Post was successfully created."라는 메세지가 레일즈의 +flash+ 해쉬에 저장된 후, (일반적으로 그냥 _the flash_라고 부릅니다.) 이 성공 메세지는 다른 액션에도 전달될수 있어서 사용자에게 진행 된 요청의 상태 정보를  제공합니다. +create+ 경우에, 사용자는 Post(글)이 생성 중에는 볼수잇는 페이지가 없습니다. 왜냐하면 새로운 글(Post)가 저장된 후에는 곧바로 만들어진 글을 보여주는 페이지로 이동하기 때문이죠. Flash는 다음 액션에도 메세지를 보관하고 있습니다. 그래서, 사용자가 +show+ 액션으로 리다이렉트 되어도 "Post was successfully created."를 확인할 수 있게되죠. 
 
 h4. Showing an Individual Post
 
