@@ -722,7 +722,7 @@ def edit
 end
 </ruby>
 
-글을 요청한 후에, 레일즈는 +edit.html.erb+ 뷰를 이용해서 이를 출력합나.:
+글을 요청한 후에, 레일즈는 +edit.html.erb+ 뷰를 이용해서 이를 출력합니다.:
 
 <erb>
 <h1>Editing post</h1>
@@ -787,7 +787,7 @@ h4(#Generating-a-Model). 모델 만들기
 $ rails generate model Comment commenter:string body:text post:references
 </shell>
 
-이 명령어는 다음의 4개의 파일을 만드니다.:
+이 명령어는 다음의 4개의 파일을 만듭니다.:
 
 * +app/models/comment.rb+ - The model
 * +db/migrate/20100207235629_create_comments.rb+ - The migration
@@ -801,7 +801,7 @@ class Comment < ActiveRecord::Base
 end
 </ruby>
 
-이 파일은 +post.rb+ 모델과 이전에 보았던 매우 비슷합니다. 다른 점은 +belongs_to :post+ 가 존재하는 건데, 이건 엑티브 레코드의 _관계(association)_ 을 정의하는 규칙입니다. 이가이드의 다음 색션에서 관계(association)에 대해서 조금 더 배우게 될 겁니다. 
+이 파일은 이전에 보았던 +post.rb+ 모델과 매우 비슷합니다. 다른 점은 +belongs_to :post+ 가 존재하는 건데, 이건 엑티브 레코드의 _관계(association)_ 을 정의하는 규칙입니다. 이 가이드의 다음 색션에서 관계(association)에 대해서 조금 더 배우게 될 겁니다. 
 
 모델과 더불어, 레일즈는 이와 대응하는 데이터베이스 테이블 생성 마이그레이션도 만듭니다.: 
 
@@ -831,7 +831,7 @@ end
 $ rake db:migrate
 </shell>
 
-레일즈는 똑똑하게 현재 데이터베이스를 대상으로 아직 실행되지 않은 마이그래이션만 실행 시킵니다. 이 경우에 이런 결과를 볼 수 있을 겁니다.:
+레일즈는 똑똑하게 현재 데이터베이스를 대상으로 아직 실행되지 않은 마이그래이션만 실행 시킵니다. 이 경우에 이런 결과를 볼 수 있습니다.:
 
 <shell>
 ==  CreateComments: migrating =================================================
@@ -840,14 +840,14 @@ $ rake db:migrate
 ==  CreateComments: migrated (0.0018s) ========================================
 </shell>
 
-h4. Associating Models
+h4(#Associating-Models). 모델 관계 설정하기
 
-Active Record associations let you easily declare the relationship between two models. In the case of comments and posts, you could write out the relationships this way:
+엑티브 레코드 관계(Association)은 두개의 모델의 관계를 손쉽게 정의하게 만들어 줍니다. 글(Post)와 댓글(Comment)의 경우에 관계는 다음과 같이 표현할 수 있습니다.:
 
-* Each comment belongs to one post
-* One post can have many comments
+* 각 댓글(comment)는 하나의 글(Post)에 속한다.
+* 하나의 글(Post)는 많은 댓글(comment)를 가질수 있다.
 
-In fact, this is very close to the syntax that Rails uses to declare this association. You've already seen the line of code inside the Comment model that makes each comment belong to a Post:
+사실, 이 관계를 정의하기 위해서 레일즈가 사용하는 문법이 이 사례에 매우 적합합니다. 이미 댓글(comment) 모델에서 각 댓글이 글(Post)에 속하게 만드는 코드를 보셨습니다.:
 
 <ruby>
 class Comment < ActiveRecord::Base
@@ -855,7 +855,7 @@ class Comment < ActiveRecord::Base
 end
 </ruby>
 
-You'll need to edit the +post.rb+ file to add the other side of the association:
+이제 +post.rb+ 파일에 추가로 다른 관점의 관계를 추가할 필요가 있어요.:
 
 <ruby>
 class Post < ActiveRecord::Base
@@ -867,9 +867,9 @@ class Post < ActiveRecord::Base
 end
 </ruby>
 
-These two declarations enable a good bit of automatic behavior. For example, if you have an instance variable +@post+ containing a post, you can retrieve all the comments belonging to that post as the array +@post.comments+.
+이 두개의 정의는 자동으로 멋진 기능을 추가합니다. 예를 들자면, 글 정보를 가지고 있는 +@post+ 인스턴스 변수를 가지고 있다면, +@post.comments+ 코드를 통해서 글에 속한 모든 댓들(comment)의 배열을 가지고 올 수 있습니다.
 
-TIP: For more information on Active Record associations, see the "Active Record Associations":association_basics.html guide.
+TIP: 엑티브 레코드 관계(Associations)에 대한 더 많은 정보는 "엑티브 레코드 Association(관계)":association_basics.html 가이드를 참고하세요.
 
 h4. Adding a Route for Comments
 
