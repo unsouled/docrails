@@ -30,7 +30,7 @@ TIP: 루비 버전 1.8.7 p248 과 p249 는 레일즈 3.0을 중단 시키는 마
 
 h3(#What-is-Rails). 레일즈란 무엇인가?
 
-레일즈는 루비 언어로 작성된 웹 어플리케이션 프레임워크 입니다. 레일즈는 모든 개발자가 개발을 시작 할때 필요한 초기 준비들을 지원하여 웹 어플리케이션 프로그래밍을 더 쉽게 만들수 있도록 설계 되어 있습니다. 레일즈는 다른 언어와 프레임웍에 비해서 더 적은 코드로 작성됩니다. 레일즈를 경험한 개발자들은 웹 어플리케이션 개발이 좀 더 재미있다고 이야기합니다.
+레일즈는 루비 언어로 작성된 웹 어플리케이션 프레임워크 입니다. 레일즈는 모든 개발자가 개발을 시작 할때 필요한 초기 준비나 가정들을 쉽게 만들수 있는 도구를 제공하여, 웹 어플리케이션 프로그래밍을 더 쉽게 만들수 있도록 설계 되어 있습니다. 레일즈는 다른 언어와 프레임웍에 비해서 더 적은 코드로 작성됩니다. 레일즈를 경험한 개발자들은 웹 어플리케이션 개발이 좀 더 재미있다고 이야기합니다.
 
 레일즈는 주장이 확실한 소프트웨어 입니다. 레일즈는 "최고"의 방법을 가정하고, 그러한 방법을 격려하도록 설계되어 있습니다. 여러분이 "The Rails Way" 배우면, 아마도 굉장한 생산성 향상을 발견하실 겁니다. 다른 언어의 개발 습관들을 레일즈 개발시 고수하고 있다면, 아마 덜 행복한 경험을 하실 겁니다.
 
@@ -600,7 +600,7 @@ end
 <%= link_to 'Back', posts_path %>
 </erb>
 
-+&lt;%= render 'form' %&gt;+ 줄은 레일즈의 _partials_를 처음 소개하는 거네요. partial은 HTML과 루비 코드의 조각으로 여러 장소에서 재사용할 수 있습니다. 이 경우에는 새로운 글(post)를 만드는 폼이 글(post)를 수정하는 폼과 동일합니다. 양쪽 모두 이름(name)과 제목(title)을 위한 텍스트 필드(text field)와 본문(content)를 위한 텍스트 영역(text area)을 가지고 새로운 글(post)을 만들거나 존재하는 글을 수정합니다. 
++&lt;%= render 'form' %&gt;+ 줄은 레일즈의 _partials_ 를 처음 소개하는 거네요. partial은 HTML과 루비 코드의 조각으로 여러 장소에서 재사용할 수 있습니다. 이 경우에는 새로운 글(post)를 만드는 폼이 글(post)를 수정하는 폼과 동일합니다. 양쪽 모두 이름(name)과 제목(title)을 위한 텍스트 필드(text field)와 본문(content)를 위한 텍스트 영역(text area)을 가지고 새로운 글(post)을 만들거나 존재하는 글을 수정합니다. 
 
 +views/posts/_form.html.erb+ 파일을 보면 다음과 같습니다.:
 
@@ -672,9 +672,9 @@ end
 
 "Post was successfully created."라는 메세지가 레일즈의 +flash+ 해쉬에 저장된 후, (일반적으로 그냥 _the flash_라고 부릅니다.) 이 성공 메세지는 다른 액션에도 전달될수 있어서 사용자에게 진행 된 요청의 상태 정보를  제공합니다. +create+ 경우에, 사용자는 Post(글)이 생성 중에는 볼수잇는 페이지가 없습니다. 왜냐하면 새로운 글(Post)가 저장된 후에는 곧바로 만들어진 글을 보여주는 페이지로 이동하기 때문이죠. Flash는 다음 액션에도 메세지를 보관하고 있습니다. 그래서, 사용자가 +show+ 액션으로 리다이렉트 되어도 "Post was successfully created."를 확인할 수 있게되죠. 
 
-h4. Showing an Individual Post
+h4(#Showing-an-Individual-Post). 각각의 글 보여주기
 
-When you click the +show+ link for a post on the index page, it will bring you to a URL like +http://localhost:3000/posts/1+. Rails interprets this as a call to the +show+ action for the resource, and passes in +1+ as the +:id+ parameter. Here's the +show+ action:
+인덱스 페이지에서 글(post) 하나를 위한 +show+ 링크 클릭하면, 레일즈는 +http://localhost:3000/posts/1+ 모양의 URL로 안내합니다. 레일즈는 이걸 해석해서 해당 리소스를 위한 +show+ 액션을 호출하고, 파라미터의 +id+ 에 +1+ 담아서 넘깁니다. 여기 +show+ 액션을 보세요.:
 
 <ruby>
 def show
@@ -687,7 +687,7 @@ def show
 end
 </ruby>
 
-The +show+ action uses +Post.find+ to search for a single record in the database by its id value. After finding the record, Rails displays it by using +show.html.erb+:
++show+ 액션은 id 값을 이용해서 데이터베이스에 있는 글(Post) 하나에 해당하는 레코드를 +Post.find+를 이용해서 찾습니다. 레코드를 찾은 후에, 레일즈는 +show.html.erb+ 를 이용해서 화면에 출력합니다.:
 
 <erb>
 <p class="notice"><%= notice %></p>
@@ -712,9 +712,9 @@ The +show+ action uses +Post.find+ to search for a single record in the database
 <%= link_to 'Back', posts_path %>
 </erb>
 
-h4. Editing Posts
+h4(Editing-Posts). 글 수정하기
 
-Like creating a new post, editing a post is a two-part process. The first step is a request to +edit_post_path(@post)+ with a particular post. This calls the +edit+ action in the controller:
+새로운 글을 만드는 것과 비슷하게, 글을 수정하는건 두가지 과정으로 이루어집니다. 첫번째는 원하는 글에 +edit_post_path(@post)+ 요청하는 것입니다. 이 요청은 컨트롤러에서 +edit+ 액션을 호출합니다.:
 
 <ruby>
 def edit
@@ -722,7 +722,7 @@ def edit
 end
 </ruby>
 
-After finding the requested post, Rails uses the +edit.html.erb+ view to display it:
+글을 요청한 후에, 레일즈는 +edit.html.erb+ 뷰를 이용해서 이를 출력합나.:
 
 <erb>
 <h1>Editing post</h1>
@@ -733,9 +733,9 @@ After finding the requested post, Rails uses the +edit.html.erb+ view to display
 <%= link_to 'Back', posts_path %>
 </erb>
 
-Again, as with the +new+ action, the +edit+ action is using the +form+ partial, this time however, the form will do a PUT action to the PostsController and the submit button will display "Update Post"
++new+ 액션처럼, +form+ partial 을 사용합니다. 하지만 이번에 폼은 PostController 에게 PUT 액션을 요청하고, submit 버튼에는 "Update Post"라고 표시 됩니다.
 
-Submitting the form created by this view will invoke the +update+ action within the controller:
+위의 폼에서 이루어진 요청은, 컨트롤러의 +update+ 액션을 호출합니다.
 
 <ruby>
 def update
@@ -755,11 +755,11 @@ def update
 end
 </ruby>
 
-In the +update+ action, Rails first uses the +:id+ parameter passed back from the edit view to locate the database record that's being edited. The +update_attributes+ call then takes the rest of the parameters from the request and applies them to this record. If all goes well, the user is redirected to the post's +show+ view. If there are any problems, it's back to the +edit+ view to correct them.
++update+ 액션에서, 레일즈는 처음에 수정 뷰가 넘긴 +:id+ 파라미터를 이용해서 데이터베이스에 있는 목표 레코드 위치를 찾아 냅니다. 그 다음에 +update_attributes+ 호출해서 요청(request)에서 받은 파라미터들을 해당 레코드에 적용합니다. 모든게 잘 이루어지면 해당 글(post)의 +show+ 뷰로 리다이렉트 시킵니다. 만약, 문제가 발생하면, 이에 대한 수정을 위해서 +edit+ 뷰로 되돌아 갑니다.
 
-h4. Destroying a Post
+h4(#Destroying-a-Post). 글 지우기
 
-Finally, clicking one of the +destroy+ links sends the associated id to the +destroy+ action:
++destroy+ 링크는 +destroy+ 액션으로 관련 id를 전송합니다. 
 
 <ruby>
 def destroy
@@ -773,27 +773,27 @@ def destroy
 end
 </ruby>
 
-The +destroy+ method of an Active Record model instance removes the corresponding record from the database. After that's done, there isn't any record to display, so Rails redirects the user's browser to the index view for the model.
+엑티브 레코드 인스턴스의 +destroy+ 메소드는 데이터베이스의 관련 레코드를 삭제합니다. 이 작업이 완료되면, 보여줄 정보가 존재하지 않아서, 레일즈는 사용자 브라우저를 모델을 위한 index 뷰로 리다이렉트 시킵니다.
 
-h3. Adding a Second Model
+h3(#Adding-a-Second-Model). 두번째 모델 추가하기
 
-Now that you've seen how a model built with scaffolding looks like, it's time to add a second model to the application. The second model will handle comments on blog posts.
+발판(scaffolding) 작업으로 만들어진 이와 같은 모델들이 어떻게 동작하는지 알게되었습니다. 이제 어플리케이션에 두번째 모델을 추가할때죠. 두번째 모델은 블로그 글(blog post)의 댓글(comment)를 다루게 됩니다.
 
-h4. Generating a Model
+h4(#Generating-a-Model). 모델 만들기
 
-Models in Rails use a singular name, and their corresponding database tables use a plural name. For the model to hold comments, the convention is to use the name Comment. Even if you don't want to use the entire apparatus set up by scaffolding, most Rails developers still use generators to make things like models and controllers. To create the new model, run this command in your terminal:
+레일즈에서 모델은 단수형 이름을 사용합니다. 그리고 이들은 데이터베이스의 복수형으로 이름 붙여진 테이블과 상호 작용합니다. comments 와 관련있는 모델은 관습상 Comment 라는 이름을 사용합니다. 비록 여러분은 발판(scaffolding) 작업을 통해서 이런 구조 전체를 만드는걸 원하지 않을지도 모르겠어요. 그렇지만 대부분은 레일즈 개발자들은 아직 모델과 컨트롤러 같은 요소를 만드는데 제너레이터를 이용합니다. 새로운 모델을 만들기 위해서 다음의 명령어를 터미널에서 실행하세요.:
 
 <shell>
 $ rails generate model Comment commenter:string body:text post:references
 </shell>
 
-This command will generate four files:
+이 명령어는 다음의 4개의 파일을 만드니다.:
 
 * +app/models/comment.rb+ - The model
 * +db/migrate/20100207235629_create_comments.rb+ - The migration
 * +test/unit/comment_test.rb+ and +test/fixtures/comments.yml+ - The test harness.
 
-First, take a look at +comment.rb+:
+우선 +comment.rb+ 를 보세요.:
 
 <ruby>
 class Comment < ActiveRecord::Base
@@ -801,9 +801,9 @@ class Comment < ActiveRecord::Base
 end
 </ruby>
 
-This is very similar to the +post.rb+ model that you saw earlier. The difference is the line +belongs_to :post+, which sets up an Active Record _association_. You'll learn a little about associations in the next section of this guide.
+이 파일은 +post.rb+ 모델과 이전에 보았던 매우 비슷합니다. 다른 점은 +belongs_to :post+ 가 존재하는 건데, 이건 엑티브 레코드의 _관계(association)_ 을 정의하는 규칙입니다. 이가이드의 다음 색션에서 관계(association)에 대해서 조금 더 배우게 될 겁니다. 
 
-In addition to the model, Rails has also made a migration to create the corresponding database table:
+모델과 더불어, 레일즈는 이와 대응하는 데이터베이스 테이블 생성 마이그레이션도 만듭니다.: 
 
 <ruby>
 class CreateComments < ActiveRecord::Migration
@@ -825,13 +825,13 @@ class CreateComments < ActiveRecord::Migration
 end
 </ruby>
 
-The +t.references+ line sets up a foreign key column for the association between the two models. And the +add_index+ line sets up an index for this association column. Go ahead and run the migration:
++t.references+ 줄은 두 모델 사이에 외럐키(foreign key) 관계를 설정합니다. 그리고 +add_index+ 줄은 이와 관계된 컬럼에 인덱스를 설정합니다. 마이그레이션을 실행하세요.:
 
 <shell>
 $ rake db:migrate
 </shell>
 
-Rails is smart enough to only execute the migrations that have not already been run against the current database, so in this case you will just see:
+레일즈는 똑똑하게 현재 데이터베이스를 대상으로 아직 실행되지 않은 마이그래이션만 실행 시킵니다. 이 경우에 이런 결과를 볼 수 있을 겁니다.:
 
 <shell>
 ==  CreateComments: migrating =================================================
