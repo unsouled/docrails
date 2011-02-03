@@ -871,9 +871,9 @@ end
 
 TIP: 엑티브 레코드 관계(Associations)에 대한 더 많은 정보는 "엑티브 레코드 Association(관계)":association_basics.html 가이드를 참고하세요.
 
-h4. Adding a Route for Comments
+h4(#Adding-a-Route-for-Comments). 댓글(Comments)를 위한 라우팅 규칙 추가하기
 
-As with the +home+ controller, we will need to add a route so that Rails knows where we would like to navigate to see +comments+.  Open up the +config/routes.rb+ file again, you will see an entry that was added automatically for +posts+ near the top by the scaffold generator, +resources :posts+, edit it as follows:
++home+ 컨트롤러 같이, 라우팅 규칙을 추가해서 레일즈가 +comments+로 가는 방법을 알게 만들 겁니다. +config/routes.rb+ 파일을 다시 여세요. 발판(scaffold) 제너레이터에 의해서 파일의 꼭대기 근처에 +posts+를 위한 규칙이 자동으로 추가된 것을 볼 수 있을 꺼에요. +resources :posts+ 를 다음과 같이 수정합니다. :
 
 <ruby>
 resources :posts do
@@ -881,29 +881,29 @@ resources :posts do
 end
 </ruby>
 
-This creates +comments+ as a _nested resource_ within +posts+. This is another part of capturing the hierarchical relationship that exists between posts and comments.
+이 구문은 +comments+를 +posts+를 포함하는 _nested 리소스_로 만듭니다. 이 규칙은 글(post)와 댓글(comment) 사이에 계층적인 관계를 포착할 수 있는 또 다른 부분입니다.
 
-TIP: For more information on routing, see the "Rails Routing from the Outside In":routing.html guide.
+TIP: 라우팅에 대한 더 많은 정보는 "외부 요청에 대한 레일즈 라우팅":routing.html 가이드를 참고하세요.
 
-h4. Generating a Controller
+h4(#Generating-a-Controller). 컨트롤러 만들기
 
-With the model in hand, you can turn your attention to creating a matching controller. Again, there's a generator for this:
+모델을 손에 얻었으니, 이제 어울리는 컨트롤러 만들기에 주력할 수 있습니다. 이렇게 제너레이터를 실행시키세요.:
 
 <shell>
 $ rails generate controller Comments
 </shell>
 
-This creates four files and one empty directory:
+이 명령은 4개의 파일과 1개의 빈 디렉토리를 만듭니다.
 
-* +app/controllers/comments_controller.rb+ - The controller
-* +app/helpers/comments_helper.rb+ - A view helper file
-* +test/functional/comments_controller_test.rb+ - The functional tests for the controller
-* +test/unit/helpers/comments_helper_test.rb+ - The unit tests for the helper
-* +app/views/comments/+ - Views of the controller are stored here
+* +app/controllers/comments_controller.rb+ - 컨트롤러
+* +app/helpers/comments_helper.rb+ - 뷰 헬퍼 파일
+* +test/functional/comments_controller_test.rb+ - 컨트롤러를 위한 기능 테스트
+* +test/unit/helpers/comments_helper_test.rb+ - 헬퍼를 위한 유닛 테스트
+* +app/views/comments/+ - 컨트롤러의 뷰는 여기에 저장됩니다.
 
-Like with any blog, our readers will create their comments directly after reading the post, and once they have added their comment, will be sent back to the post show page to see their comment now listed.  Due to this, our +CommentsController+ is there to provide a method to create comments and delete SPAM comments when they arrive.
+어떠한 블로그와 같이, 우리의 독자는 글을 읽은 후에 그들의 댓글을 만들 겁니다. 그리고 댓글을 한번 추가하고, 그 댓글을 확인하기 위해서  글(post)을 보는 페이지로 돌아갈 꺼에요. 이러한 책무를 가진 우리의 +CommentController+는 댓글 생성하는 메소드와 스팸 댓글을 지우는 기능을 제공해야 합니다.
 
-So first, we'll wire up the Post show template (+/app/views/posts/show.html.erb+) to let us make a new comment:
+그래서, 우선 해당 글(Post)을 보여주는 템플릿(+/app/views/posts/show.html.erb+)을 새로운 댓글 만들기와 연결 시킬 것입니다.:
 
 <erb>
 <p class="notice"><%= notice %></p>
@@ -942,7 +942,7 @@ So first, we'll wire up the Post show template (+/app/views/posts/show.html.erb+
 <%= link_to 'Back to Posts', posts_path %> |
 </erb>
 
-This adds a form on the Post show page that creates a new comment, which will call the +CommentsController+ +create+ action, so let's wire that up:
+새로운 댓글을 만들기 위한 폼을 Post의 show 페이지에 추가합니다. 이 폼은 +CommentsController+의 +create+ 액션을 호출할 것입니다. 그래서 이렇게 작성합니다.:
 
 <ruby>
 class CommentsController < ApplicationController
@@ -954,11 +954,11 @@ class CommentsController < ApplicationController
 end
 </ruby>
 
-You'll see a bit more complexity here than you did in the controller for posts. That's a side-effect of the nesting that you've set up; each request for a comment has to keep track of the post to which the comment is attached, thus the initial find action to the Post model to get the post in question.
+글(post)를 위한 컨트롤러보다 약간 복잡하게 보일 겁니다. 이러한 약간의 복잡함은 여러분이 설정한 nested 라우팅 설정의 결과이기도 합니다.; 댓글(comment)를 위한 각 요청은 해당 댓글이 속하게 될 글(post)를 따라갑니다. 그래서 첫 부분에서 Post(글) 모델을 찾는 코드가 있죠.
 
-In addition, the code takes advantage of some of the methods available for an association. We use the +create+ method on +@post.comments+ to create and save the comment. This will automatically link the comment so that it belongs to that particular post.
+덫붙여서, 관계를 위한 메소드는 몇 가지 장점을 가지고 옵니다. 우리는 댓글을 만들고 저장하기 위해서 +@post.comments+ 상의 +create+ 메소드를 사용합니다. 그런데, 이 메소드는 글과 댓글(comment)을 자동으로 연결해서, 댓글을 특정한 글(post)에 속하게 만듭니다. 
 
-Once we have made the new comment, we send the user back to the original post using the +post_path(@post)+ helper. As we have already seen, this calls the +show+ action of the +PostsController+ which in turn renders the +show.html.erb+ template. This is where we want the comment to show, so let's add that to the +app/views/posts/show.html.erb+.
+새로운 댓글을 만들고 나면, 컨트롤러는 사용자를 +post_path(@post)+ 헬퍼를 이용해서 원래의 글 페이지로 보냅니다. 이미 우리가 봤듯이, 이 호출은 +PostsController+의 +show+ 액션을 호출해서 사용자에게 +show.html.erb+ 템플릿의 출력 결과를 보여줍니다. 이 화면에서 사용자가 작성한 댓글을 보여줄 수 있죠. 자 이제,  +app/views/posts/show.html.erb+ 를 붙여 봅시다.
 
 <erb>
 <p class="notice"><%= notice %></p>
@@ -1012,9 +1012,9 @@ Once we have made the new comment, we send the user back to the original post us
 <%= link_to 'Back to Posts', posts_path %> |
 </erb>
 
-Now you can add posts and comments to your blog and have them show up in the right places.
+이제 여러분의 블로그에 글과 댓글을 붙일수있습니다. 그리고 이 내용은 정확한 장소에서 볼 수 있습니다.
 
-h3. Refactoring
+h3(#Refactoring). 리펙토링(Refactoring)
 
 Now that we have Posts and Comments working, if we take a look at the +app/views/posts/show.html.erb+ template, it's getting long and awkward. We can use partials to clean this up.
 
