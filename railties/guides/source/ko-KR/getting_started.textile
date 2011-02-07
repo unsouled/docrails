@@ -1012,15 +1012,15 @@ end
 <%= link_to 'Back to Posts', posts_path %> |
 </erb>
 
-이제 여러분의 블로그에 글과 댓글을 붙일수있습니다. 그리고 이 내용은 정확한 장소에서 볼 수 있습니다.
+이제 여러분의 블로그에 글과 댓글을 쓸수 있습니다. 그리고 이 작성한 내용을 정확한 위치에서 확인할 수 있습니다.
 
 h3(#Refactoring). 리펙토링(Refactoring)
 
-Now that we have Posts and Comments working, if we take a look at the +app/views/posts/show.html.erb+ template, it's getting long and awkward. We can use partials to clean this up.
+글(Post)과 댓글(Comment)를 계속 작업합니다. +app/views/posts/show.html.erb+ 템플릿 둘러보면, 이건 너무 길어요. Partial을 이용해서 이를 좀 더 깔끔하게 만들 수 있습니다.
 
-h4. Rendering Partial Collections
+h4(#Rendering-Partial-Collections). Partial 컬렉션 렌더링하기
 
-First we will make a comment partial to extract showing all the comments for the post. Create the file +app/views/comments/_comment.html.erb+ and put the following into it:
+먼저, 글(Post)를 모든 댓글을 보는 부분을 댓글(comment) Partial로 추출합니다. +app/views/comments/_comment.html.erb+ 을 만들고 다음 내용을 위치시키세요.:
 
 <erb>
 <p>
@@ -1034,7 +1034,7 @@ First we will make a comment partial to extract showing all the comments for the
 </p>
 </erb>
 
-Then in the +app/views/posts/show.html.erb+ you can change it to look like the following:
+이후에는 +app/views/posts/show.html.erb+ 을 아래와 같이 변경할 수 있습니다.:
 
 <erb>
 <p class="notice"><%= notice %></p>
@@ -1078,11 +1078,11 @@ Then in the +app/views/posts/show.html.erb+ you can change it to look like the f
 <%= link_to 'Back to Posts', posts_path %> |
 </erb>
 
-This will now render the partial in +app/views/comments/_comment.html.erb+ once for each comment that is in the +@post.comments+ collection.  As the +render+ method iterates over the <tt>@post.comments</tt> collection, it assigns each comment to a local variable named the same as the partial, in this case +comment+ which is then available in the partial for us to show.
+이제  +@post.comments+ 내의 각 댓글(comment)는 +app/views/comments/_comment.html.erb+ 을 통해서 출력 될 것입니다. +render+ 메소드는 <tt>@post.comments</tt> 걸랙션을 순회하면서, partial과 동일한 이름으로 각 댓글(comment)를 지역 변수로 할당합니다. 이 경우에는 +comment+가 각 partial을 위한 지역 변수로 할당됩니다. 
 
-h4. Rendering a Partial Form
+h4(#Rendering-a-Partial-Form). Partial 폼 렌더링하기 
 
-Lets also move that new comment section out to it's own partial, again, you create a file +app/views/comments/_form.html.erb+ and in it you put:
+새로운 댓글 만드는 부분도 Partial로 옮겨 봅시다. +app/views/comments/_form.html.erb+을 만들고 아래의 내용을 입려하세요.:
 
 <erb>
 <%= form_for([@post, @post.comments.build]) do |f| %>
@@ -1100,7 +1100,7 @@ Lets also move that new comment section out to it's own partial, again, you crea
 <% end %>
 </erb>
 
-Then you make the +app/views/posts/show.html.erb+ look like the following:
+그리고 난후에 아래 내용으로 +app/views/posts/show.html.erb+을 수정하세요.:
 
 <erb>
 <p class="notice"><%= notice %></p>
@@ -1132,15 +1132,15 @@ Then you make the +app/views/posts/show.html.erb+ look like the following:
 <%= link_to 'Back to Posts', posts_path %> |
 </erb>
 
-The second render just defines the partial template we want to render, <tt>comments/form</tt>, Rails is smart enough to spot the forward slash in that string and realize that you want to render the <tt>_form.html.erb</tt> file in the <tt>app/views/comments</tt> directory.
+이 두번째 렌더링에서 단지 우리는 그리길 원하는 Partial 템플릿 <tt>comments/form</tt>를 정의 했습니다. 레일즈는 문자열에서 슬래시 앞쪽을 분석해서 원하는 <tt>app/views/comments</tt>내의 <tt>_form.html.erb</tt> 파일을 렌더링 합니다.
 
-The +@post+ object is available to any partials rendered in the view because we defined it as an instance variable.
++@post+ 객체는 인스턴수 변수로 정의했기 때문에 렌더링되는 어떤 Partial 에서든 사용할 수 있습니다.
 
-h3. Deleting Comments
+h3(#Deleting-Comments). 댓글(Comment) 지우기
 
-Another important feature on a blog is being able to delete SPAM comments.  To do this, we need to implement a link of some sort in the view and a +DELETE+ action in the +CommentsController+.
+SPAM 댓글을 지우는 기능은 또 다른 중요한 요소입니다. 이 기능을 위해서 해당 뷰에서 링크와  +CommentsController+ 내의 +DELETE+ 액션을 구현해야 합니다.
 
-So first, let's add the delete link in the +app/views/comments/_comment.html.erb+ partial:
+그래서 먼저, +app/views/comments/_comment.html.erb+ Partial 안에 삭제 링크를 추가합시다.:
 
 <erb>
 <p>
@@ -1160,7 +1160,7 @@ So first, let's add the delete link in the +app/views/comments/_comment.html.erb
 </p>
 </erb>
 
-Clicking this new "Destroy Comment" link will fire off a <tt>DELETE /posts/:id/comments/:id</tt> to our +CommentsController+, which can then use this to find the comment we want to delete, so let's add a destroy action to our controller:
+이 새로운 "Destroy Comment" 링크를 클릭하면 <tt>DELETE /posts/:id/comments/:id</tt> 요청이 +CommentsController+ 에게 전달됩니다. 이를 이용해서 삭제하기를 원하는 댓글을 찾고 기능을 구현할 수 있죠. 그러면 컨트롤러에 삭제(destroy) 액션을 추가합시다.:
 
 <ruby>
 class CommentsController < ApplicationController
@@ -1181,12 +1181,13 @@ class CommentsController < ApplicationController
 end
 </ruby>
 
-The +destroy+ action will find the post we are looking at, locate the comment within the <tt>@post.comments</tt> collection, and then remove it from the database and send us back to the show action for the post.
++destroy+ 액션은 목표한 글을 찾고, <tt>@post.comments</tt> 컬렉션 내의 목표 댓글(comment)를 찾은 후에 데이터베이스에서 그 내용을 삭제합니다. 사용자를 그후에 원래 글의 보여주기(show) 엑션으로 이동 시킵니다.
 
 
-h4. Deleting Associated Objects
+h4(#Deleting-Associated-Objects). 관계된 객체 삭제하기
 
-If you delete a post then its associated comments will also need to be deleted. Otherwise they would simply occupy space in the database. Rails allows you to use the +dependent+ option of an association to achieve this. Modify the Post model, +app/models/post.rb+, as follows:
+
+만약, 글을 삭제하면 연관된 댓글(comment)도 함께 삭제될 필요가 있습니다. 삭제하지 않으면 갯들 데이터는 데이터베이스상에서 단순히 공간만 차지하게 됩니다. 레일즈에서는 관계(association)을 부여할때 +dependent+ 옵션을 사용하면 손쉽게 구현할 수 있습니다. 글(Post)에 해당하는 +app/models/post.rb+ 을 다음과 같이 수정하세요.:
 
 <ruby>
 class Post < ActiveRecord::Base
@@ -1197,11 +1198,11 @@ class Post < ActiveRecord::Base
 end
 </ruby>
 
-h3. Security
+h3(#Security). 보안
 
-If you were to publish your blog online, anybody would be able to add, edit and delete posts or delete comments.
+블로그를 온라인에 노출시키면, 누구나 글과 댓글을 쓰기, 수정 그리고 지울 수 있습니다.
 
-Rails provides a very simple HTTP authentication system that will work nicely in this situation. First, we enable simple HTTP based authentication in our <tt>app/controllers/application_controller.rb</tt>:
+이번 챕터에서, 레일즈는 잘 동작하고, 매우 단순한 HTTP 인증 시스템을 제공할 겁니다.우선, <tt>app/controllers/application_controller.rb</tt> 내에서 단순한 HTTP기반 인증을 활성화 시키세요.
 
 <ruby>
 class ApplicationController < ActionController::Base
@@ -1218,11 +1219,11 @@ class ApplicationController < ActionController::Base
 end
 </ruby>
 
-You can obviously change the username and password to whatever you want.  We put this method inside of +ApplicationController+ so that it is available to all of our controllers.
+보시다시피, username 과 password 를 원하는데로 수정할 수 있습니다. +ApplicationController+ 의 내부에 이 메소드를 위치시켜서 모든 컨트롤러에서 사용 가능합니다.
 
-Then in the +PostsController+ we need to have a way to block access to the various actions if the person is not authenticated, here we can use the Rails <tt>before_filter</tt> method, which allows us to specify that Rails must run a method and only then allow access to the requested action if that method allows it.
+그 다음에, +PostsController+ 에서 인증받지 않은 사용자의 다양한 접근에 대한 요청을 막는 방법이 필요합니다. 여기에서 레일즈의 <tt>before_filter</tt> 메소드를 사용할 수 있습니다. 이 메소드는 레일즈가 반드시 실행해야할 메소드를 지정하고, 그 메소드가 허용한 요청 액션들에 대하여 접근을 허락합니다. 
 
-To use the before filter, we specify it at the top of our +PostsController+, in this case, we want the user to be authenticated on every action, except for +index+ and +show+, so we write that:
+before filter를 사용하기 위해서, +PostController+의 상단에 원하는 내용을 정의합니다.  이 경우에 우리는 +index+ 와 +show+ 제외한 모든 액션에 대해서 인증된 사용자만 허락하고 싶습니다. 이렇게 적어주세요.:
 
 <ruby>
 class PostsController < ApplicationController
@@ -1237,7 +1238,7 @@ class PostsController < ApplicationController
 # snipped for brevity
 </ruby>
 
-We also only want to allow authenticated users to delete comments, so in the +CommentsController+ we write:
+또한 우리는 오직 댓글(comment) 삭제에만 인증된 사용자를 허용하고 싶습니다. +CommentsController+ 에 이렇게 적어주세요.:
 
 <ruby>
 class CommentsController < ApplicationController
@@ -1249,28 +1250,28 @@ class CommentsController < ApplicationController
 # snipped for brevity
 </ruby>
 
-Now if you try to create a new post, you will be greeted with a basic HTTP Authentication challenge
+이제, 새로운 글(post)을 작성하려고 하면, 기본 HTTP 인증 요구를 만날 수 있습니다.
 
 !images/challenge.png(Basic HTTP Authentication Challenge)!
 
 
-h3. Building a Multi-Model Form
+h3(#Building-a-Multi-Model-Form). 다중-모델(Multi-Model) 폼 만들기
 
-Another feature of your average blog is the ability to tag posts. To implement this feature your application needs to interact with more than one model on a single form. Rails offers support for nested forms.
+평범한 블로그의 다른 요소는 글에 태그(tag)를 붙이는 기능입니다. 어플리케이션에 이 기능을 구현하려면 단일 폼에서 1개 이상의 모델과 상호 작용해야 합니다. 레일즈는 Nested 폼으로 이를 지원합니다.
 
-To demonstrate this, we will add support for giving each post multiple tags, right in the form where you create the post. First, create a new model to hold the tags:
+이를 구현하기  위해서, 각 글을 작성할때 즉시, 다양한 태그를 부여할 수 있는 기능 지원을 붙일겁니다. 먼저 태그를 위한 새로운 모델을 만듭니다.:
 
 <shell>
 $ rails generate model tag name:string post:references
 </shell>
 
-Again, run the migration to create the database table:
+다시, 데이터베이스 테이블을 만들기위한 마이그레이션을 실행하세요.:
 
 <shell>
 $ rake db:migrate
 </shell>
 
-Next, edit the +post.rb+ file to create the other side of the association, and to tell Rails (via the +accepts_nested_attributes_for+ macro) that you intend to edit tags via posts:
+다음에, 다른 관점의 관계를 만들고, 레일즈에게 글(post)를 통해서( +accepts_nested_attributes_for+ 매크로를 이용) 태그를 수정할 꺼라는 의도를 알려주기 위해서 +post.rb+ 파일을 수정합니다.:
 
 <ruby>
 class Post < ActiveRecord::Base
@@ -1286,9 +1287,9 @@ class Post < ActiveRecord::Base
 end
 </ruby>
 
-The +:allow_destroy+ option on the nested attribute declaration tells Rails to display a "remove" checkbox on the view that you'll build shortly. The +:reject_if+ option prevents saving new tags that do not have any attributes filled in.
+Nested 어트리뷰트 선언에서 +:allow_destroy+ 는 레일즈에게 뷰에서 "remove(삭제)" 체크박스를 출력하라고 알립니다. +:reject_if+ 옵션은 새로운 빈 태그 저장을 방지합니다.
 
-We will modify +views/posts/_form.html.erb+ to render a partial to make a tag:
++views/posts/_form.html.erb+ 내용을 태그를 만드는 Partial을 출력하도록 수정합니다.:
 
 <erb>
 <% @post.tags.build %>

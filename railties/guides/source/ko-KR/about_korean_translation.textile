@@ -55,6 +55,8 @@ h3(#word-dict). 영어 - 한국어 용어 사전
 | Context | 컨텍스트 |
 | hyperlink | 하이퍼링크, 링크 |
 | escape | 이스케이프 |
+| Collection| 컬렉션 |
+| tag | 태그 |
 
 h3. Translation 진행 상태
 
