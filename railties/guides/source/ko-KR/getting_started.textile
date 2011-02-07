@@ -1391,9 +1391,9 @@ Nested 어트리뷰트 선언에서 +:allow_destroy+ 는 레일즈에게 뷰에�
 
 h3(#View-Helpers). 뷰 헬퍼
 
-View Helpers live in <tt>app/helpers</tt> and provide small snippets of reusable code for views.  In our case, we want a method that strings a bunch of objects together using their name attribute and joining them with a comma.  As this is for the Post show template, we put it in the PostsHelper.
+뷰 헬퍼는 <tt>app/helpers</tt>에 위치하고, 뷰를 위한 재사용 가능한 작은 코드 조각을 제공합니다. 우리의 경우에는, 컴마를 이용해서 문자열 배열을 하나의 문자열로 합쳐주는 메소드를 원합니다. 글의 show 템플릿을 위해서 이 기능을 PostHelper 에 두겠습니다.
 
-Open up <tt>app/helpers/posts_helper.rb</tt> and add the following:
+<tt>app/helpers/posts_helper.rb</tt>을 열고 아래 내용을 추가해주세요.:
 
 <erb>
 module PostsHelper
@@ -1403,7 +1403,7 @@ module PostsHelper
 end
 </erb>
 
-Now you can edit the view in <tt>app/views/posts/show.html.erb</tt> to look like this:
+이제 <tt>app/views/posts/show.html.erb</tt>를 이와 같이 수정 할 수 있습니다.:
 
 <erb>
 <p class="notice"><%= notice %></p>
@@ -1439,9 +1439,9 @@ Now you can edit the view in <tt>app/views/posts/show.html.erb</tt> to look like
 <%= link_to 'Back to Posts', posts_path %> |
 </erb>
 
-h3. What's Next?
+h3(#What's'Next). 다음에는 무엇?
 
-Now that you've seen your first Rails application, you should feel free to update it and experiment on your own. But you don't have to do everything without help. As you need assistance getting up and running with Rails, feel free to consult these support resources:
+이제, 여러분의 첫번째 레일즈 어플리케이션을 경험하였습니다. 실험과 업데이트는 자유입니다. 그러나 모든 것을 도움 없이 할필요는 없습니다. 레일즈를 가지고 사용하는데 도움이 필요하면, 여기 자료와 지원들이 여러분을 도와 줄 수 있습니다.
 
 * The "Ruby on Rails guides":index.html
 * The "Ruby on Rails Tutorial":http://railstutorial.org/book
@@ -1449,10 +1449,10 @@ Now that you've seen your first Rails application, you should feel free to updat
 * The "#rubyonrails":irc://irc.freenode.net/#rubyonrails channel on irc.freenode.net
 * The "Rails Wiki":http://wiki.rubyonrails.org/
 
-Rails also comes with built-in help that you can generate using the rake command-line utility:
+레일즈는 도움말을 내장해서 배포됩니다. rake 커멘드-라인 도구를 이용해서 도움말을 만들 수 있어요.:
 
-* Running +rake doc:guides+ will put a full copy of the Rails Guides in the +doc/guides+ folder of your application. Open +doc/guides/index.html+ in your web browser to explore the Guides.
-* Running +rake doc:rails+ will put a full copy of the API documentation for Rails in the +doc/api+ folder of your application. Open +doc/api/index.html+ in your web browser to explore the API documentation.
+* +rake doc:guides+ 실행은 여러분의 어플리케이션의 +doc/guides+ 폴더에 레일즈 가이드의 전체 복사본을 만들어 줍니다. 브라우저에서 +doc/guides/index.html+을 열어서 가이드를 탐험하세요.
+* +rake doc:rails+는 레일즈를 위한 API 문서 전체 사본을 +doc/api+ 폴더에 만들어 줍니다. 브라우저로 +doc/api/index.html+를 열어서 API 문서를 탐험하세요.
 
 h3. Configuration Gotchas
 
