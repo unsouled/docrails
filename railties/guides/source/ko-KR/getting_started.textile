@@ -1287,7 +1287,7 @@ class Post < ActiveRecord::Base
 end
 </ruby>
 
-Nested 어트리뷰트 선언에서 +:allow_destroy+ 는 레일즈에게 뷰에서 "remove(삭제)" 체크박스를 출력하라고 알립니다. +:reject_if+ 옵션은 새로운 빈 태그 저장을 방지합니다.
+Nested 어트리뷰트 선언에서 +:allow_destroy+ 는 레일즈에게 뷰에서 "remove(삭제)" 체크박스를 출력하라고 알립니다. +:reject_if+ 옵션은 빈 태그 저장을 방지합니다.
 
 +views/posts/_form.html.erb+ 내용을 태그를 만드는 Partial을 출력하도록 수정합니다.:
 
@@ -1326,13 +1326,13 @@ Nested 어트리뷰트 선언에서 +:allow_destroy+ 는 레일즈에게 뷰에�
 <% end %>
 </erb>
 
-Note that we have changed the +f+ in +form_for(@post) do |f|+ to +post_form+ to make it easier to understand what is going on.
+좀 더 이해하기 편하게 +form_for(@post) do |f|+의 +f+를 +post_form+으로 변경합니다.
 
-This example shows another option of the render helper, being able to pass in local variables, in this case, we want the local variable +form+ in the partial to refer to the +post_form+ object.
+이 예제는 render 헬퍼의 또 다른 옵션으로, 지역 변수를 넘기는걸 보여줍니다. 이 경우에, Partial 뷰에게 +post_form+ 객체를 지역변수 +form+ 이름으로 넘깁니다. 
 
-We also add a <tt>@post.tags.build</tt> at the top of this form, this is to make sure there is a new tag ready to have it's name filled in by the user.  If you do not build the new tag, then the form will not appear as there is no new Tag object ready to create.
+<tt>@post.tags.build</tt>도 이 폼의 위쪽에 추가합니다. 이것은 사용자가 입력한 새로운 태그를 받아드릴 준비를 합니다. 이렇게 새로운 태그를 만들어 놓지 않으면, 폼은 새로운 태그 객체를 만드는 화면을 보여주지 않을 겁니다.
 
-Now create the folder <tt>app/views/tags</tt> and make a file in there called <tt>_form.html.erb</tt> which contains the form for the tag:
+이제, <tt>app/views/tags</tt> 폴더를 만들고, 태그를 위한 폼을 가질 <tt>_form.html.erb</tt> 파일을 만듭니다.:
 
 <erb>
 <%= form.fields_for :tags do |tag_form| %>
@@ -1349,7 +1349,7 @@ Now create the folder <tt>app/views/tags</tt> and make a file in there called <t
 <% end %>
 </erb>
 
-Finally, we will edit the <tt>app/views/posts/show.html.erb</tt> template to show our tags.
+마지막으로, 태그를 보여줄 <tt>app/views/posts/show.html.erb</tt> 템플릿을 수정할 것입니다.
 
 <erb>
 <p class="notice"><%= notice %></p>
@@ -1385,11 +1385,11 @@ Finally, we will edit the <tt>app/views/posts/show.html.erb</tt> template to sho
 <%= link_to 'Back to Posts', posts_path %> |
 </erb>
 
-With these changes in place, you'll find that you can edit a post and its tags directly on the same view.
+이 변경으로 여러분은 글과 태그를 수정하는 일을 동일한 뷰에서 할 수 있다는 점을 발견할 것 입니다.
 
-However, that method call <tt>@post.tags.map { |t| t.name }.join(", ")</tt> is awkward, we could handle this by making a helper method.
+그렇지만, 저 메소드는 생소한 <tt>@post.tags.map { |t| t.name }.join(", ")</tt>를 호출합니다. 우리는 헬퍼 메소드로 이것을 다룰 것입니다.
 
-h3. View Helpers
+h3(#View-Helpers). 뷰 헬퍼
 
 View Helpers live in <tt>app/helpers</tt> and provide small snippets of reusable code for views.  In our case, we want a method that strings a bunch of objects together using their name attribute and joining them with a comma.  As this is for the Post show template, we put it in the PostsHelper.
 
