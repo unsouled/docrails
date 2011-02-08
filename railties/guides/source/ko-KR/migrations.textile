@@ -1,5 +1,6 @@
-h2. Migrations
+h2(#Migrations). 마이그레이션
 
+마이그레이션은 체계적이고 유기적인 방법으로 데이터페이스를 변경할수 있는 편리한 방법입니다. 
 Migrations are a convenient way for you to alter your database in a structured and organized manner. You could edit fragments of SQL by hand but you would then be responsible for telling other developers that they need to go and run them. You'd also have to keep track of which changes need to be run against the production machines next time you deploy.
 
 Active Record tracks which migrations have already been run so all you have to do is update your source and run +rake db:migrate+. Active Record will work out which migrations should be run. It will also update your +db/schema.rb+ file to match the structure of your database.

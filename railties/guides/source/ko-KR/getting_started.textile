@@ -1486,4 +1486,4 @@ h3. Changelog
 * September 8, 2008: initial version by "James Miller":credits.html#bensie (not yet approved for publication)
 
 h3. Changelog for Korean Translation
-* 2011년 2월 7일 초벌 번역 완료 by neocoin
+* 2011년 2월 7일 초벌 번역 완료 by "Sangmin Ryu":http://neocoin.net
