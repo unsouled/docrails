@@ -36,7 +36,7 @@ h3(#word-dict). 영어 - 한국어 용어 사전
 | block | 블록 |
 | partial | partial |
 | form | 폼 |
-| helper | 핼퍼 |
+| helper | 헬퍼 |
 | built-in | 내장된 |
 | Controller | 컨트롤러 |
 | Model | 모델 |

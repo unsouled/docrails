@@ -224,7 +224,7 @@ development:
   timeout: 5000
 </yaml>
 
-NOTE: 이 가이드에서는 데이터 저장을 위해서 SQLite3 데이터베이스를 사용합니다. 왜냐하면, 데이터베이스를 위한 특별한 설정이 필요없기 때문이죠. 물론, 레일즈는 MySQL과 PostgreSQL도 별도로 지원합니다. 그리고 많은 데이터베이스 시스템을 플러그인으로 가지고 있습니다. production(제품) 환경에서 데이터베이스를 사용하기 위해, 레일즈는 대부분의 어탭터(adapter) 가지고 있습니다.
+NOTE: 이 가이드에서는 데이터 저장을 위해서 SQLite3 데이터베이스를 사용합니다. 왜냐하면, 데이터베이스를 위한 특별한 설정이 필요없기 때문이죠. 물론, 레일즈는 MySQL과 PostgreSQL도 별도로 지원합니다. 그리고 많은 데이터베이스 시스템을 플러그인으로 지원합니다. production(제품) 환경에서 데이터베이스를 사용하기 위해, 레일즈는 대부분의 어탭터(adapter) 가지고 있습니다.
 
 h5(#Configuring-a-MySQL-Database). MySQL 데이터베이스 설정
 
@@ -1449,30 +1449,20 @@ h3(#What-Next). 다음에는 무엇?
 * The "#rubyonrails":irc://irc.freenode.net/#rubyonrails channel on irc.freenode.net
 * The "Rails Wiki":http://wiki.rubyonrails.org/
 
-레일즈는 도움말을 내장해서 배포됩니다. rake 커멘드-라인 도구를 이용해서 도움말을 만들 수 있습니다.:
+레일즈는 도움말과 함께 배포됩니다. rake 커멘드-라인 도구를 이용해서 브라우저에서 읽을 수 있는  도움말을 만들 수 있습니다.:
 
 * +rake doc:guides+ 실행은 레일즈 가이드의 전체 복사본을 +doc/guides+ 폴더에 만들어 줍니다. 브라우저에서 +doc/guides/index.html+을 열어서 가이드를 탐험하세요.
 * +rake doc:rails+는 레일즈를 위한 API 문서 전체 사본을 +doc/api+ 폴더에 만들어 줍니다. 브라우저로 +doc/api/index.html+를 열어서 API 문서를 탐험하세요.
 
-h3. Configuration Gotchas
+h3(#Configuration-Gotchas). 설정 사로 잡기(Configuration Gotchas)
 
-The easiest way to work with Rails is to store all external data as UTF-8. If you don't, Ruby libraries and Rails will often be able to convert your native data into UTF-8, but this doesn't always work reliably, so you're better off ensuring that all external data is UTF-8.
+레일즈와 함께하는데 가장 쉬운 방법은 모든 외부 데이터를 UTF-8을 이용하는 것입니다. UTF-8을 사용하지 않으면, 루비 라이브러리와 레일즈는 자주 여러분의 원본 데이터를 UTF-8로 변환할 것 입니다. 그러나 이 과정은 늘 믿음직 스럽게 동작하지만은 앖습니다. 그래서 모든 외부 데이터가 UTF-8인 편이 좀 더 확실합니다.
 
-If you have made a mistake in this area, the most common symptom is a black diamond with a question mark inside appearing in the browser. Another common symptom is characters like "Ã¼" appearing instead of "ü". Rails takes a number of internal steps to mitigate common causes of these problems that can be automatically detected and corrected. However, if you have external data that is not stored as UTF-8, it can occasionally result in these kinds of issues that cannot be automatically detected by Rails and corrected.
+만약 이 영역에서 여러분이 실수 했다면, 일반적으로 나타나는 대부분의 증상은 브라우저 상에서 보이는 데이터들이 물음표를 동반한 검은 다이어몬드로 표시되는 것 입니다. 다른 일반적인 증상은 "ü" 글자 대신에 "Ã¼" 같은 글자가 보입니다. 레일즈는 이러한 문제들을 자동으로 해결하려는 내부 처리 단계를 많이 가지고 있습니다. 그럼에도 불구하고, 외부 데이터를 UTF-8 로 저장하지 않으면, 때때로 레일즈가 자동으로 처리할 수 없는 이런 종류의 문제들이 발생합니다.
 
-Two very common sources of data that are not UTF-8:
-* Your text editor: Most text editors (such as Textmate), default to saving files as
-  UTF-8. If your text editor does not, this can result in special characters that you
-  enter in your templates (such as é) to appear as a diamond with a question mark inside
-  in the browser. This also applies to your I18N translation files.
-  Most editors that do not already default to UTF-8 (such as some versions of
-  Dreamweaver) offer a way to change the default to UTF-8. Do so.
-* Your database. Rails defaults to converting data from your database into UTF-8 at
-  the boundary. However, if your database is not using UTF-8 internally, it may not
-  be able to store all characters that your users enter. For instance, if your database
-  is using Latin-1 internally, and your user enters a Russian, Hebrew, or Japanese
-  character, the data will be lost forever once it enters the database. If possible,
-  use UTF-8 as the internal storage of your database.
+비 UTF-8 데이터를 만들어내는 두가지 흔한 원인: 
+* 여러분의 텍스트 에디터: 대부분의 텍스트 에디터 (가령 Textmate)는 기본적으로 파일을 UTF-8로 저장합니다. 만약 여러분이 데이터가 그런 기능을 수행하지 못하면, 템플릿 안에 특별한 문자(가령 é)를 물은표를 동반한 검은 다이어몬드로 표현할 겁니다. 이는 I18N 번역 파일에도 적용됩니다. 대부분 에디터는 아직 UTF-8이 기본값이 아닙니다. (가령 드림위버 임의 버전들) 그래서 기본 값을 UTF-8로 변경해 주세요.
+* 여러분의 데이터베이스: 이런 관점에서 레일즈는 데이터베이스 상의 데이터를 UTF-8로 변환하지는 않습니다. 데이터베이스가 UTF-8을 내부적으로 사용하지 않으면, 사용자가 입력한 문자 정보가 전부 저장되지는 않습니다. 예를들어, 만약 데이터베이스가 Latin-1 을 내부적으로 사용하고, 사용자가 러시아어, 헤브루어 혹은 일본어를 입력하면 해당 데이터는 데이터베이스에 입력되면서 영원히 잃어버립니다. 가능하면 여러분의 데이터베이스를 내부 저장에 UTF-8을 사용하세요.
 
 h3. Changelog
 
@@ -1492,3 +1482,6 @@ h3. Changelog
 * October 13, 2008: First complete draft by "Mike Gunderloy":credits.html#mgunderloy (not yet approved for publication)
 * October 12, 2008: More detail, rearrangement, editing by "Mike Gunderloy":credits.html#mgunderloy (not yet approved for publication)
 * September 8, 2008: initial version by "James Miller":credits.html#bensie (not yet approved for publication)
+
+h3. Changelog for Korean Translation
+* 2011년 2월 7일 초벌 번역 완료 by neocoin
