@@ -63,6 +63,9 @@ h3(#word-dict). 영어 - 한국어 용어 사전
 | Collection| 컬렉션 |
 | tag | 태그 |
 | nested | nestetd |
+| primary key | primary 키 |
+| foreign key | foreign 키(외래키) |
+| timestamp | 타임스탬프 |
 
 h3. Translation 진행 상태
 

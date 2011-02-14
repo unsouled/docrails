@@ -1,24 +1,23 @@
-h2(#Migrations). 마이그레이션
+h2. 마이그레이션
 
-마이그레이션은 체계적이고 유기적인 방법으로 데이터페이스를 변경할수 있는 편리한 방법입니다. 
-Migrations are a convenient way for you to alter your database in a structured and organized manner. You could edit fragments of SQL by hand but you would then be responsible for telling other developers that they need to go and run them. You'd also have to keep track of which changes need to be run against the production machines next time you deploy.
+마이그레이션은 체계적이고 유기적인 방법으로 데이터베이스를 변경할수 있는 편리한 방법입니다. 여러분은 손수 SQL을 수정할 수 있습니다. 그러나 수정후에 다른 개발자들에게 수정 사항을 알려줘야할 책임을 가지게 될겁니다. 그리고 다음에 제품을 배포 할때도 변경 사항이 실행되는지 이를 지켜봐야만 합니다.
 
-Active Record tracks which migrations have already been run so all you have to do is update your source and run +rake db:migrate+. Active Record will work out which migrations should be run. It will also update your +db/schema.rb+ file to match the structure of your database.
+엑티브 레코드는 이미 실행된 마이그레이션을 추적합니다. 그래서 여러분이 해야할 일은 소스를 업데이트 하고 +rake db:migrate+ 명령을 실행하는 일 뿐입니다. 엑티브 레코드는 실행해야 할 마이그레이션만 작업을 진행합니다. 그리고 여러분의 데이터베이스의 구조에 부합하는 +db/schema.rb+ 파일도 갱신합니다.
 
-Migrations also allow you to describe these transformations using Ruby. The great thing about this is that (like most of Active Record's functionality) it is database independent: you don't need to worry about the precise syntax of +CREATE TABLE+ any more than you worry about variations on +SELECT *+ (you can drop down to raw SQL for database specific features). For example you could use SQLite3 in development, but MySQL in production.
+마이그레이션은 루비를 이용해서 이러한 변경 사항을 기술합니다. 이것의 굉장한 점은, 대부분의 엑티브 레코드의 기능 처럼 데이터베이스에 독립적이라는 것 입니다.: +SELECT *+ 의 다양한 변화에 비한다면야, +CREATE TABLE+의 정확한 문법에 대해서 크게 걱정할 필요가 없습니다. (데이터베이스의 특별한 기능들을 위해 기존 SQL도 사용할 수 있습니다.) 예를 들어, 개발에서는 SQLite3 를 사용하지만, 제품에서는 MySQL을 사용할 수 있죠. 
 
-You'll learn all about migrations including:
+여러분은 다음 내용의 마이그레이션 관한 모든걸 배울 수 있습니다.:
 
-* The generators you can use to create them
-* The methods Active Record provides to manipulate your database
-* The Rake tasks that manipulate them
-* How they relate to +schema.rb+
+* 제너레이터(generators) 사용하고 만들기
+* 엑티브 레코드가 제공하는 데이터베이스 관리 메소드
+* 마이그레이션을 관리하는 Rake 태스크
+* 마이그레이션과 +schema.rb+ 의 관계
 
 endprologue.
 
-h3. Anatomy of a Migration
+h3(#Anatomy-of-a-Migration). 마이그레이션 분석
 
-Before I dive into the details of a migration, here are a few examples of the sorts of things you can do:
+마이그레이션의 자세한 부분을 다루기 앞서, 여러분이 수행할 수 있는 몇 가지 예제가 있습니다.:
 
 <ruby>
 class CreateProducts < ActiveRecord::Migration
@@ -37,9 +36,9 @@ class CreateProducts < ActiveRecord::Migration
 end
 </ruby>
 
-This migration adds a table called +products+ with a string column called +name+ and a text column called +description+. A primary key column called +id+ will also be added, however since this is the default we do not need to ask for this. The timestamp columns +created_at+ and +updated_at+ which Active Record populates automatically will also be added. Reversing this migration is as simple as dropping the table.
+이 마이그레이션은 문자열 컬럼 +name+과 텍스트 컬럼 +description+으로 구성된 +products+ 테이블을 추가합니다. primary 키 컬럼 +id+도 역시 추가됩니다. 그렇지만 이에 관련한 세팅은 기본 설정입니다. 엑티브 레코드가 자동으로 생성하는 타임스탬프 컬럼인 +created_at+ 과 +updated_at+도 추가됩니다. 이 마이그레이션은 간단하게 테이블을 삭제하는 것으로 되돌릴 수 있습니다.
 
-Migrations are not limited to changing the schema. You can also use them to fix bad data in the database or populate new fields:
+마이그레이션은 스키마의 변경에만 그치는게 아닙니다. 마이그레이션을 데이터베이스내의 잘못된 데이터를 고치거나, 새로운 필드를 만드는데도 사용할 수 있습니다.:
 
 <ruby>
 class AddReceiveNewsletterToUsers < ActiveRecord::Migration
@@ -56,16 +55,15 @@ class AddReceiveNewsletterToUsers < ActiveRecord::Migration
 end
 </ruby>
 
-This migration adds a +receive_newsletter+ column to the +users+ table. We want it to default to +false+ for new users, but existing users are considered
-to have already opted in, so we use the User model to set the flag to +true+ for existing users.
+이 마이그레이션은 +receive_newsletter+ 컬럼을 +user+ 테이블에 추가합니다. 우리는 새로운 사용자에 대해서는 기본 값을 +false+로 하기를 원하지만, 기존 사용자에 대해서도 옵션을 생각해야 합니다. 그래서 User 모델을 기존 사용자들에 대해 해당 플래그를 +true+로 세팅하는데 사용합니다. 
 
-NOTE: Some "caveats":#using-models-in-your-migrations apply to using models in your migrations.
+NOTE: 마이그레이션 중에서 모델을 사용하는데 몇가지 "주의사항":#using-models-in-your-migrations 을 참고하세요.
 
 h4. Migrations are Classes
 
-A migration is a subclass of <tt>ActiveRecord::Migration</tt> that implements two class methods: +up+ (perform the required transformations) and +down+ (revert them).
+마이그레이션은 +up+(필요한 변경 사항을 수행합니다.)과 +down+(변경 사항을 되돌립니다.)을 구현한 <tt>ActiveRecord::Migration</tt>의 서브 클래스 입니다.
 
-Active Record provides methods that perform common data definition tasks in a database independent way (you'll read about them in detail later):
+엑티브 레코드는 데이터베이스 독립적인 방법으로 일반적인 데이터 정의 태스크를 수행하는 메소드들을 제공합니다. (여러분은 나중에 이에 관해서 자세히 배울 것입니다.):
 
 * +create_table+
 * +change_table+
@@ -77,9 +75,9 @@ Active Record provides methods that perform common data definition tasks in a da
 * +add_index+
 * +remove_index+
 
-If you need to perform tasks specific to your database (for example create a "foreign key":#active-record-and-referential-integrity constraint) then the +execute+ function allows you to execute arbitrary SQL. A migration is just a regular Ruby class so you're not limited to these functions. For example after adding a column you could write code to set the value of that column for existing records (if necessary using your models).
+만약, 여러분의 데이터베이스에 특화된 일을 수행할 필요가 있다면 (예컨데 "foreign 키":#active-record-and-referential-integrity constraint 를 만들기),  +execute+ 함수로 임의의 SQL을 실행할 수 있습니다. 마이그레이션은 단지 보통 루비 클래스 입니다. 그래서 이런 함수에 대한 제약 사항은 없습니다. 예를 들어, 컬럼을 추가한 후에 이미 존재하는 레코드를 위해서 추가된 컬에 값을 세팅하는 코드를 작성할 수 있습니다. (필요시 여러분의 모델을 사용해야 합니다.)
 
-On databases that support transactions with statements that change the schema (such as PostgreSQL or SQLite3), migrations are wrapped in a transaction. If the database does not support this (for example MySQL) then when a migration fails the parts of it that succeeded will not be rolled back. You will have to unpick the changes that were made by hand.
+데이터베이스가 스키마 변경을 위한 트랜젝션을 제공하면(가령 PostgreSQL 혹은 SQLite3), 마이그레이션은 트랜젝셔에 감싸입니다. 만약 이를 지원하지 않으면 (가령 MySQL), 마이그레이션이 실패했을때 변경이 적용된 부분들이 되돌아가지(roll back) 못할 것입니다. 이 상황에서 손으로 변경된 부분을 하나 하나 되돌려야 할 것입니다.
 
 h4. What's in a Name
 
@@ -487,7 +485,7 @@ generates the following output
 
 If you just want Active Record to shut up then running +rake db:migrate VERBOSE=false+ will suppress any output.
 
-h3. Using Models in Your Migrations
+h3(#using-models-in-your-migrations). Using Models in Your Migrations
 
 When creating or updating data in a migration it is often tempting to use one of your models. After all they exist to provide easy access to the underlying data. This can be done but some caution should be observed.
 
