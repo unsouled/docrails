@@ -1,10 +1,10 @@
 h2. 마이그레이션
 
-마이그레이션은 체계적이고 유기적인 방법으로 데이터베이스를 변경할수 있는 편리한 방법입니다. 여러분은 손수 SQL을 수정할 수 있습니다. 그러나 수정후에 다른 개발자들에게 수정 사항을 알려줘야할 책임을 가지게 될겁니다. 그리고 다음에 제품을 배포 할때도 변경 사항이 실행되는지 이를 지켜봐야만 합니다.
+마이그레이션은 체계적이고 유기적인 방법으로 데이터베이스를 변경할 수 있는 편리한 방법입니다. 여러분은 손수 SQL을 수정할 수 있습니다. 그러나 수정후에 다른 개발자들에게 수정 사항을 알려줘야할 책임을 가지게 될겁니다. 그리고 다음에 제품을 배포 할때도 변경 사항이 실행되는지 이를 지켜봐야만 합니다.
 
 엑티브 레코드는 이미 실행된 마이그레이션을 추적합니다. 그래서 여러분이 해야할 일은 소스를 업데이트 하고 +rake db:migrate+ 명령을 실행하는 일 뿐입니다. 엑티브 레코드는 실행해야 할 마이그레이션만 작업을 진행합니다. 그리고 여러분의 데이터베이스의 구조에 부합하는 +db/schema.rb+ 파일도 갱신합니다.
 
-마이그레이션은 루비를 이용해서 이러한 변경 사항을 기술합니다. 이것의 굉장한 점은, 대부분의 엑티브 레코드의 기능 처럼 데이터베이스에 독립적이라는 것 입니다.: +SELECT *+ 의 다양한 변화에 비한다면야, +CREATE TABLE+의 정확한 문법에 대해서 크게 걱정할 필요가 없습니다. (데이터베이스의 특별한 기능들을 위해 기존 SQL도 사용할 수 있습니다.) 예를 들어, 개발에서는 SQLite3 를 사용하지만, 제품에서는 MySQL을 사용할 수 있죠. 
+마이그레이션은 루비를 이용해서 이러한 변경 사항을 기술합니다. 이것의 굉장한 점은, 대부분의 엑티브 레코드의 기능처럼 데이터베이스에 독립적이라는 것 입니다.: +SELECT *+ 의 다양한 변화에 비한다면야, +CREATE TABLE+의 정확한 문법에 대해서 크게 걱정할 필요가 없습니다. (데이터베이스의 특별한 기능들을 위해 기존 SQL도 사용할 수 있습니다.) 예를 들어, 개발에서는 SQLite3 를 사용하지만, 제품에서는 MySQL을 사용할 수 있죠. 
 
 여러분은 다음 내용의 마이그레이션 관한 모든걸 배울 수 있습니다.:
 
@@ -59,7 +59,7 @@ end
 
 NOTE: 마이그레이션 중에서 모델을 사용하는데 몇가지 "주의사항":#using-models-in-your-migrations 을 참고하세요.
 
-h4. Migrations are Classes
+h4(#migrations-are-classes). 마이그레이션은 클래스이다.
 
 마이그레이션은 +up+(필요한 변경 사항을 수행합니다.)과 +down+(변경 사항을 되돌립니다.)을 구현한 <tt>ActiveRecord::Migration</tt>의 서브 클래스 입니다.
 
@@ -75,43 +75,43 @@ h4. Migrations are Classes
 * +add_index+
 * +remove_index+
 
-만약, 여러분의 데이터베이스에 특화된 일을 수행할 필요가 있다면 (예컨데 "foreign 키":#active-record-and-referential-integrity 제약사항 만들기),  +execute+ 함수로 임의의 SQL을 실행할 수 있습니다. 마이그레이션은 단지 보통 루비 클래스 입니다. 그래서 이런 함수에 대한 제약 사항은 없습니다. 예를 들어, 컬럼을 추가한 후에 이미 존재하는 레코드를 위해서 추가된 컬에 값을 세팅하는 코드를 작성할 수 있습니다. (필요시 여러분의 모델을 사용해야 합니다.)
+만약, 여러분의 데이터베이스에 특화된 일을 수행할 필요가 있다면 (예컨데 "foreign 키":#active-record-and-referential-integrity 제약사항 만들기), +execute+ 함수로 임의의 SQL을 실행할 수 있습니다. 마이그레이션은 단지 보통 루비 클래스 입니다. 그래서 이런 함수에 대한 제약 사항은 없습니다. 예를 들어, 컬럼을 추가한 후에 이미 존재하는 레코드를 위해서 추가된 컬에 값을 세팅하는 코드를 작성할 수 있습니다. (필요시 여러분의 모델을 사용해야 합니다.)
 
-데이터베이스가 스키마 변경을 위한 트랜젝션을 제공하면(가령 PostgreSQL 혹은 SQLite3), 마이그레이션은 트랜젝셔에 감싸입니다. 만약 이를 지원하지 않으면 (가령 MySQL), 마이그레이션이 실패했을때 변경이 적용된 부분들이 되돌아가지(roll back) 못할 것입니다. 이 상황에서 손으로 변경된 부분을 하나 하나 되돌려야 할 것입니다.
+데이터베이스가 스키마 변경을 위한 트랜젝션을 제공하면(가령 PostgreSQL 혹은 SQLite3), 마이그레이션은 트랜젝셔에 감싸입니다. 만약 이를 지원하지 않으면 (가령 MySQL), 마이그레이션이 실패 했을때 변경이 적용된 부분들이 되돌아가지(roll back) 못할 것입니다. 이 상황에서 변경된 부분을 손수 되돌려야 할 것입니다.
 
-h4. What's in a Name
+h4(#whats-in-a-name). 이름은 무엇을 의미하는가.
 
-Migrations are stored in files in +db/migrate+, one for each migration class. The name of the file is of the form +YYYYMMDDHHMMSS_create_products.rb+, that is to say a UTC timestamp identifying the migration followed by an underscore followed by the name of the migration. The name of the migration class (CamelCased version) should match the latter part of the file name. For example +20080906120000_create_products.rb+ should define +CreateProducts+ and +20080906120001_add_details_to_products.rb+ should define +AddDetailsToProducts+. If you do feel the need to change the file name then you <em>have to</em> update the name of the class inside or Rails will complain about a missing class.
+마이그레이션은 각 마이그레이션 클래스당 하나의 파일로 +db/migrate+에 저장됩니다. 파일의 이름은 +YYYYMMDDHHMMSS_create_products.rb+한 형태의 포맷입니다. 이 이름은 UTC 타임스탬프 마이그레이션 식별자와 언더스코어(_ 모양의 글자)로 연결된 마이그레이션의 이름으로 구성됩니다. 마이그레이션 클래스의 이름( CamelCase 버전)은 반드시 파일 이름의 글자 부분과 맞아야합니다. 예를들어서 +20080906120000_create_products.rb+는 반드시 +CreateProducts+을 정의해야 하고, +20080906120001_add_details_to_products.rb+는 반드시 +AddDetailsToProducts+을 정의해야 합니다. 만약 파일의 이름을 변경하려면, 반드시 파일 내부의 클래스의 이름도 <em>변경해야 합니다.</em> 그렇지 않으면, 레일즈는 클래스를 찾지 못해서 에러를 보고 할 것입니다.
 
-Internally Rails only uses the migration's number (the timestamp) to identify them. Prior to Rails 2.1 the migration number started at 1 and was incremented each time a migration was generated. With multiple developers it was easy for these to clash requiring you to rollback migrations and renumber them. With Rails 2.1 this is largely avoided by using the creation time of the migration to identify them. You can revert to the old numbering scheme by adding the following line to +config/application.rb+.
+레일즈는 내부적으로 오직 마이그레이션의 번호(타임스탬프를 의미)를 마이그레이션 식별에 사용합니다. 레일즈 2.1 이전에 마이그레이션 번호는 1부터 시작해서 마이그레이션이 생성될때 마다 증가하는 값을 취했습니다. 여러명의 개발자들이 함께 개발할때, 이 규칙은 소규모의 충돌 상황에서도 롤백하고 번호를 마이그레이션의 번호를 다시 매기는 상황을 만들었습니다. 레일즈 2.1에서 마이그레이션의 생성 시각을 식별하는데 사용해서 이러한 문제 상황을 대부분 피할 수 있게 했습니다. +config/application.rb+에 다음 라인을 추가시키면 예전 방식의 번호 매기는 방식으로 돌아갈 수 있습니다.
 
 <ruby>
 config.active_record.timestamped_migrations = false
 </ruby>
 
-The combination of timestamps and recording which migrations have been run allows Rails to handle common situations that occur with multiple developers.
+타임스탬프와 마이그레이션을 기록하는 조합은 레일즈가 여러 개발자들이 마이그레이션에 관여하면서 생기는 일반적인 상황을 다룰 수 있게 해주었습니다.
 
-For example Alice adds migrations +20080906120000+ and +20080906123000+ and Bob adds +20080906124500+ and runs it. Alice finishes her changes and checks in her migrations and Bob pulls down the latest changes. Rails knows that it has not run Alice's two migrations so +rake db:migrate+ would run them (even though Bob's migration with a later timestamp has been run), and similarly migrating down would not run their +down+ methods.
+예를들어서 앨리스가 마이그레이션 +20080906120000+과 +20080906123000+을 추가하고 밥이 +20080906124500+를 추가시킨 후 이를 실행합니다. 앨리스는 그녀의 마이그레이션에서 변경을 완료하고 점검합니다. 그리고 밥은 자신의 소스에 최근 변경 사항을 내려 받습니다. 레일즈는 앨리스의 두개의 마이그레이션을 아직 실행하지 않았다는걸 알 수있어서, +rake db:migrate+은 이들 마이그레이션을 실행합니다. (더 이후의 타임스템프 값을 가진 밥의 마이그레이션을 실행하는데도 말이죠.) 그리고 이 과정과 비슷하게 마이그레이션 다운(down)시에도 앨리스의 +down+ 메소드를 실행하지 않습니다.
 
-Of course this is no substitution for communication within the team. For example, if Alice's migration removed a table that Bob's migration assumed to exist, then trouble would certainly strike.
+물론, 이는 팀간의 대화를 대체하는건 아닙니다. 예를 들어서, 만약 앨리스의 마이그레이션이 밥의 마이그레이션 실행에 필요한 테이블을 삭제하면, 문제는 확연히 발생합니다.
 
-h4. Changing Migrations
+h4(#changing-migrations). 마이그레이션 변경하기
 
-Occasionally you will make a mistake when writing a migration. If you have already run the migration then you cannot just edit the migration and run the migration again: Rails thinks it has already run the migration and so will do nothing when you run +rake db:migrate+. You must rollback the migration (for example with +rake db:rollback+), edit your migration and then run +rake db:migrate+ to run the corrected version.
+때로, 마이그리션을 작성할때 여러분은 실수를 하게 됩니다. 이미 마이그레이션을 실행한 후에는, 단순히 마이그레이션을 수정하고 다시 실행하는 것으로 원하는 변경을 반영할 수는 없습니다.:레일즈는 이미 실행된 마이그레이션이라면, +rake db:migrate+를 수행할때 아무 것도 수행하지 않습니다. 여러분은 반드시 마이그레이션을 되돌(rollback)리고 (예를 들어, +rake db:rollback+를 사용), 마이그레이션을 수정하고 정확한 버전에 대하여 +rake db:migrate+를 실행해야 합니다.
 
-In general editing existing migrations is not a good idea: you will be creating extra work for yourself and your co-workers and cause major headaches if the existing version of the migration has already been run on production machines. Instead you should write a new migration that performs the changes you require. Editing a freshly generated migration that has not yet been committed to source control (or more generally which has not been propagated beyond your development machine) is relatively harmless. Just use some common sense.
+일반적으로 마이그레이션 수정은 좋은 생각이 아닙니다.:여러분은 자신과 동료들을 위해서 추가적인 일을 만들어내고, 만약 제품에 이미 적용된 마이그레이션을 수정하면 골치 아픈 상황을 만들어 낼겁니다. 대신에 필요한 변경을 수행하는 새로운 마이그레이션을 만드세요. 소스 관리 도구에 커밋되지 않은(혹은 좀 더 일반적으로 표현하자면 여러분의 개발 머신 이외에 퍼지지 않은) 새로운 마이그레이션을 수정하는 편이 상대적으로 무해합니다. 이런건 그냥 상식이죠.
 
-h3. Creating a Migration
+h3(#creating-a-migration). 마이그레이션 만들기
 
-h4. Creating a Model
+h4(#creating-a-model). 모델 만들기
 
-The model and scaffold generators will create migrations appropriate for adding a new model. This migration will already contain instructions for creating the relevant table. If you tell Rails what columns you want then statements for adding those will also be created. For example, running
+모델과 발판(scaffold) 제너레이터는 새로운 모델을 추가를 위한 적합한 마이그레이션을 만들 것입니다. 이 마이그레이션은 이미 관련된 테이블 생성에 대한 코드를 담고 있을 것입니다. 만약 레일즈에게 여러분이 원하는 컬럼들을 알려주면 이 역시 함께 생성됩니다. 예를들어서 다음과 같이 실행하면
 
 <shell>
 rails generate model Product name:string description:text
 </shell>
 
-will create a migration that looks like this
+다음과 같은 마이그레이션이 생성됩니다.
 
 <ruby>
 class CreateProducts < ActiveRecord::Migration
@@ -130,18 +130,17 @@ class CreateProducts < ActiveRecord::Migration
 end
 </ruby>
 
-You can append as many column name/type pairs as you want. By default +t.timestamps+ (which creates the +updated_at+ and +created_at+ columns that
-are automatically populated by Active Record) will be added for you.
+여러분이 원하는 컬럼을 얼마든지 name/type 형태로 추가할 수 있습니다. 기본값으로, +t.timestamps+가 추가되어 있습니다.(이 구문으로 생성된 +updated_at+과 +created_at+ 컬럼은 엑티브 레코드에 의해서 자동으로 채워집니다.)
 
-h4. Creating a Standalone Migration
+h4(#creating-a-standalone-migration). 독립적인(Standalone) 마이그레이션 만들기
 
-If you are creating migrations for other purposes (for example to add a column to an existing table) then you can use the migration generator:
+만약 다른 목적으로 (가령, 이미 존재하는 테이블에 컬럼을 추가하는 경우) 마이그레이션을 만들려면, 마이그레이션 제너레이터를 사용할 수 있습니다.
 
 <shell>
 rails generate migration AddPartNumberToProducts
 </shell>
 
-This will create an empty but appropriately named migration:
+이 명령은 비어있지만, 정확한 이름을 가진 마이그레이션을 만듭니다.:
 
 <ruby>
 class AddPartNumberToProducts < ActiveRecord::Migration
@@ -153,13 +152,13 @@ class AddPartNumberToProducts < ActiveRecord::Migration
 end
 </ruby>
 
-If the migration name is of the form "AddXXXToYYY" or "RemoveXXXFromYYY" and is followed by a list of column names and types then a migration containing the appropriate +add_column+ and +remove_column+ statements will be created.
+만약 마이그레이션 이름이 "AddXXXToYYY" 혹은 "RemoveXXXFromYYY" 이고 이후에 컬럼 이름과 타입을 입력하면 정확한 +add_column+ 과 +remove_column+ 구문이 생성될 것입니다.
 
 <shell>
 rails generate migration AddPartNumberToProducts part_number:string
 </shell>
 
-will generate
+이 명령은 다음을 생성하죠.
 
 <ruby>
 class AddPartNumberToProducts < ActiveRecord::Migration
@@ -173,13 +172,13 @@ class AddPartNumberToProducts < ActiveRecord::Migration
 end
 </ruby>
 
-Similarly,
+비슷하게,
 
 <shell>
 rails generate migration RemovePartNumberFromProducts part_number:string
 </shell>
 
-generates
+다음의 내용을 생성합니다.
 
 <ruby>
 class RemovePartNumberFromProducts < ActiveRecord::Migration
@@ -193,13 +192,13 @@ class RemovePartNumberFromProducts < ActiveRecord::Migration
 end
 </ruby>
 
-You are not limited to one magically generated column, for example
+마술 같은 컬럼 만들기는 하나만 할 수 있는게 아닙니다. 예를들어서
 
 <shell>
 rails generate migration AddDetailsToProducts part_number:string price:decimal
 </shell>
 
-generates
+명령은 다음을 생성합니다.
 
 <ruby>
 class AddDetailsToProducts < ActiveRecord::Migration
@@ -215,9 +214,9 @@ class AddDetailsToProducts < ActiveRecord::Migration
 end
 </ruby>
 
-As always, what has been generated for you is just a starting point. You can add or remove from it as you see fit.
+늘, 시작점이 될만한 것을 만들 수 있습니다. 여기에서 부터 여러분에 입맛에 맞게 추가하고 삭제하면 됩니다.
 
-h3. Writing a Migration
+h3(#writing-a-migration). 마이그레이션 작성하기
 
 Once you have created your migration using one of the generators it's time to get to work!
 
