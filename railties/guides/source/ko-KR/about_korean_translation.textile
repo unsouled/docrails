@@ -69,6 +69,19 @@ h3(#word-dict). 영어 - 한국어 용어 사전
 | commit | 커밋 |
 | parameter | 파라미터 |
 | task | 태스크 |
+| column | 컬럼 or 행 |
+| row | 로우 or 열 |
+| cache | 캐시 |
+| schema | 스키마 |
+| dump | 덤프 |
+| instance | 인스턴스 |
+| attribute | 속성(attribute) |
+| type | 타입 or 유형 |
+| load | 적재 |
+| trigger | 트리거(trigger) |
+| stored procedure | 저장 프로시저(stored procedure) |
+| schema dumper | 스키마 덤프 엔진 |
+
 
 h3(#translation-state). Translation 진행 상태
 
