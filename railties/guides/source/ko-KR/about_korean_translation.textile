@@ -63,12 +63,14 @@ h3(#word-dict). 영어 - 한국어 용어 사전
 | Collection| 컬렉션 |
 | tag | 태그 |
 | nested | nestetd |
-| primary key | primary 키 |
-| foreign key | foreign 키(외래키) |
+| primary key | 기본키(primary key) |
+| foreign key | 외래키(foreign key) |
 | timestamp | 타임스탬프 |
 | commit | 커밋 |
+| parameter | 파라미터 |
+| task | 태스크 |
 
-h3. Translation 진행 상태
+h3(#translation-state). Translation 진행 상태
 
-
-| getting_started | 진행중 |
+| getting_started | 초벌 완료 |
+| migrations | 진행중 |

@@ -1,6 +1,6 @@
 h2. 마이그레이션
 
-마이그레이션은 체계적이고 유기적인 방법으로 데이터베이스를 변경할 수 있는 편리한 방법입니다. 여러분은 손수 SQL을 수정할 수 있습니다. 그러나 수정후에 다른 개발자들에게 수정 사항을 알려줘야할 책임을 가지게 될겁니다. 그리고 다음에 제품을 배포 할때도 변경 사항이 실행되는지 이를 지켜봐야만 합니다.
+마이그레이션은 체계적이고 유기적인 수단으로 데이터베이스를 변경할 수 있는 편리한 방법입니다. 여러분은 손수 SQL을 수정할 수 있습니다. 그러나 수정후에 다른 개발자들에게 수정 사항을 알려줘야할 책임을 가지게 될겁니다. 그리고 다음에 제품을 배포 할때도 변경 사항이 실행되는지 이를 지켜봐야만 합니다.
 
 엑티브 레코드는 이미 실행된 마이그레이션을 추적합니다. 그래서 여러분이 해야할 일은 소스를 업데이트 하고 +rake db:migrate+ 명령을 실행하는 일 뿐입니다. 엑티브 레코드는 실행해야 할 마이그레이션만 작업을 진행합니다. 그리고 여러분의 데이터베이스의 구조에 부합하는 +db/schema.rb+ 파일도 갱신합니다.
 
@@ -14,6 +14,8 @@ h2. 마이그레이션
 * 마이그레이션과 +schema.rb+ 의 관계
 
 endprologue.
+
+WARNING. 이 가이드의 원본은 영문 버전인 "Rails Database Migrations":http://guides.rubyonrails.org/migrations.html 입니다. 번역 과정에서 원본과 차이가 발생할 수 있습니다. 번역본은 원본의 참고로 생각해 주세요.
 
 h3(#Anatomy-of-a-Migration). 마이그레이션 분석
 
@@ -36,7 +38,7 @@ class CreateProducts < ActiveRecord::Migration
 end
 </ruby>
 
-이 마이그레이션은 문자열 컬럼 +name+과 텍스트 컬럼 +description+으로 구성된 +products+ 테이블을 추가합니다. primary 키 컬럼 +id+도 역시 추가됩니다. 그렇지만 이에 관련한 세팅은 기본 설정입니다. 엑티브 레코드가 자동으로 생성하는 타임스탬프 컬럼인 +created_at+ 과 +updated_at+도 추가됩니다. 이 마이그레이션은 간단하게 테이블을 삭제하는 것으로 되돌릴 수 있습니다.
+이 마이그레이션은 문자열 컬럼 +name+과 텍스트 컬럼 +description+으로 구성된 +products+ 테이블을 추가합니다. 기본키(primary key) 컬럼 +id+도 역시 추가됩니다. 그렇지만 이에 관련한 세팅은 기본 설정입니다. 엑티브 레코드가 자동으로 생성하는 타임스탬프 컬럼인 +created_at+ 과 +updated_at+도 추가됩니다. 이 마이그레이션은 간단하게 테이블을 삭제하는 것으로 되돌릴 수 있습니다.
 
 마이그레이션은 스키마의 변경에만 그치는게 아닙니다. 마이그레이션을 데이터베이스내의 잘못된 데이터를 고치거나, 새로운 필드를 만드는데도 사용할 수 있습니다.:
 
@@ -75,11 +77,11 @@ h4(#migrations-are-classes). 마이그레이션은 클래스이다.
 * +add_index+
 * +remove_index+
 
-만약, 여러분의 데이터베이스에 특화된 일을 수행할 필요가 있다면 (예컨데 "foreign 키":#active-record-and-referential-integrity 제약사항 만들기), +execute+ 함수로 임의의 SQL을 실행할 수 있습니다. 마이그레이션은 단지 보통 루비 클래스 입니다. 그래서 이런 함수에 대한 제약 사항은 없습니다. 예를 들어, 컬럼을 추가한 후에 이미 존재하는 레코드를 위해서 추가된 컬에 값을 세팅하는 코드를 작성할 수 있습니다. (필요시 여러분의 모델을 사용해야 합니다.)
+만약, 여러분의 데이터베이스에 특화된 일을 수행할 필요가 있다면 (예컨데 "외래키(foreign key)":#active-record-and-referential-integrity 제약사항 만들기), +execute+ 함수로 임의의 SQL을 실행할 수 있습니다. 마이그레이션은 단지 보통 루비 클래스 입니다. 그래서 이런 함수에 대한 제약 사항은 없습니다. 예를 들어, 컬럼을 추가한 후에 이미 존재하는 레코드를 위해서 추가된 컬에 값을 세팅하는 코드를 작성할 수 있습니다. (필요시 여러분의 모델을 사용해야 합니다.)
 
 데이터베이스가 스키마 변경을 위한 트랜젝션을 제공하면(가령 PostgreSQL 혹은 SQLite3), 마이그레이션은 트랜젝셔에 감싸입니다. 만약 이를 지원하지 않으면 (가령 MySQL), 마이그레이션이 실패 했을때 변경이 적용된 부분들이 되돌아가지(roll back) 못할 것입니다. 이 상황에서 변경된 부분을 손수 되돌려야 할 것입니다.
 
-h4(#whats-in-a-name). 이름은 무엇을 의미하는가.
+h4(#whats-in-a-name). 이름의 의미
 
 마이그레이션은 각 마이그레이션 클래스당 하나의 파일로 +db/migrate+에 저장됩니다. 파일의 이름은 +YYYYMMDDHHMMSS_create_products.rb+한 형태의 포맷입니다. 이 이름은 UTC 타임스탬프 마이그레이션 식별자와 언더스코어(_ 모양의 글자)로 연결된 마이그레이션의 이름으로 구성됩니다. 마이그레이션 클래스의 이름( CamelCase 버전)은 반드시 파일 이름의 글자 부분과 맞아야합니다. 예를들어서 +20080906120000_create_products.rb+는 반드시 +CreateProducts+을 정의해야 하고, +20080906120001_add_details_to_products.rb+는 반드시 +AddDetailsToProducts+을 정의해야 합니다. 만약 파일의 이름을 변경하려면, 반드시 파일 내부의 클래스의 이름도 <em>변경해야 합니다.</em> 그렇지 않으면, 레일즈는 클래스를 찾지 못해서 에러를 보고 할 것입니다.
 
@@ -97,7 +99,7 @@ config.active_record.timestamped_migrations = false
 
 h4(#changing-migrations). 마이그레이션 변경하기
 
-때로, 마이그리션을 작성할때 여러분은 실수를 하게 됩니다. 이미 마이그레이션을 실행한 후에는, 단순히 마이그레이션을 수정하고 다시 실행하는 것으로 원하는 변경을 반영할 수는 없습니다.:레일즈는 이미 실행된 마이그레이션이라면, +rake db:migrate+를 수행할때 아무 것도 수행하지 않습니다. 여러분은 반드시 마이그레이션을 되돌(rollback)리고 (예를 들어, +rake db:rollback+를 사용), 마이그레이션을 수정하고 정확한 버전에 대하여 +rake db:migrate+를 실행해야 합니다.
+때로, 마이그레이션을 작성할때 여러분은 실수를 하게 됩니다. 이미 마이그레이션을 실행한 후에는, 단순히 마이그레이션을 수정하고 다시 실행하는 것으로 원하는 변경을 반영할 수는 없습니다.:레일즈는 이미 실행된 마이그레이션이라면, +rake db:migrate+를 수행할때 아무 것도 수행하지 않습니다. 여러분은 반드시 마이그레이션을 되돌(rollback)리고 (예를 들어, +rake db:rollback+를 사용), 마이그레이션을 수정하고 정확한 버전에 대하여 +rake db:migrate+를 실행해야 합니다.
 
 일반적으로 마이그레이션 수정은 좋은 생각이 아닙니다.:여러분은 자신과 동료들을 위해서 추가적인 일을 만들어내고, 만약 제품에 이미 적용된 마이그레이션을 수정하면 골치 아픈 상황을 만들어 낼겁니다. 대신에 필요한 변경을 수행하는 새로운 마이그레이션을 만드세요. 소스 관리 도구에 커밋되지 않은(혹은 좀 더 일반적으로 표현하자면 여러분의 개발 머신 이외에 퍼지지 않은) 새로운 마이그레이션을 수정하는 편이 상대적으로 무해합니다. 이런건 그냥 상식이죠.
 
@@ -192,7 +194,7 @@ class RemovePartNumberFromProducts < ActiveRecord::Migration
 end
 </ruby>
 
-마술 같은 컬럼 만들기는 하나만 할 수 있는게 아닙니다. 예를들어서
+이런 마술 같은 컬럼 만들기는 하나만 할 수 있는게 아닙니다. 예를들어서
 
 <shell>
 rails generate migration AddDetailsToProducts part_number:string price:decimal
@@ -218,11 +220,11 @@ end
 
 h3(#writing-a-migration). 마이그레이션 작성하기
 
-Once you have created your migration using one of the generators it's time to get to work!
+이제 제너레이터를 이용해서 여러분의 마이그레이션을 만들어 볼때 입니다!
 
-h4. Creating a Table
+h4(#creating-a-table). 테이블 만들기
 
-Migration method +create_table+ will be one of your workhorses. A typical use would be
+마이그레이션 메소드인 +create_table+은 여러분의 편리한 도구 중 하나입니다. 보통 이렇게 사용합니다.
 
 <ruby>
 create_table :products do |t|
@@ -230,9 +232,9 @@ create_table :products do |t|
 end
 </ruby>
 
-which creates a +products+ table with a column called +name+ (and as discussed below, an implicit +id+ column).
+이 코드는 +name+이란 이름의 컬럼을 가진 +products+ 테이블을 만듭니다. (그리고 아래의 논의에서 처럼, 암시적인 +id+ 컬럼도 생성합니다.)
 
-The object yielded to the block allows you to create columns on the table. There are two ways of doing this: The first (traditional) form looks like
+이 객체는 테이블에 만들 컬럼 정보를 블록 형태로 실행합니다. 이를 수행하는 방법은 두가지가 있죠.:첫번째 (관습적인) 폼은 다음과 같습니다.
 
 <ruby>
 create_table :products do |t|
@@ -240,7 +242,7 @@ create_table :products do |t|
 end
 </ruby>
 
-the second form, the so called "sexy" migration, drops the somewhat redundant +column+ method. Instead, the +string+, +integer+, etc. methods create a column of that type. Subsequent parameters are the same.
+두번째 폼은 "섹시(sexy)" 마이그레이션이라 불리며, 중복된 +column+ 메소드를 날려버린 방법이죠. 대신에 +string+, +integer+ 등의 메소드는 해당 타입의 컬럼을 생성합니다. 이후 파라미터는 동일합니다.
 
 <ruby>
 create_table :products do |t|
@@ -248,7 +250,7 @@ create_table :products do |t|
 end
 </ruby>
 
-By default +create_table+ will create a primary key called +id+. You can change the name of the primary key with the +:primary_key+ option (don't forget to update the corresponding model) or if you don't want a primary key at all (for example for a HABTM join table) you can pass +:id => false+. If you need to pass database specific options you can place an SQL fragment in the +:options+ option. For example
+기본적으로, +create_table+은 +id+라는 기본키(primary key)를 생성합니다. +:primary_key+ 옵션을 이용해서 기본키(primary key)의 이름을 변경하거나, 기본키(primary key)를 원하지 않으면, (예를들어 HABTM 조인 테이블 같이요.) +:id => false+ 를 넘기세요. 만약, 데이터베이스에 특화된 옵션을 넘기려면, +:options+에 SQL 조각을 위치 시킬 수 있습니다. 예를 들어서
 
 <ruby>
 create_table :products, :options => "ENGINE=BLACKHOLE" do |t|
@@ -256,11 +258,11 @@ create_table :products, :options => "ENGINE=BLACKHOLE" do |t|
 end
 </ruby>
 
-will append +ENGINE=BLACKHOLE+ to the SQL statement used to create the table (when using MySQL the default is +ENGINE=InnoDB+).
+이 코드는 +ENGINE=BLACKHOLE+을 테이블 생성하는 SQL 구문에 추가할 것입니다. (MySQL은 기본 값은 +ENGIN=InnoDB+ 입니다.)
 
-The types supported by Active Record are +:primary_key+, +:string+, +:text+, +:integer+, +:float+, +:decimal+, +:datetime+, +:timestamp+, +:time+, +:date+, +:binary+, +:boolean+.
+엑티브 레코드가 지원하는 타입은 +:primary_key+, +:string+, +:text+, +:integer+, +:float+, +:decimal+, +:datetime+, +:timestamp+, +:time+, +:date+, +:binary+, +:boolean+ 입니다.
 
-These will be mapped onto an appropriate underlying database type, for example with MySQL +:string+ is mapped to +VARCHAR(255)+. You can create columns of types not supported by Active Record when using the non-sexy syntax, for example
+이들은 각 데이터베이스에 적합한 타입으로 짝지어 집니다. 예를들어서 MySQL을 사용할때 +:string+은 +VARCHAR(255)+와 짝지어 집니다. 섹시하지 않은(non-sexy) 문법을 사용하면, 엑티브 레코드가 지원하지 않는 타입의 컬럼도 만들수 있습니다. 예를들어
 
 <ruby>
 create_table :products do |t|
@@ -268,11 +270,11 @@ create_table :products do |t|
 end
 </ruby>
 
-This may however hinder portability to other databases.
+그렇지만, 아마 이런 코드는 데이터베이스 이식성이 떨어지게 됩겠죠.
 
-h4. Changing Tables
+h4(#changing-tables). 테이블 변경
 
-A close cousin of +create_table+ is +change_table+, used for changing existing tables. It is used in a similar fashion to +create_table+ but the object yielded to the block knows more tricks. For example
++create_table+과 가까운 메소드는 존재하는 테이블을 변경에 사용되는 +change_table+입니다. 이건 +create_table+과 비슷한 모습으로 사용되지만 객체가 실행하는 블록에 더 많은 트릭이 있습니다. 예를들어
 
 <ruby>
 change_table :products do |t|
@@ -282,7 +284,7 @@ change_table :products do |t|
   t.rename :upccode, :upc_code
 end
 </ruby>
-removes the +description+ and +name+ columns, creates a +part_number+ column and adds an index on it. Finally it renames the +upccode+ column.   This is the same as doing
+이 코드는 +description+과 +name+을 삭제, +part_number+ 컬럼을 만들고 인덱스를 부여합니다. 마지막으로 +upccode+ 컬럼을 +upc_code+로 이름을 변경합니다. 이건 다음의 코드와 동일합니다.
 
 <ruby>
 remove_column :products, :description
@@ -292,27 +294,27 @@ add_index :products, :part_number
 rename_column :products, :upccode, :upc_code
 </ruby>
 
-You don't have to keep repeating the table name and it groups all the statements related to modifying one particular table. The individual transformation names are also shorter, for example +remove_column+ becomes just +remove+ and +add_index+ becomes just +index+.
+테이블 이름을 반복하지 말고, 수정할 테이블과 관련된 구문을 한곳에 모으세요. 각 변환 코드 역시 줄어듭니다. 예를들어, +remove_column+ 는 +remove+로 그리고 +add_index+는 +index+가 됩니다.
 
-h4. Special Helpers
+h4(#special-helpers). 특별한 헬퍼
 
-Active Record provides some shortcuts for common functionality. It is for example very common to add both the +created_at+ and +updated_at+ columns and so there is a method that does exactly that:
+엑티브 레코드는 공통의 기능에 대해 몇가지 간단한 방법을 제공합니다. 가장 자주 쓰이는 예가 +created_at+과 +updated_at+ 컬럼을 함께 추가할때, 이를 메소드로 수행 할 수 있습니다.:
 
 <ruby>
 create_table :products do |t|
   t.timestamps
 end
 </ruby>
-will create a new products table with those two columns (plus the +id+ column) whereas
+이 코드는 방금 언급한 두 컬럼(거기에 +id+컬럼 까지)을 가진 새로운 products 테이블을 만듭니다.
 
 <ruby>
 change_table :products do |t|
   t.timestamps
 end
 </ruby>
-adds those columns to an existing table.
+이렇게 기존 테이블에 두 컬럼을 추가할 수도 있죠.
 
-The other helper is called +references+ (also available as +belongs_to+). In its simplest form it just adds some readability
++references+로 불리는 다른 헬퍼도 있습니다. (+belongs_to+ 로도 가능합니다.) 가장 간단한 형태로 예를 들어본다면,
 
 <ruby>
 create_table :products do |t|
@@ -320,24 +322,24 @@ create_table :products do |t|
 end
 </ruby>
 
-will create a +category_id+ column of the appropriate type. Note that you pass the model name, not the column name. Active Record adds the +_id+ for you. If you have polymorphic +belongs_to+ associations then +references+ will add both of the columns required:
+이 코드는 정확한 타입을 가진 +category_id+ 컬럼을 만듭니다. 컬럼의 이름이 아니라 모델의 이름을 넘기는 부분에 주목하세요. 엑티브 레코드는 여러분을 위해 +id+를 이름에 추가합니다. 만약, 여러 형과 +belongs_to+ 관계를 가지고 있다면, +references+에 필요한 컬럼 정보도 추가해야 합니다.:
 
 <ruby>
 create_table :products do |t|
   t.references :attachment, :polymorphic => {:default => 'Photo'}
 end
 </ruby>
-will add an +attachment_id+ column and a string +attachment_type+ column with a default value of 'Photo'.
+이 코드는 +attachment_id+ 컬럼과 문자열이면서 기본값이 'Photo'인  +attachment_type+ 컬럼을 추가할 것입니다.
 
-NOTE: The +references+ helper does not actually create foreign key constraints for you. You will need to use +execute+ for that or a plugin that adds "foreign key support":#active-record-and-referential-integrity.
+NOTE: +references+ 헬퍼는 외래키(foreign key) 제약사항을 추가하지는 않습니다. 이를 위해서 +execute+를 이용하거나, "외래키(foreign key) 지원":#active-record-and-referential-integrity 을 추가하는 플러그인을 사용하세요.
 
-If the helpers provided by Active Record aren't enough you can use the +execute+ function to execute arbitrary SQL.
+엑티브 레코드가 제공하는 헬퍼가 만족스럽지 않으면 +execute+ 함수로 원하는 SQL을 실행하세요.
 
-For more details and examples of individual methods check the API documentation, in particular the documentation for "<tt>ActiveRecord::ConnectionAdapters::SchemaStatements</tt>":http://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/SchemaStatements.html (which provides the methods available in the +up+ and +down+ methods),  "<tt>ActiveRecord::ConnectionAdapters::TableDefinition</tt>":http://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/TableDefinition.html (which provides the methods available on the object yielded by +create_table+) and "<tt>ActiveRecord::ConnectionAdapters::Table</tt>":http://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/Table.html (which provides the methods available on the object yielded by +change_table+).
+개별 메소드에 대한 더 자세한 내용과 예제는 API 문서를 참고하세요. 상세한 문서들은 다음과 같습니다. "<tt>ActiveRecord::ConnectionAdapters::SchemaStatements</tt>":http://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/SchemaStatements.html (이 문서는 +up+과 +down+ 내에서 사용할수 있는 메소드 정보를 제공합니다.), "<tt>ActiveRecord::ConnectionAdapters::TableDefinition</tt>":http://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/TableDefinition.html (이 문서는 +creat_table+을 사용할때 객체가 실행하는 블록내에서 사용할 수 있는 메소드 정보를 제공합니다.), 그리고 "<tt>ActiveRecord::ConnectionAdapters::Table</tt>":http://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/Table.html (이 문서는 +change_table+을 사용할때 객체가 실행하는 블록에서 사용할 수 있는 메소드 정보를 제공합니다.).
 
-h4. Writing Your +down+ Method
+h4(#writing-your-down-method). +down+ 메소드 작성하기
 
-The +down+ method of your migration should revert the transformations done by the +up+ method. In other words the database schema should be unchanged if you do an +up+ followed by a +down+. For example if you create a table in the +up+ method you should drop it in the +down+ method. It is wise to do things in precisely the reverse order to in the +up+ method. For example
+마이그레이션의 +down+ 메소드는 +up+ 메소드가 수행한 변경을 되돌립니다. 다른 말로하자면, +up+을 통해서 변경된 데이터베이스 스키마는 +down+을 통해서 되돌려 집니다. 예를들어, 만약 여러분이 +up+ 메소드에서 테이블을 만들었다면, 여러분은 +down+ 메소드에서 이를 제거해야 합니다. 현명하게 +up+ 메소드의 반대 순서로 만드세요. 예를들면
 
 <ruby>
 class ExampleMigration < ActiveRecord::Migration
@@ -367,54 +369,52 @@ class ExampleMigration < ActiveRecord::Migration
   end
 end
 </ruby>
-Sometimes your migration will do something which is just plain irreversible, for example it might destroy some data. In cases like those when you can't reverse the migration you can raise +IrreversibleMigration+ from your +down+ method. If someone tries to revert your migration an error message will be
-displayed saying that it can't be done.
 
+때로, 마이그레이션을 되돌릴수 없게 될 수 있습니다. 가령, 데이터를 삭제하는 경우 말이죠. 이렇게 마이그레이션을 되돌릴 수 없을때는 +down+ 메소드에서 +IrreversibleMigration+을 발생 시키세요. 만약에 다른이가 여러분의 마이그레이션을 되돌리려고 시도하면, 에러 메세지가 불가능 하다는 사실을 안내해 줄 것입니다.
 
-h3. Running Migrations
+h3(#running-migrations). 마이그레이션 실행하기
 
-Rails provides a set of rake tasks to work with migrations which boils down to running certain sets of migrations. The very first migration related rake task you use will probably be +db:migrate+. In its most basic form it just runs the +up+ method for all the migrations that have not yet been run. If there are no such migrations it exits.
+레일즈는 마이그레이션 작업을 위한 rake 태스크 조합을 제공합니다. 최초의 마이그레이션은 아마도 여러분이 사용하게될 +db:migrate+와 관련있습니다. 가장 기본적인 동작은 아직 실행되지 않은 모든 마이그레이션의 +up+ 메소드를 실행하는 것 입니다. 만약 마이그레이션이 없더라도, 일을 무사히 마칩니다.
 
-Note that running the +db:migrate+ also invokes the +db:schema:dump+ task, which will update your db/schema.rb file to match the structure of your database.
++db:migrate+ 실행하면 데이터베이스 구조에 부합하는 db/schema.rb 파일을 업데이트하는 +db:schema:dump+ 태스크도 실행하는 걸 기억하세요. 
 
-If you specify a target version, Active Record will run the required migrations (up or down) until it has reached the specified version. The
-version is the numerical prefix on the migration's filename. For example to migrate to version 20080906120000 run
+원하는 버전을 지정하면, 엑티브 레코드는 필요한 마이그레이션(up 혹은 down)을 정해진 버전까지만 실행합니다. 버전은 마이그레이션 파일 앞 부분의 숫자 접두어 입니다. 예를 들어서 버전 20080906120000을 실행하려 이렇게 합니다.
 
 <shell>
 rake db:migrate VERSION=20080906120000
 </shell>
 
-If this is greater than the current version (i.e. it is migrating upwards) this will run the +up+ method on all migrations up to and including 20080906120000, if migrating downwards this will run the +down+ method on all the migrations down to, but not including, 20080906120000.
+현재 버전보다 더 크면, 20080906120000를 포함해서 해당 버전까지 모든 마이그레이션을 실행합니다.(다른 말로, '마이그레이션 올리기'라고 합니다.) 만약, 마이그레이션 내리기(롤백을 의미)를 수행하면 20080906120000까지 모든 마이그레이션의 +down+ 메소드를 실행하지만 20080906120000을 포함하지는 않습니다.
 
-h4. Rolling Back
+h4(#rolling-back). 롤백 하기
 
-A common task is to rollback the last migration, for example if you made a mistake in it and wish to correct it. Rather than tracking down the version number associated with the previous migration you can run
+흔한 테스크는 마지막 마이그레이션을 되돌리는 일 입니다. 예컨데, 실수를 한 후 이를 고치기를 원할때죠. 롤백을 위해 관련된 버전 숫자를 따라가는 것보다 이렇게 하는게 더 쉽죠.
 
 <shell>
 rake db:rollback
 </shell>
 
-This will run the +down+ method from the latest migration. If you need to undo several migrations you can provide a +STEP+ parameter:
+이 명령은 최근 마이그레이션의 +down+을 실행합니다. 만약 여러번의 undo가 필요하면 +STEP+ 파라미터를 이용할 수 있습니다.:
 
 <shell>
 rake db:rollback STEP=3
 </shell>
 
-will run the +down+ method from the last 3 migrations.
+이 명령은 최근 마이그레이션 3개의 +down+ 메소드를 실행합니다.
 
-The +db:migrate:redo+ task is a shortcut for doing a rollback and then migrating back up again. As with the +db:rollback+ task you can use the +STEP+ parameter if you need to go more than one version back, for example
++db:migrate:redo+ 태스크는 롤백을 하고 다시 마이그레이션을 수행하는데 사용하는 단축 명령입니다. 만약 더 많은 버전을 한꺼번에 되돌아가고 싶다면, +db:rollback+ 태스크에서 여러분이 +STEP+ 파라미터를 사용한 것 처럼 사용할 수 있습니다. 예를들면 다음과 같습니다.
 
 <shell>
 rake db:migrate:redo STEP=3
 </shell>
 
-Neither of these Rake tasks do anything you could not do with +db:migrate+, they are simply more convenient since you do not need to explicitly specify the version to migrate to.
+이 레이크 태스크들은 +db:migrate+와 함께하지 않습니다. 그들은 단순히 여러분이 특정한 버전으로 마이그레이그션을 필요 없을때까지 좀더 편한 방법을 제공할 뿐입니다.
 
-Lastly, the +db:reset+ task will drop the database, recreate it and load the current schema into it.
+마지막으로, +db:reset+ 태스크는 모든 데이터베이스를 삭제하고 현재의 스키마를 재생성합니다.
 
-NOTE: This is not the same as running all the migrations - see the section on "schema.rb":#schema-dumping-and-you.
+NOTE: +db:reset+은 모든 마이그레이션을 실행하는 것과 동일하지는 않습니다. - "schema.rb":#schema-dumping-and-you 을 참고하세요.
 
-h4. Being Specific
+h4(#being-specific). Being Specific
 
 If you need to run a specific migration up or down the +db:migrate:up+ and +db:migrate:down+ tasks will do that. Just specify the appropriate version and the corresponding migration will have its +up+ or +down+ method invoked, for example
 
@@ -578,7 +578,7 @@ h4. Schema Dumps and Source Control
 
 Because schema dumps are the authoritative source for your database schema, it is strongly recommended that you check them into source control.
 
-h3. Active Record and Referential Integrity
+h3(#active-record-and-referential-integrity).. Active Record and Referential Integrity
 
 The Active Record way claims that intelligence belongs in your models, not in the database. As such, features such as triggers or foreign key constraints, which push some of that intelligence back into the database, are not heavily used.
 

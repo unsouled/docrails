@@ -11,7 +11,7 @@ endprologue.
 
 WARNING. 이 가이드는 레일즈 3.0에 기초합니다. 기존 버전의 레일즈에서는 이 문서의 코드가 동작하지 않을 수 있습니다.
 
-WARNING. 이 가이드의 원본은 영문 버전인 "Getting Started with Rails":http://guides.rubyonrails.org/getting_started.html 입니다. 번역본은 원본의 참고본으로 생각해 주세요.
+WARNING. 이 가이드의 원본은 영문 버전인 "Getting Started with Rails":http://guides.rubyonrails.org/getting_started.html 입니다. 번역 과정에서 원본과 차이가 발생할 수 있습니다. 번역본은 원본의 참고로 생각해 주세요.
 
 h3(#Rails-Assumptions). 이 가이드를 시작하기 위해서
 
