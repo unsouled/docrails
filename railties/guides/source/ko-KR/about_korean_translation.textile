@@ -81,6 +81,8 @@ h3(#word-dict). 영어 - 한국어 용어 사전
 | trigger | 트리거(trigger) |
 | stored procedure | 저장 프로시저(stored procedure) |
 | schema dumper | 스키마 덤프 엔진 |
+| integrity | 무결성 |
+| referential integrity | 참조 무결성 |
 
 
 h3(#translation-state). Translation 진행 상태
