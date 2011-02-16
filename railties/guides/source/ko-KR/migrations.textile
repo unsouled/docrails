@@ -594,4 +594,4 @@ h3. Changelog
 * September 14, 2008: initial version by "Frederick Cheung":credits.html#fcheung
 
 h3. Changelog for Korean Translation
-* 2011년 2월 13일 초벌 번역 완료 by "Sangmin Ryu":http://neocoin.net
+* 2011년 2월 15일 초벌 번역 완료 by "Sangmin Ryu":http://neocoin.net
