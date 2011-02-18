@@ -71,7 +71,7 @@ h3(#word-dict). 영어 - 한국어 용어 사전
 | task | 태스크 |
 | column | 컬럼 or 행 |
 | row | 로우 or 열 |
-| cache | 캐시 |
+| cache | 임시 저장, 캐시 |
 | schema | 스키마 |
 | dump | 덤프 |
 | instance | 인스턴스 |
