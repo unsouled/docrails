@@ -86,11 +86,11 @@ h4(#skipping-validations). 유효성 검사 무시하기
 * +update_attribute+
 * +update_counters+
 
-+save+ 역시 +:validate => false+를 인자로 넘기면 유효성 검사를 하지 않습니다. 이 기법은 신중을 기해 사용하세요.
++save+ 역시 +:validate => false+를 인자로 넘기면 유효성 검사를 하지 않습니다. 이 기법은 신중하게 사용하세요.
 
 * +save(:validate => false)+
 
-h4. +valid?+ and +invalid?+
+h4. +valid?+ 와 +invalid?+
 
 객체의 유효 여부를 검사하기 위해 레일즈는 +valid?+ 메소드를 사용합니다. 여러분도 이 메소드를 사용할 수 있습니다. +valid?+는 유효성 검사를 실행하고 아무런 에러가 없으면 true(참)을 그렇지 않으면 false(거짓)을 반환합니다. 
 
@@ -141,9 +141,9 @@ end
 
 h4(#validations_overview-errors). +errors[]+
 
-To verify whether or not a particular attribute of an object is valid, you can use +errors[:attribute]+. It returns an array of all the errors for +:attribute+. If there are no errors on the specified attribute, an empty array is returned.
+객체가 가진 특정 속성(attribute)의 유효성 확인을 위해서, +errors[:attribute]+를 사용할 수 있습니다. 그것은 +:attribute+을 위한 모든 에러를 가진 배열을 반환합니다. 만약 특정 속성에 대한 에러가 없으면, 비어있는 배열이 반환됩니다.
 
-This method is only useful _after_ validations have been run, because it only inspects the errors collection and does not trigger validations itself. It's different from the +ActiveRecord::Base#invalid?+ method explained above because it doesn't verify the validity of the object as a whole. It only checks to see whether there are errors found on an individual attribute of the object.
+이 메소드는 오직 유효성 검사 _실행 후_에만 유용합니다. 왜냐하면, 오직 에러 컬렉션을 조회할 뿐이고 유효성 검사를 실행하지 않기 때문입니다. 그것은 위에 설명한 +ActiveRecord::Base#invalid?+ 메소드와 다릅니다. 왜냐하면, 객체의 유효성 전체를 검사하지는 않기 때문이죠. 그것은 오직 객체의 개발 속성에 대한 에러가 존재하는지 여부만 살핍니다.
 
 <ruby>
 class Person < ActiveRecord::Base
@@ -154,10 +154,11 @@ end
 >> Person.create.errors[:name].any? # => true
 </ruby>
 
-We'll cover validation errors in greater depth in the "Working with Validation Errors":#working-with-validation-errors section. For now, let's turn to the built-in validation helpers that Rails provides by default.
+우리는 유효성 검사 에러에 대한 자세한 사항을 "유효성 검사 에러로 작업하기":#working-with-validation-errors 섹션에서 다를 것입니다. 지금은, 레일즈가 제공하는 내장된 유효성 검사 헬퍼로 돌아가죠.
 
-h3. Validation Helpers
+h3(#validation-helpers). 유효성 검사 헬퍼 (Validation helpers)
 
+엑티브 레코드는 미리 정의된 많은 유효성 검사 헬퍼를 제공합니다. 이건 클래스 정의 내부에서 직접 사용할 수 있습니다. 이런 헬퍼는 공통의 유효성 검사 규칙을 제공합니다. 
 Active Record offers many pre-defined validation helpers that you can use directly inside your class definitions. These helpers provide common validation rules. Every time a validation fails, an error message is added to the object's +errors+ collection, and this message is associated with the field being validated.
 
 Each helper accepts an arbitrary number of attribute names, so with a single line of code you can add the same kind of validation to several attributes.
@@ -591,7 +592,7 @@ class Movie < ActiveRecord::Base
 end
 </ruby>
 
-h3. Working with Validation Errors
+h3(#working-with-validation-errors). 유효성 검사 에러로 작업하기
 
 In addition to the +valid?+ and +invalid?+ methods covered earlier, Rails provides a number of methods for working with the +errors+ collection and inquiring about the validity of objects.
 

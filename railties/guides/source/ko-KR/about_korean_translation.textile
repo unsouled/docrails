@@ -6,7 +6,9 @@ endprologue.
 
 h3(#Caution-for-translation). 번역시 주의 사항
 
-WARNING. textile 을 이용해서 각 문서의 index 생성시, 한글로만 이루어진 제목(h#{N} 계열)은 잘못된 anchor 와 인덱스를 생성할 수 있습니다. 반드시 <tt>h3(#anchor-information). </tt> 형태로 anchor 정보를 수동으로 넣어주세요.  
+WARNING. textile을 이용해서 각 문서의 index 생성시, 한글로만 이루어진 제목(h#{N} 계열)은 잘못된 anchor 와 인덱스를 생성할 수 있습니다. 반드시 <tt>h3(#anchor-information). </tt> 형태로 anchor 정보를 수동으로 넣어주세요.  
+
+WARNING. textile을 이용해서 링크 생성시, 띄어쓰기에 유의해 주세요. 링크 생성시 +title:http://linkurl.com+ 에서 com 이후에 띄어쓰기 없이 조사를 붙이면 해당 단어도 링크에 포함되니다.
 
 
 h3(#Transtation-style). 번역 규칙, 분위기
@@ -86,9 +88,11 @@ h3(#word-dict). 영어 - 한국어 용어 사전
 | capsulate | 캡슐화 |
 | observer | 옵저버 |
 | bang version | bang (빵!) 버전 |
+| collection | 컬렉션 |
 
 
 h3(#translation-state). Translation 진행 상태
 
 | getting_started | 초벌 완료 |
-| migrations | 진행중 |
+| migrations | 초벌 완료 |
+| active_record_validations_callbacks | 진행중 |
