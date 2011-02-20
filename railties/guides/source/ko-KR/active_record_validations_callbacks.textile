@@ -1,0 +1,1175 @@
+h2. 액티브 레코드 데이터 검증(Validation)과 콜백(Callback)
+
+이 가이드는 액티브 레코드 객체의 생명 주기에 관여하는 방법을 안내합니다. 액티브 레코드가 데이터베이스에 정보를 입력하기 전에 객체의 데이터 검증을 어떻게 할 것인지, 그리고 객체의 생명 주기에서 정확한 부분에 원하는 작업을 수행하는 방법을 배울 것입니다.
+
+이 가이드를 읽고 주어진 개념을 시험한 후, 다음 내용을 할 수 있기를 기대합니다.:
+
+* 액티브 레코드 객체의 생명 주기에 대한 이해
+* 내장된 액티브 레코드 데이터 검증 헬퍼 사용 방법
+* 맞춤형 데이터 검증 메소드 만들기
+* 데이터 검증 과정으로 에러 메세지 만들어서 사용하기
+* 객체의 생명 주기내에서 이벤트에 대응하는 콜백 메소드 만들기
+* 콜백 함수를 위한 공통의 동작들을 캡슐화 한 특별한 클래스 만들기
+* 원본 클래스의 바깥에서 생명 주기 이벤트에 반응하는 옵저버 만들기
+
+endprologue.
+
+WARNING. 이 가이드의 원본은 영문 버전인 "Active Record Validations and Callbacks":http://guides.rubyonrails.org/active_record_validations_callbacks.html 입니다. 번역 과정에서 원본과 차이가 발생할 수 있습니다. 번역본은 원본의 참고로 생각해 주세요.
+
+h3(#the-object-life-cycle). 객체 생명 주기
+
+레일즈 어플리케이션 실행중에, 객체는 만들어지고, 갱신되고, 삭제 됩니다. 액티브 레코드는 이러한 <em>객체 생명 주기</em>내에서 가로채기(hook)를 제공합니다. 그래서 여러분은 어플리케이션과 데이터를 조종할 수 있습니다.
+
+데이터 검증은 데이터베이스에 오직 유효만 데이터의 입력을 보장합니다. 콜백과 옵저버는 객체의 상태 변화 전/후에 로직을 실행하도록 허락합니다.
+
+h3(#validations-overview). 데이터 검증 둘러보기
+
+레일즈의 데이터 검증을 자세히 알아보기전에, 여러분은 큰 그림 속에서 어떻게 데이터 검증이 수행되는지 이해해야 합니다.
+
+h4(#why-use-validations). 왜 데이터 검증을 사용하는가?
+
+데이터 검증은 오직 유효한 데이터만 데이터베이스에 들어가는 것을 보장합니다. 예를들어, 모든 회원들이 유효한 이메일 주소와 편지 주소를 입력해야 하는 것은 어플리케이션에 중요한 점이 될 수 있습니다.
+
+여기 데이터베이스에 데이터를 저장하기 전에 데이터 검증을 하는 몇가지 방법이 있습니다. (데이터베이스 고유의 제약사항, 클라이언트 측에서 데이터 검증, 컨트롤러 수준의 데이터 검증, 그리고 모델 수준의 데이터 검증을 포함합니다.)
+
+* 데이터베이스 제약사항과 (혹은) 저장 프로시저(stored proceture)는 데이터베이스 의존적인 데이터 검증 방법입니다. 그리고 이는 테스트하고 관리하기 좀 더 어렵습니다. 그럼에도, 여러분의 데이터베이스를 다른 어플리케이션이 사용한다면, 데이터베이스 수준의 몇몇 제약 사항을 사용하는 건 좋은 생각입니다. 추가로, 데이터베이스 수준 데이터 검증은 다른 방법으로 구현하기 어려울 수 있는 몇가지 것(가령, 자주 사용되는 테이블에서 유일성 검증 따위)를 안전하게 다룰 수 있습니다.
+* 클라이언트 측 데이터 검증은 유용할 수 있습니다. 그러나 이것만 사용하면, 일반적으로 믿기 힘듭니다. 만약 자바스크립을 이용해서 구현했다면, 자바스크립트가 꺼져있는 사용자 브라우저 경우에 검사를 우회할 수 있습니다. 그럼에도, 다른 기술들과 함께 사용하면, 클라이언트 측 데이터 검증은 여러분의 사이트에서 즉각적인 피드백을 사용자들에게 줄 수 있어서 사용자에게 편리함을 제공할 수 있습니다. 
+* 컨트롤러 수준의 데이터 검증은 마음을 끕니다. 그러나 자주 테스트나 유지 보수를 하기 어렵게 만듭니다. 가능하면, "컨트롤러 가볍게 유지하기":http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model 가 좋은 생각입니다. 장기간에 걸처 작업을 할때 이런 습관은 여러분의 어플리케이션을 제작을 더 편하게 만들 겁니다.
+* 모델 수준의 데이터 검증은 데이터베이스에 유효한 데이터만 입력하는 가장 좋은 방법입니다. 이 데이터 검증은 데이터베이스를 신뢰하지 않습니다. 그리고 최종 고객이 우회해서 접근할 수 있는 기회도 제공하지 않습니다. 그리고 테스트와 유지보스에 편리합니다. 레일즈는 공통적인 요구 사항에 대한 내장된 헬퍼를 제공하고, 맞춤형 데이터 검증 제작을 손쉽게 할수 있도록 지원합니다.
+
+h4(#when-does-validation-happen). 데이터 검증은 언제하나?
+
+액티브 레코드 객체는 두 종류가 있습니다.:데이터베이스의 한열(row)와 대응하는 것과, 그렇지 않은 것이죠. 새로운 객체를 만들때, 예컨데 +new+ 메소드를 이용해서, 이 객체는 아직 데이터베이스와 대응하지 않습니다. 한번이라도 해당 객체에 대해서 +save+를 호출하면 그것은 정확한 데이터메이스 테이블에 저장 됩니다. 액티브 레코드는 +new_record?+ 인스턴스 메소드르 사용해서 해당 객체가 데이터베이스에 연결되었는지를 알 수 있습니다. 다음의 간단한 액티브 레코드 클래스를 생각해보세요.:
+
+<ruby>
+class Person < ActiveRecord::Base
+end
+</ruby>
+
+이것이 어떻게 동작하는지는, 몇가지 +rails console+ 결과 관찰로 알 수 있습니다.:
+
+<shell>
+>> p = Person.new(:name => "John Doe")
+=> #<Person id: nil, name: "John Doe", created_at: nil, :updated_at: nil>
+>> p.new_record?
+=> true
+>> p.save
+=> true
+>> p.new_record?
+=> false
+</shell>
+
+새로운 레코드 만들기와 저장하기는 데이터베이스에 +INSERT+ SQL 명령을 전달할 것입니다. 존재하는 레코드 정보 갱신은 +UPDATE+ SQL 명령어를 전달합니다. 데이터 검증은 보통 데이터베이스에 이런 명령어를 전달되지 전에 실행 됩니다. 만약에 데이터 검증이 하나라도 실패하면, 해당 객체는 타당하지 않은 객체로 기록되고, 액티브 레코드는 +INSERT+나 +UPDATE+ 명령을 실행하지 않습니다. 이는 데이터베이스에 타당하지 않은 객체 저장 방지를 돕습니다. 여러분은 객체가 만들어때, 저장될때, 갱신될때 확인할 데이터 검증 규칙을 지정할 수 있습니다.
+
+CAUTION: 데이터베이스 안에서 객체의 상태를 바꾸는 방법은 많습니다. 몇가지 메소드는 데이터 검증을 실행하지만, 몇몇은 그렇지 않겠죠. 이는 여러분이 주의 깊지 못하면, 잘못된 상태로 데이터베이스에 객체를 저장할 가능성이 있다는 것을 의미합니다.
+
+다음은 메소드는 데이터 검증을 실행시킵니다. 그리고 객체가 유효할때만 데이터베이스에 저장합니다.:
+
+* +create+
+* +create!+
+* +save+
+* +save!+
+* +update+
+* +update_attributes+
+* +update_attributes!+
+
+bang(빵!) 버전(e.g +save!+)은 객체가 타당하지 않으면 예외를 발생 시킵니다. non-bang 버전은 발생 시키지 않습니다.:+save+와 +update+와 +update_attributes+는 +false+를 반환하고, +create+와 +update+는 그냥 객체를 반환합니다.
+
+h4(#skipping-validations). 데이터 검증 무시하기
+
+다음 메소드는 데이터 검증을 하지 않습니다. 그리고 데이터의 타당성에 개의치 않고 객체를 데이터베이스에 저장합니다. 이 메소드는 주의 깊게 사용해야 합니다.
+
+* +decrement!+
+* +decrement_counter+
+* +increment!+
+* +increment_counter+
+* +toggle!+
+* +update_all+
+* +update_attribute+
+* +update_counters+
+
++save+ 역시 +:validate => false+를 인자로 넘기면 데이터 검증을 하지 않습니다. 이 기법은 신중하게 사용하세요.
+
+* +save(:validate => false)+
+
+h4. +valid?+ 와 +invalid?+
+
+객체의 유효 여부를 검사하기 위해 레일즈는 +valid?+ 메소드를 사용합니다. 여러분도 이 메소드를 사용할 수 있습니다. +valid?+는 데이터 검증을 실행하고 아무런 에러가 없으면 true(참)을 그렇지 않으면 false(거짓)을 반환합니다. 
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates :name, :presence => true
+end
+
+Person.create(:name => "John Doe").valid? # => true
+Person.create(:name => nil).valid? # => false
+</ruby>
+
+액티브 레코드가 데이터 검증을 수행 중일때, +errors+ 인스턴스 메소드를 통해서 발견된 어떤 에러든지 접근할 수 있습니다. 기본적으로, 데이터 검증을 실행한 후에 +errors+ 인스턴스 메소드가 반환한 컬렉션 객체가 비어 있으면, 객체는 유효합니다. 
+
++new+로 생성된 객체는 기술적으로 유효하지 않은 정보를 담고 있더라도, 에러를 보고하지 않는 다는 점에 유의하세요. 데이터 검증은 +new+를 사용중에 동작하지 않기 때문입니다.
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates :name, :presence => true
+end
+
+>> p = Person.new
+=> #<Person id: nil, name: nil>
+>> p.errors
+=> {}
+
+>> p.valid?
+=> false
+>> p.errors
+=> {:name=>["can't be blank"]}
+
+>> p = Person.create
+=> #<Person id: nil, name: nil>
+>> p.errors
+=> {:name=>["can't be blank"]}
+
+>> p.save
+=> false
+
+>> p.save!
+=> ActiveRecord::RecordInvalid: Validation failed: Name can't be blank
+
+>> Person.create!
+=> ActiveRecord::RecordInvalid: Validation failed: Name can't be blank
+</ruby>
+
++invalid?+는 간단히 +valid?+의 반대입니다. +invalid?+는 데이터 검증을 실행하고, 객체에 어떠한 에러라도 추가되면 true(참)을 반환하고 반대면 false(거짓)을 반환합니다.
+
+h4(#validations_overview-errors). +errors[]+
+
+객체가 가진 특정 속성(attribute)의 타당성 확인을 위해서, +errors[:attribute]+를 사용할 수 있습니다. 그것은 +:attribute+을 위한 모든 에러를 가진 배열을 반환합니다. 만약 특정 속성에 대한 에러가 없으면, 비어있는 배열이 반환됩니다.
+
+이 메소드는 오직 데이터 검증 _실행 후_에만 유용합니다. 왜냐하면, 오직 에러 컬렉션을 조회할 뿐이고 데이터 검증을 실행하지 않기 때문입니다. 그것은 위에 설명한 +ActiveRecord::Base#invalid?+ 메소드와 다릅니다. 왜냐하면, 객체의 타당성 전체를 검사하지는 않기 때문이죠. 그것은 오직 객체의 개발 속성에 대한 에러가 존재하는지 여부만 살핍니다.
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates :name, :presence => true
+end
+
+>> Person.new.errors[:name].any? # => false
+>> Person.create.errors[:name].any? # => true
+</ruby>
+
+우리는 데이터 검증 에러에 대한 자세한 사항을 "데이터 검증 에러로 작업하기":#working-with-validation-errors 섹션에서 다를 것입니다. 지금은, 레일즈가 제공하는 내장된 데이터 검증 헬퍼로 돌아가죠.
+
+h3(#validation-helpers). 데이터 검증 헬퍼 (Validation helpers)
+
+액티브 레코드는 미리 정의된 많은 데이터 검증 헬퍼를 제공합니다. 이건 클래스 정의 내부에서 직접 사용할 수 있습니다. 이런 헬퍼는 공통의 데이터 검증 규칙을 제공합니다. 매번 검증이 실패할때, 한 에러 메세지가 해당 객체의 +errors+ 컬렉션에 추가되고, 이 메세지는 검증 대상의 필드와 관련있습니다.
+
+각 헬퍼는 속성을 원하는 숫자 만큼 받아들입니다. 그래서 같은 종류의 검증에  여러개의 속성을 한줄로 추가할 수 있습니다.
+
+모든 헬퍼는 +:on+과 +:message+ 옵션을 받을 수 있습니다. +:message+ 옵션은 검증이 실행되고 실패일 경우에 +errors+ 컬렉션에 추가될 메세지를 지정할 수 있습니다. +:on+ 옵션은 +:save+(기본값), +:create+ 또는 +:update+ 어느 시점의 값을 검사할 것인지 지정합니다. 데이터 검증 헬퍼 각 메소드는 기본 에러 메세지 값을 가지고 있습니다. 기본 메세지는 +:message+가 지정되지 않았을때 사용됩니다. 자, 사용할 수 있는 헬퍼들을 하나씩 살펴봅시다.
+
+h4. +validates_acceptance_of+ (수락 검증)
+
+폼이 실행된 후에, 유저 인터페이스 상에서 체크되어 있는 체크박스를 검증합니다. 이것은 보통 사용자가 여러분의 어플리케이션의 서비스 계약 사항의 동의 확인이 필요할때, 어떤 텍스트를 읽었는지 확인하거나 그 비슷한 상황에서 사용됩니다. 이 검증은 웹 어플리케이션에 매우 특화되어 있는 것이고, 이 수락(acceptance)은 데이터베이스 내에 어떤 곳에도 구지 기록될 필요는 없습니다.(만약 이를 위한 필드를 만들어 놓지 않으면, 이 헬퍼는 가상의 속성을 만듭니다.)
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates_acceptance_of :terms_of_service
+end
+</ruby>
+
++validates_acceptance_of+의 기본 에러 메세지는 "_must be accepted_" 입니다.
+
++validates_acceptance_of+은 +:accept+ 옵션을 받을수 있는데, 이 옵션은 수락시 결정될 값을 의미합니다. 기본값은 "1"이지만 이를 변경할 수 있습니다.
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates_acceptance_of :terms_of_service, :accept => 'yes'
+end
+</ruby>
+
+h4. +validates_associated+ (관계 검증)
+
+이 헬퍼는 모델과 다른 모델과의 관계와 그들 모두가 데이터 검증이 필요할때 사용합니다. 객체를 저장할때, 관계된 각 객체의 +valid?+가 호출 됩니다.
+
+<ruby>
+class Library < ActiveRecord::Base
+  has_many :books
+  validates_associated :books
+end
+</ruby>
+
+이 데이터 검증은 관계된 타입의 관계된 타입 모두와 동작할 것입니다.
+
+CAUTION: 여러분의 관계(associations) 설정되어 있는 양쪽 클래스 모두에게 상호간의 +validates_associated+를 사용하지는 마세요. 그들은 서로를 호출해서 무한 루프를 만들게 될 것 입니다.
+
++validates_associated+를 위한 기본 에러 메세지는 "_is invalid_+ 입니다. 각 관계된 객체가 +errors+ 컬렉션에 메세지를 가지고 있다는 부분에 주목하세요.; 에러는 호출되는 모델에 다른 모델의 에러까지 과도하게 쌓이지 않습니다. 
+
+h4. +validates_confirmation_of+ (수락 검증)
+
+이 헬퍼는 완전히 동일한 내용의 두개의 텍스트 필드를 이용할때 사용해야 합니다. 예를들어, 아마도 여러분은 이메일 주소나 암호의 확인하기를 원할 겁니다. 이 검증은 가상 속성을 생성하는데, 이 속성의 이름은 대상 필드에 "_confirmation"을 덧붙인 것 입니다.
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates_confirmation_of :email
+end
+</ruby>
+
+여러분의 뷰 템플릿에서 다음과 같이 사용하세요.
+
+<erb>
+<%= text_field :person, :email %>
+<%= text_field :person, :email_confirmation %>
+</erb>
+
+이 검사는 오직 +email_confirmation+이 +nil+이 아닐때만 동작합니다. 이 검증이 필요하면, 확인 대상 위한 속성에 대한 존재(presence) 검증을 추가하면 실행을 확신할 있습니다. (우리는 이 가이드 뒷 부분에서 +validates_presence_of+를 다룰 것입니다.)
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates_confirmation_of :email
+  validates_presence_of :email_confirmation
+end
+</ruby>
+
++validates_confirmation_of+을 위한 기본 에러 메세지는  "_doesn't match confirmation_" 입니다.
+
+h4. +validates_exclusion_of+
+
+이 헬퍼는 속성의 값이 가지지 않아야 하는 값을 정의합니다. 사실, 이 헬퍼는 어떤 종류의 열거 객체(enumerable object)든 지정될 수 있습니다.
+
+<ruby>
+class Account < ActiveRecord::Base
+  validates_exclusion_of :subdomain, :in => %w(www us ca jp),
+    :message => "Subdomain %{value} is reserved."
+end
+</ruby>
+
++validates_exclusion_of+ 헬퍼는 +:in+ 옵션을 통해서 검증 대상 속성이 허락하지 않는 값 집합을 받습니다. +:in+ 옵션은 +:within+의 별명(alias)을 가지고 있는데, 이 이름이 사용하기 좋다면, 같은 목적으로 +:within+을 사용할 수 있습니다. 이 예제는 +:message+을 이용해서, 여러분이 속성의 값을 메세지 속에 포함시키는 방법을 보여줍니다.
+
++validates_exclusion_of+를 위한 기본 에러 메세지는  "_is reserved_" 입니다.
+
+h4. +validates_format_of+ (포맷 검증)
+
+이 헬퍼는 +:with+ 옵션으로 입력된 정규식을 이용해서 속성의 값을 검증합니다.
+
+<ruby>
+class Product < ActiveRecord::Base
+  validates_format_of :legacy_code, :with => /\A[a-zA-Z]+\z/,
+    :message => "Only letters allowed"
+end
+</ruby>
+
++validates_format_of+을 위한 기본 에러 메세지는  "_is invalid_" 입니다.
+
+h4. +validates_inclusion_of+ 
+
+이 헬퍼는 속성의 값이 속해야만 하는 집합을 정의합니다. 사실, 이 헬퍼는 어떤 종류의 열거 객체(enumerable object)든 지정될 수 있습니다.
+
+<ruby>
+class Coffee < ActiveRecord::Base
+  validates_inclusion_of :size, :in => %w(small medium large),
+    :message => "%{value} is not a valid size"
+end
+</ruby>
+
++validates_inclusion_of+ 헬퍼는 +:in+ 옵션을 통해서 검증 대상 속성이 허락하는 값 집합을 받습니다. +:in+ 옵션은 +:within+의 별명(alias)을 가지고 있는데, 이 이름이 사용하기 좋다면, 같은 목적으로 +:within+을 사용할 수 있습니다. 이 예제는 +:message+을 이용해서, 여러분이 속성의 값을 메세지 속에 포함시키는 방법을 보여줍니다.
+
++validates_inclusion_of+을 위한 에러 메세지는  "_is not included in the list_" 입니다. 
+
+h4. +validates_length_of+ (길이 검증)
+
+이 헬퍼는 속성 값의 길이를 검증합니다. 그것은 다양한 옵션을 제공해서, 여러분은 길이의 각기 다른 방면에서 길이 제약 사항을 부여할 수 있습니다.
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates_length_of :name, :minimum => 2
+  validates_length_of :bio, :maximum => 500
+  validates_length_of :password, :in => 6..20
+  validates_length_of :registration_number, :is => 6
+end
+</ruby>
+
+가능한 길이 제약 옵션은 다음과 같습니다.:
+
+* +:minimum+ - 속성은 최소한 주어진 길이보다 작을 수 없습니다.
+* +:maximum+ - 속성은 주어진 길이보다 길 수 없습니다.
+* +:in+ (or +:within+) - 속성의 길이는 반드시 주어진 범위내여야 합니다. 이 옵션의 값은 반드시 범위(range)여야 합니다.
+* +:is+ - 속성의 길이는 주어진 값과 동일해야 합니다.
+
+기본 에러 메세지는 수행된 길이 검증의 종류에 따릅니다. +:wrong_length+, +:too_long+ 그리고 +:too_short+ 옵션과 제약 길이인 <tt>%{count}</tt>로 에러 메세지를 개인화 할 수 있습니다. 여전히 +:message+ 옵션을 이용해서도 에러 메세지를 정의할 수 있습니다.
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates_length_of :bio, :maximum => 1000,
+    :too_long => "%{count} characters is the maximum allowed"
+end
+</ruby>
+
+이 헬퍼는 기본적으로 글자의 갯수를 셉니다. 그러나 +:tokenizer+ 옵션을 이용해서 다른 방법으로 값을 자를 수 있습니다.
+
+<ruby>
+class Essay < ActiveRecord::Base
+  validates_length_of :content,
+    :minimum   => 300,
+    :maximum   => 400,
+    :tokenizer => lambda { |str| str.scan(/\w+/) },
+    :too_short => "must have at least %{count} words",
+    :too_long  => "must have at most %{count} words"
+end
+</ruby>
+
++validates_size_of+ 헬퍼는 +validates_length_of+의 별명(Alias)입니다. 
+
+h4. +validates_numericality_of+ (숫자 검증)
+
+이 헬퍼는 속성값이 오직 숫자 형태의 값인지 검증합니다. 기본적으로, 이 헬퍼는 정수형 혹은 부동 소수점 형태의 임의 기호인지 확인합니다. 오직 정수형 숫자로 한정하려면 +:only_integer+을 참(true) 갑승로 지정해 주세요.
+
+만약, +:only_integer+을 참(true) 설정하면, 헬퍼는 다음의 
+
+<ruby>
+/\A[+-]?\d+\Z/
+</ruby>
+
+정규식으로 속성의 값을 검증할 것입니다. 만약 그렇지 않으면, +Float+를 이용해서 숫자 변환을 시도할 것입니다.
+
+WARNING. 위의 정규식이 값의 마지막에 개행(newline) 문자를 허용한다는 점을 유의하세요.
+
+<ruby>
+class Player < ActiveRecord::Base
+  validates_numericality_of :points
+  validates_numericality_of :games_played, :only_integer => true
+end
+</ruby>
+
++:only_integer+와 함께, +validates_numericality_of+ 헬퍼는 다음의 옵션들을 제약사항으로 추가할 수 있습니다.:
+
+* +:greater_than+ - 속성 값은 반드시 옵션으로 지정된 값보다 커야 합니다. 이 옵션의 에러 메세지는 "_must be greater than %{count}_" 입니다.
+* +:greater_than_or_equal_to+ - 속성 값은 옵션으로 지정된 값보다 크거나 같아야 합니다. 이 옵션의 에러 메세지는 "_must be greater than or equal to %{count}_" 입니다.
+* +:equal_to+ - 속성 값은 반드시 옵션으로 지정된 값과 같아야 합니다. 이 옵션의 에러 메세지는 "_must be equal to %{count}_" 입니다.
+* +:less_than+ - 속성 값은 반드시 옵션으로 지정된 값보다 작아야 합니다. 이 옵션의 에러 메세지는 "_must be less than %{count}_" 입니다.
+* +:less_than_or_equal_to+ - 속성 값은 옵션으로 지정된 값보다 작거나 같아야 합니다. 이 옵션의 에러 메세지는 "_must be less than or equal to %{count}_" 입니다.
+* +:odd+ - 속성 값은 반드시 홀수 여야 합니다. 이 옵션의 에러 메세지는  "_must be odd_" 입니다.
+* +:even+ - 속성 값은 반드시 짝수 여야 합니다. 이 옵션의 에러 메세지는  "_must be even_" 입니다.
+
++validates_numericality_of+를 위한 기본 에러 메세지는 "_is not a number_" 입니다.
+
+h4. +validates_presence_of+ (존재 검증)
+
+이 헬퍼는 지정된 속성이 비어있는지 검증합니다. 그것은 값이 +nil+ 이거나 빈 문자열인지 검증하기 위해서 +blank? 메소드를 사용합니다. 이는 빈 문자열이거나 공백 문자로 구성되어 있는 것을 의미합니다.
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates :name, :login, :email, :presence => true
+end
+</ruby>
+
+만약 관계하는 모델 존재 여부를 확신하려면, 관계된 객체가 아니라 관계에 이용되는 외래키(foreign key)의 여부를 테스트할 필요가 있습니다.
+
+<ruby>
+class LineItem < ActiveRecord::Base
+  belongs_to :order
+  validates_presence_of :order_id
+end
+</ruby>
+
++false.blank?+는 참(true)이므로, Boolean 값의 존재 여부를 확인하려면, +validates_inclusion_of :field_name, :in => [true, false]+를 사용해야 합니다.
+
++validates_presence_of+을 위한 기본 에러 메세지는 "_can't be empty_" 입니다.
+
+h4. +validates_uniqueness_of+ (유일성 검증)
+
+이 헬퍼는 객체를 저장하기 전에 속성의 값이 유일한지 검증합니다. 이 헬퍼는 데이터베이스 안에 유일성 관련 제약사항을 만들지는 않습니다. 그래서 데이터베이스에 연결된 다른 두 접속은 유일하기를 원하는 컬럼이 같은 값을 가진 두개의 레코드를 만들 수 있습니다. 이를 피하기 위해, 반드시 여러분의 데이터베이스에 유일한  인덱스(unique index)를 거세요.
+
+<ruby>
+class Account < ActiveRecord::Base
+  validates_uniqueness_of :email
+end
+</ruby>
+
+속성에 같은 값을 가진 레코드 여부를 알아내기 위해서, 모델 테이블에 SQL 구문 실행으로 검증합니다.
+
++:scope+ 옵션으로 유일성 검사 제한에 다른 속성을 함께 지정해서 사용할 수 있습니다.:
+
+<ruby>
+class Holiday < ActiveRecord::Base
+  validates_uniqueness_of :name, :scope => :year,
+    :message => "should happen once per year"
+end
+</ruby>
+
++:case_sensitive+ 옵션으로 대소문자 여부를 유일성 제약에 포함할지 정의할 수 있습니다. 이 옵션의 가본 값은 참(true) 입니다
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates_uniqueness_of :name, :case_sensitive => false
+end
+</ruby>
+
+WARNING. 몇몇 데이터베이스는 대소문자를 가리지 않는 검색으로 설정되어 있다는 점에 유의하세요. 
+
++validates_uniqueness_of+을 위한 에러메세지는 "_has already been taken_" 입니다.
+
+h4. +validates_with+ (클래스로 검기)
+
+이 헬퍼는 검증을 위해서 분리된 클래스에 레코드를 전달합니다. 
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates_with GoodnessValidator
+end
+
+class GoodnessValidator < ActiveModel::Validator
+  def validate
+    if record.first_name == "Evil"
+      record.errors[:base] << "This person is evil"
+    end
+  end
+end
+</ruby>
+
++validates_with+ 헬퍼는 검증을 위해서 클래스나 클래스 목록을 받아 들입니다. +validates_with+를 위한 기본 에러 메세지는 없습니다. 여러분은 반드시 검증하는 클래스내에 레코드의 에러 컬렉션에 에러를 직접 추가해야 합니다.
+
+검증 클래스는 기본적으로 두가지의 속성을 가집니다.:
+
+* +record+ - 검증할 레코드
+* +options+ - +validates_with+에 넘길 추가 옵션
+
+다른 모든 검증과 같이, +validates_with+도 +:if+, +:unless+ 그리고 +:on+ 옵션을 받아들입니다. 만약 여러분이 다른 옵션을 넘긴다면, 이들 옵션은 검증 클레스의 +options+로 전달됩니다.  
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates_with GoodnessValidator, :fields => [:first_name, :last_name]
+end
+
+class GoodnessValidator < ActiveRecord::Validator
+  def validate
+    if options[:fields].any?{|field| record.send(field) == "Evil" }
+      record.errors[:base] << "This person is evil"
+    end
+  end
+end
+</ruby>
+
+h4. +validates_each+ (블록으로 각 속성 검증)
+
+이 헬퍼는 블록을 이용해서 각 속성을 검증합니다. 이 헬퍼는 미리 정의된 검증 함수를 가지지 않습니다. 여러분은 블록을 만들고, +validates_each+은 넘겨받은 모든 속성에 대하여 검사를 진행합니다. 다음의 예제는 성과 이름이 반드시 대문자로 시작하기를 원하는 검증 코드입니다.
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates_each :name, :surname do |model, attr, value|
+    model.errors.add(attr, 'must start with upper case') if value =~ /\A[a-z]/
+  end
+end
+</ruby>
+
+블록은 모델, 속성의 이름과 값을 받습니다. 블록을 이용해서 하고싶은 어떠한 검사도 할 수 있습니다. 만약 검증에 실패하면, 모델의 에러 메세지 추가해서 그것은 검증 실패로 만들 수 있습니다.
+
+h3(common-validation-options). 공통 검증 옵션
+
+모든 헬퍼가 사용할 수 있는 공통 옵션이 몇가지 있습니다. +:if+와 +:unless+를 제외한 이들 옵션은 나중에 "조건부 검증":#conditional-validation 에서 논의 될 것입니다.
+
+h4. +:allow_nil+ (nil 허용)
+
++:allow_nil+ 옵션은 검증 중인 값이 +nil+일때 검증을 무시합니다. +validates_presence_of+와 함께 +:allow_nil+ 사용해서 +nil+을 존재 검증에서 허용할 수 있습니다. 하지만 +blank?+는 여전히 다른 경우(ex-공백 문자열)를 거부합니다.
+
+<ruby>
+class Coffee < ActiveRecord::Base
+  validates_inclusion_of :size, :in => %w(small medium large),
+    :message => "%{value} is not a valid size", :allow_nil => true
+end
+</ruby>
+
+h4. +:allow_blank+ (공백 허락)
+
++:allow_blank+ 옵션은 +:allow_nil+과 비슷합니다. 이 옵션은 +blank?+가 성공하면 검증을 통과 시길 것입니다. (속성 값의 +nil+ 혹은 빈 문자열이 통과 대상입니다.)
+
+<ruby>
+class Topic < ActiveRecord::Base
+  validates_length_of :title, :is => 5, :allow_blank => true
+end
+
+Topic.create("title" => "").valid? # => true
+Topic.create("title" => nil).valid? # => true
+</ruby>
+
+h4. +:message+ (메세지)
+
+이미 보았던대로, +:message+ 옵션은 검증이 실패했을때 +errors+ 컬렉션에 추가되는 메세지를 지정합니다. 이 옵션을 사용하지 않으면, 액티브 레코드는 각 검증 헬퍼들을 위한 각자의 기본 메세지를 사용할 것입니다.
+
+h4. +:on+
+
++:on+ 검증이 반드시 발생해야할 때를 지정합니다. 내장된 모든 검증 헬퍼들에 대한 기본 동작은 저장시에 실행됩니다. (새로운 레코드를 만들때와 갱신할때 양쪽 다 포함합니다.) 만약 이를 변경하고 싶으면, +:on => :create+를 사용하면 오직 새로운 레코드를 만들때만 검증을 실행시킬 수 있고, 혹은 +:on => :update+를 사용하면 레코드가 갱신될 때문 검증을 시행 시킬수 있습니다.
+
+<ruby>
+class Person < ActiveRecord::Base
+  # it will be possible to update email with a duplicated value
+  validates_uniqueness_of :email, :on => :create
+
+  # it will be possible to create the record with a non-numerical age
+  validates_numericality_of :age, :on => :update
+
+  # the default (validates on both create and update)
+  validates :name, :presence => true, :on => :save
+end
+</ruby>
+
+h3(#conditional-validation). 조건부 검증
+
+때로, 영리하게 제공한 조건을 만족할때만 객체를 검증할 필요가 있습니다. +:if+와 +:unless+ 옵션에 심볼(symbol), 문자열 혹은 +Proc+을 전달해서 이를 수행할 수 있습니다. 아마 검증을 *반드시* 해야할때 +:if+ 옵션을 사용해야 할 것입니다.것입니다. 만약 검증을 *반드시 해야 않을때는*, +:unless+ 옵션을 사용해야 할 겁니다.
+
+h4(#using-a-symbol-with-if-and-unless). +:if+와 +:unless+에 심볼(Symbol) 사용하기
+
++:if+와 +:unless+ 옵션과 검증이 일어나기 직전에 실행될 메소드 이름의 심볼(Symbol)을 연결할 수 있습니다. 이것은 옵션의 가장 흔한 사용 방법입니다.
+
+<ruby>
+class Order < ActiveRecord::Base
+  validates_presence_of :card_number, :if => :paid_with_card?
+
+  def paid_with_card?
+    payment_type == "card"
+  end
+end
+</ruby>
+
+h4(#using-a-string-with-if-and-unless). +:if+와 +:unless+에 문자열 사용하기
+
++eval+로 실행되는 유효한 루비 코드의 문자열도 이용할 수 있습니다. 문자열이 정말 짧은 조건을 표현할때 이 옵션을 이용하세요.
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates_presence_of :surname, :if => "name.nil?"
+end
+</ruby>
+
+h4(#using-a-proc-with-if-and-unless). +:if+와 +:unless+에 Proc 사용하기
+
+마지막으로, +:if+와 +:unless+에 호출될 Proc 객체를 연결하는 것도 가능합니다. +Proc+ 객체는 분리된 메소드 대신에 그때마다 즉시 처리하는 조건을 제공합니다. 이 옵션은 한줄 코드에 가장 적합합니다.
+
+<ruby>
+class Account < ActiveRecord::Base
+  validates_confirmation_of :password,
+    :unless => Proc.new { |a| a.password.blank? }
+end
+</ruby>
+
+h3(#creating-custom-validation-methods). 맞춤형 검증 메소드 만들기
+
+내장된 검증 헬퍼들이 여러분의 요구사항을 만족하지 못하면, 필요한 직접 검증 메소드를 작성할 수 있습니다.
+
+간단하게 여러분 모델의 상태를 검사하는 메소드를 만드세요. 그리고 검증이 실패하면 +errors+ 컬렉션에 메세지를 추가하세요. 이러한 메소드는 반드시 한개 이상의 +validate+, +validate_on_create+ 혹은 +validate_on_update+ 클래스 메소드에 검증 메소드 이름의 심볼(Symbol)을 넘겨서 등록해야 합니다. 
+
+각 클래스 메소드를 위해서 한개 이상의 심볼을 전달할 수 있습니다. 그리고 각각의 검증은 등록된 순서대로 실행 될 것입니다.
+
+<ruby>
+class Invoice < ActiveRecord::Base
+  validate :expiration_date_cannot_be_in_the_past,
+    :discount_cannot_be_greater_than_total_value
+
+  def expiration_date_cannot_be_in_the_past
+    errors.add(:expiration_date, "can't be in the past") if
+      !expiration_date.blank? and expiration_date < Date.today
+  end
+
+  def discount_cannot_be_greater_than_total_value
+    errors.add(:discount, "can't be greater than total value") if
+      discount > total_value
+  end
+end
+</ruby>
+
+여러분의 검증 헬퍼를 만들고 다른 모델에 이를 재사용할 수 있습니다. 예를들어, 설문조사를 관리하는 어플리케이션은 선택 결과의 집합과 관계있는 필드로 검증을 표현하면 유용합니다.
+
+<ruby>
+ActiveRecord::Base.class_eval do
+  def self.validates_as_choice(attr_name, n, options={})
+    validates_inclusion_of attr_name, {:in => 1..n}.merge(options)
+  end
+end
+</ruby>
+
+간단히, +ActiveRecord::Base+ 다시 열어서 위와 같은 클래스 메소드를 정의하세요. 이런 코드는 일반적으로 +config/initializers+ 내에 위치 시킵니다. 그리고 이 헬퍼를 아래와 같이 사용할 수 있습니다.:
+
+<ruby>
+class Movie < ActiveRecord::Base
+  validates_as_choice :rating, 5
+end
+</ruby>
+
+h3(#working-with-validation-errors). 데이터 검증 에러로 작업하기
+
+추가로 +valid?+와 +invalid?+ 메소는 이미 다루었죠. 레일즈는 +errors+ 컬렉션을 사용하고, 객체의 검증 상태를 질의할 수 있는 몇가지 메소드를 제공합니다.
+
+이어지는 리스트는 가장 흔하게 사용하는 메소드 입니다. 사용 가능한 모든 메소드는 +ActiveRecord::Errors+ 문서를 참고하세요.
+
+h4(#working_with_validation_errors-errors). +errors+
+
+모든 에러를 OrderedHash로 반환합니다. 각 키는 속성의 이름이고, 값은 에러를 가진 문자열 배열입니다.
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates :name, :presence => true
+  validates_length_of :name, :minimum => 3
+end
+
+person = Person.new
+person.valid? # => false
+person.errors
+ # => {:name => ["can't be blank", "is too short (minimum is 3 characters)"]}
+
+person = Person.new(:name => "John Doe")
+person.valid? # => true
+person.errors # => []
+</ruby>
+
+h4(#working_with_validation_errors-errors-2). +errors[]+
+
++errors[]+는 원하는 속성의 에러 메세지를 책크하길 원할때 사용합니다. 그것은 주어진 속성을 위한 모든 에러 메세지를 담은 문자열 배열을 반환하는데, 각 문자열이 에러 메세지 하나입니다. 속성에 관계된 에러가 없을때, 빈 배열을 반환합니다.
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates :name, :presence => true
+  validates_length_of :name, :minimum => 3
+end
+
+person = Person.new(:name => "John Doe")
+person.valid? # => true
+person.errors[:name] # => []
+
+person = Person.new(:name => "JD")
+person.valid? # => false
+person.errors[:name] # => ["is too short (minimum is 3 characters)"]
+
+person = Person.new
+person.valid? # => false
+person.errors[:name]
+ # => ["can't be blank", "is too short (minimum is 3 characters)"]
+</ruby>
+
+h4. +errors.add+
+
++add+ 메소드는 특정한 속성에 관계된 메세지를 직접 추가할때 사용합니다. 고객을 위해 에러를 폼에 보여주기 위해서 +erros.full_messages+ 나 +erros.to_a+ 메소드를 사용할 수 있습니다. 이 메세지는 그럴싸한(그리고 첫 글자가 대문자로 되어 있는) 속성 이름을 가집니다. +add+는 메제시에 추가하길 원하는 속성의 이름과 메세지 그 자체를 인자로 받습니다.
+
+<ruby>
+class Person < ActiveRecord::Base
+  def a_method_used_for_validation_purposes
+    errors.add(:name, "cannot contain the characters !@#%*()_-+=")
+  end
+end
+
+person = Person.create(:name => "!@#")
+
+person.errors[:name]
+ # => ["cannot contain the characters !@#%*()_-+="]
+
+person.errors.full_messages
+ # => ["Name cannot contain the characters !@#%*()_-+="]
+</ruby>
+
+다른 방법으로 +[]=+ 대입자를 사용할 수 있습니다. 
+
+<ruby>
+  class Person < ActiveRecord::Base
+    def a_method_used_for_validation_purposes
+      errors[:name] = "cannot contain the characters !@#%*()_-+="
+    end
+  end
+
+  person = Person.create(:name => "!@#")
+
+  person.errors[:name]
+   # => ["cannot contain the characters !@#%*()_-+="]
+
+  person.errors.to_a
+   # => ["Name cannot contain the characters !@#%*()_-+="]
+</ruby>
+
+h4. +errors[:base]+
+
+관계된 속성 대신에, 객체의 전체 상태 관련한 에러 메세지를 추가할 수 있습니다. 속성의 값에 개의치않고, 객체가 타당하지 않다고 이야기하고 싶을때 이 메소드를 사용할 수 있습니다. +errors[:base]+는 배열이므로, 간단하게 문자열을 배열에 넣는 식으로 에러메세지를 사용할 수 있습니다.
+
+<ruby>
+class Person < ActiveRecord::Base
+  def a_method_used_for_validation_purposes
+    errors[:base] << "This person is invalid because ..."
+  end
+end
+</ruby>
+
+
+
+h4. +errors.clear+
+
++clear+ 메소드는 +errors+ 컬렉션안의 모든 메세지를 강제로 삭제하고 싶을때 사용합니다. 물론, 타당하지 않은 객체에 +errors.clear+ 호출한다고 객체가 타당하게 바뀌지는 않습니다.:+errors+ 컬렉션은 비워지겠지만, 다음에 +valid?+를 호출하거나 데이터베이스에 저장과 관련된 메소드가 호출되면, 데이터 검증 코드는 다시 실행됩니다. 어떤 검증이라도 실패하면, +errors+ 컬렉션은 다시 채워집니다.
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates :name, :presence => true
+  validates_length_of :name, :minimum => 3
+end
+
+person = Person.new
+person.valid? # => false
+person.errors[:name]
+ # => ["can't be blank", "is too short (minimum is 3 characters)"]
+
+person.errors.clear
+person.errors.empty? # => true
+
+p.save # => false
+
+p.errors[:name]
+ # => ["can't be blank", "is too short (minimum is 3 characters)"]
+</ruby>
+
+h4. +errors.size+
+
++size+ 메소드는 객체에 대한 에러 메세지 갯수를 반환합니다.
+
+<ruby>
+class Person < ActiveRecord::Base
+  validates :name, :presence => true
+  validates_length_of   :name, :minimum => 3
+  validates_presence_of :email
+end
+
+person = Person.new
+person.valid? # => false
+person.errors.size # => 3
+
+person = Person.new(:name => "Andrea", :email => "andrea@example.com")
+person.valid? # => true
+person.errors.size # => 0
+</ruby>
+
+h3(#displaying-validation-errors-in-the-view). 뷰에 검증된 에러 출력하기
+
+레일즈는 뷰 템플릿에 모델의 에러 메세지를 출력하기 위한 내장 헬퍼들을 제공합니다.
+
+h4(#error_messages-and-error_messages_for). +error_messages+ 와 +error_messages_for+
+
++form_for+ 헬퍼로 폼을 만들때, +error_messages+ 메소드를 사용해서, 폼 빌더 상에 현재 모델 인스턴스에 대하여 실패한 검증 메세지를 출력할 수 있습니다.
+
+<ruby>
+class Product < ActiveRecord::Base
+  validates_presence_of :description, :value
+  validates_numericality_of :value, :allow_nil => true
+end
+</ruby>
+
+<erb>
+<%= form_for(@product) do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :description %><br />
+    <%= f.text_field :description %>
+  </p>
+  <p>
+    <%= f.label :value %><br />
+    <%= f.text_field :value %>
+  </p>
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+</erb>
+
+이해를 위해서, 필드를 비운채 실행하면 기본적으로 스타일은 좀 잃어버리더라도 다음과 같은 화면을 확인할 수 있습니다. 
+
+!images/error_messages.png(Error messages)!
+
+뷰 템플릿에 할당된 모델의 에러 메세지를 출력하기 위해서 +error_messages_for+ 헬퍼도 사용할 수 있습니다. 그것은 이전 예제와 매우 유사하고 정확하게 동일한 결과를 이를 것입니다. 
+
+<erb>
+<%= error_messages_for :product %>
+</erb>
+
+에러 메세지를 위해 출력된 텍스트는 항상 에러를 가지는 속성의 대문자로 시작하는 이름과 에러 메세지가 따르는 형태로 구성됩니다.
+
++form.error_messages+ 와 the +error_messages_for+ 헬퍼는 맞춤형 메세지를 만들기 위한 옵션을 제공합니다. +div+ 요소에 포함되는 메세지를 지정, 헤더의 텍스트를 변경, 헤더 텍스트 아래 메세지와 헤더로 정의된 요소의 태그를 조정할 수 있습니다.
+
+<erb>
+<%= f.error_messages :header_message => "Invalid product!",
+  :message => "You'll need to fix the following fields:",
+  :header_tag => :h3 %>
+</erb>
+
+다음의 그림이 결과입니다.:
+
+!images/customized_error_messages.png(Customized error messages)!
+
+만약 이 옵션중에 어떤 것이라고 +nil+을 넘긴다면, 해당 각 색션은 +div+에서 제거될 것입니다.
+
+h4(#customizing-the-error-messages-css). 에러 메세지 CSS 원하는데로 변경하기
+
+에러 메세지의 스타일 변경을 위한 선택자(Selector)는 다음과 같습니다.:
+
+* +.field_with_errors+ - 에러를 가진 폼 필드와 라벨을 위한 스타일
+* +#errorExplanation+ - 에러를 가진 +div+ 요소에 대한 스타일
+* +#errorExplanation h2+ - +div+ 요소의 헤더를 위한 스타일
+* +#errorExplanation p+ - +div+ 요소의 헤더 바로 다음에 등장하는 에러 메세지를 포함하는 단락에 대한 스타일
+* +#errorExplanation ul li+ - 개발 에러 메세지를 가진 리스트를 위한 스타일
+
+예제를 위한 발판 작업(Scaffolding)은 위에서 보이듯이 붉은색 계열의 스타일로 정의된 +public/stylesheets/scaffold.css+를 생성합니다.
+
+CSS 클래스(class)와 아이디(id)는 양쪽 헬퍼 모두 +:class+와 +:id+ 옵션 변경 변경할 수 있습니다.
+
+h4(#customizing-the-error-messages-html). 에러 메세지 HTML 원하는데로 변경하기
+
+기본적으로, 에러를 가진 폼 필드는 +field_with_errors+ CSS 클래스를 가진 +div+ 요소 감싸여서 출력됩니다. 그렇지만, 이것을 덮어 쓰는건 가능합니다.
+
+에러를 포함한 폼 필드를 취급하는 방법은 +ActionView::Base.field_error_proc+에 의해 정의됩니다. 이것은 두개의 인자를 받아들이는 +Proc+ 입니다.
+
+* HTML 태그를 이용한 문자열
+* +ActionView::Helpers::InstanceTag+의 인스턴스
+
+여기에 에러를 포함하는 각 폼 필드의 앞에 항상 에러 메세지를 출력하도록 변경한 간단한 예제가 있습니다. 에러 메세지는 +validates-error+ CSS 클래스를 가진 +span+으로 둘러쌓여 있습니다. +input+을 감싸는 +div+ 요소는 없습니다. 이렇게해서 텍스트 필드를 둘러싼 붉은색 경계선은 제거되었습니다. 여러분은 +validation-error+ CSS 클래스를 스타일을 꾸미기 위해서 원하는 어디든 위치 시킬 수 있습니다.
+
+<ruby>
+ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
+  if instance.error_message.kind_of?(Array)
+    %(#{html_tag}<span class="validation-error">&nbsp;
+      #{instance.error_message.join(',')}</span>).html_safe
+  else
+    %(#{html_tag}<span class="validation-error">&nbsp;
+      #{instance.error_message}</span>).html_safe
+  end
+end
+</ruby>
+
+이러헥 고친 것은 다음과 같은 결과를 가져옵니다.:
+
+!images/validation_error_messages.png(Validation error messages)!
+
+h3(#callbacks-overview). 콜백 둘러보기
+
+콜백은 객체의 생명 주기의 특정한 순간에 호출되는 메소드입니다. 콜백을 이용해서, 액티브 레코드 객제의 데이터베이스로 부터 생성, 저장, 갱신, 삭제, 검증, 혹은 로드 각 경우에 실행할 코드를 작성하는게 가능합니다.
+
+h4(#callback-registration). 콜백 등록
+
+가능한 콜백을 이용하기 위해서, 이들 등록이 필요합니다. 여러분은 평범한 메소드 처럼 콜백을 구현하고, 콜백으로 등록하기 위해 메크로 스타일의 메소드를 사용할 수 있습니다.
+
+<ruby>
+class User < ActiveRecord::Base
+  validates_presence_of :login, :email
+
+  before_validation :ensure_login_has_a_value
+
+  protected
+  def ensure_login_has_a_value
+    if login.nil?
+      self.login = email unless email.blank?
+    end
+  end
+end
+</ruby>
+
+메크로 스타일의 클레스 메소드는 블록도 받을 수 있습니다. 블록안의 여러분의 코드가 단지 한줄 정도로 매우 짧을때 이러한 스타일을 고려해 보세요.
+
+<ruby>
+class User < ActiveRecord::Base
+  validates_presence_of :login, :email
+
+  before_create {|user| user.name = user.login.capitalize
+	if user.name.blank?}
+end
+</ruby>
+
+protected 나 private 로 콜백 메소드를 선언하는 것은 좋은 습관입니다. public 으로 남겨두면, 이 메소드는 모델의 바깥에서 호출될 수 있고 객체의 캡슐화 원칙을 깨트립니다.
+
+h3(#available-callbacks). 사용 가능한 콜백
+
+여기에 사용 가능한 액티브 레코드 콜백 전체 리스트가 있습니다. 저마다의 작업 중에 호출되는 순서로 나열되어 있습니다.:
+
+h4(#creating-an-object). 객체 생성하기(Create)
+
+* +before_validation+
+* +after_validation+
+* +before_save+
+* +after_save+
+* +before_create+
+* +around_create+
+* +after_create+
+
+h4(#updating-an-object). 객체 갱신하기(Update)
+
+* +before_validation+
+* +after_validation+
+* +before_save+
+* +after_save+
+* +before_update+
+* +around_update+
+* +after_update+
+
+h4(#destroying-an-object). 객체 삭제하기(Destroy)
+
+* +before_destroy+
+* +after_destroy+
+* +around_destroy+
+
+WARNING. +after_save+는 생성, 갱신 양쪽 모든 상황에서 실행되지만, 그외 모든 _after_ 는 +after_create+ 와 +after_update+ 콜백 같이 좀 더 구체적인 시점을 지정하기 때문에, 호출되는 매크로의 순서가 그리 중요하지는 않습니다. 
+
+
+h4(#after_initialize-and-after_find). +after_initialize+ 와 +after_find+
+
++after_initialize+는 +new+를 사용하든 데이터베이스에서 정보를 로드하든, 액티브 레코드 객체가 생성될 때마다 호출 됩니다. 그것은 직접 액티브 레코드의 +initialize+ 메소드를 덮어쓰고(override) 싶을때 덮어쓰지 않고 기능을 추가할 수 있어서 유용합니다. 
+
++after_find+ 콜백은 데이터베이스에서 액티브 레코드가 로드될 때마다 호출됩니다. +after_find+는 +after_initialize+ 전에 (양쪽 모두 정의되어 있다면,) 호출됩니다.
+
++after_initialize+ 와 +after_find+ 콜백은 다른 콜백과 약간 다릅니다. 그들에게는 반대 메소드인 +before_*+가 존재하지 않고, 표준 메소드처럼 정의하는 것이 그들을 등록할 수 있는 유일한 방법입니다. 만약 +after_initialize+ 나 +after_find+를 매크로 형태로 등록하려 시도하면, 이들은 무시됩니다. 이러한 동작 방식은 성능 때문입니다. 왜냐하면, +after_initialize+와 +after_find+ 메소드는 데이터베이스에서 각 레코드를 호출할때마다 불리고, 이는 눈에 띄게 요청을 느리게 만들수 있습니다.
+
+<ruby>
+class User < ActiveRecord::Base
+  def after_initialize
+    puts "You have initialized an object!"
+  end
+
+  def after_find
+    puts "You have found an object!"
+  end
+end
+
+>> User.new
+You have initialized an object!
+=> #<User id: nil>
+
+>> User.first
+You have found an object!
+You have initialized an object!
+=> #<User id: 1>
+</ruby>
+
+h3(#running-callbacks). 콜백 실행하기
+
+이어지는 메소드들은 콜백에게 방아쇠 역할을 합니다.:
+
+* +create+
+* +create!+
+* +decrement!+
+* +destroy+
+* +destroy_all+
+* +increment!+
+* +save+
+* +save!+
+* +save(false)+
+* +toggle!+
+* +update+
+* +update_attribute+
+* +update_attributes+
+* +update_attributes!+
+* +valid?+
+
+추가로, +after_find+ 콜백에게 이어지는 찾기 메소드들이 방아쇠 역할을 합니다.
+
+* +all+
+* +first+
+* +find+
+* +find_all_by_<em>attribute</em>+
+* +find_by_<em>attribute</em>+
+* +find_by_<em>attribute</em>!+
+* +last+
+
++after_initialize+ 콜백은 클래스의 새로운 객체가 초기화 될때 항상 실행됩니다.
+
+h3(skipping-callbacks). 콜백 건너뛰기
+
+그냥 데이터 검증으로서, 콜백을 건너뛰는 것도 가능하다. 이 메소드는 신중하게 사용해야하는데, 왜냐하면 중요한 비지니스 규칙과 어플리케이션 로직이 아마도 콜백안에 남아 있을지도 모르기 때문이다. 잠재적인 함축 의미의 이해 없이 우회 한다면 잘못된 데이터를 유발할 수 있다.
+
+* +decrement+
+* +decrement_counter+
+* +delete+
+* +delete_all+
+* +find_by_sql+
+* +increment+
+* +increment_counter+
+* +toggle+
+* +update_all+
+* +update_counters+
+
+h3(halting-execution). 실행 중지
+
+모델에 새로운 콜백 등록 시작할때, 이들의 작업은 큐에 쌓입니다. 이 큐는 모델의 데이터 검증, 등록된 콜백, 그리고 실행을 위한 데이터베이스 작업들을 모두 포함합니다.
+
+전체 콜백 체인은 트랜잭션에서 실행됩니다. 만약 어떠한 <em>before</em> 콜백 메소드가 정확히 +false+를 반환하거나, 예외(exception)가 발생하면, 실행 체인은 중지되고, ROLLBACK 이 발생됩니다.;<em>after</em> 콜백은 오직 예외가 발생될때만 이렇게 동작합니다.
+
+WARNING. 임의 예외 발생은 아마도 실패한 +save+ 류의 코드들을 중지 시킵니다. +ActiveRecord::Rollback+ 예외는 액티브 레코드에게 롤백을 하라고 전달합니다. 이 예외는 내부적으로 잡히고, 상위로 전파되지 않습니다.
+
+h3(#relational-callbacks). 관계형 콜백
+
+콜백은 관계를 통해서 동작하고,관계에 의해 정의될 수도 있습니다. 한 사용자가 많은 글(post)를 가지고 있는 예제를 생각해 봅시다. 예제에서 사용자의 글(post)는 만약 사용자가 삭제되면, 함께 삭제되어야 합니다. 그래서 +User+ 모델과 +Post+ 모델간의 관계를 이용해서 +after_destroy+ 콜백을 +User+ 모델에 추가할 것입니다.
+
+<ruby>
+class User < ActiveRecord::Base
+  has_many :posts, :dependent => :destroy
+end
+
+class Post < ActiveRecord::Base
+  after_destroy :log_destroy_action
+
+  def log_destroy_action
+    puts 'Post destroyed'
+  end
+end
+
+>> user = User.first
+=> #<User id: 1>
+>> user.posts.create!
+=> #<Post id: 1, user_id: 1>
+>> user.destroy
+Post destroyed
+=> #<User id: 1>
+</ruby>
+
+h3(#Conditional-callbacks). 조건부 콜백
+
+데이터 검증과 비슷하게, 콜백도 제공된 조건을 만족할때만 동작하도록 만들 수 있습니다. +:if+ 와 +:unless+ 옵션에 심볼, 문자열 혹은 +Proc+을 넘겨서 수행할 수 있습니다. +:if+ 옵션은 주어진 조건에서 *반드시 실행*하고 싶을때 사용할 수 있습니다. 만약, 조건에서 *반드시 실행하기 싶지 않으면*, +:unless+을 사용할 수 있습니다.
+
+h4(#using-a-symbol-with-if-and-unless). +:if+와 +:unless+에 심볼(Symbol) 사용하기
+
++:if+와 +:unless+ 옵션과 콜백 바로 전에 실행될 메소드 이름의 심볼(Symbol)을 연결할 수 있습니다. +:if+ 옵션을 사용중, 만약 해당 메소드가 거짓(false)을 반환하면 콜백은 실행되지 않습니다.; +:unless+ 옵션 사용중에는 해당 메소드가 참(true)를 반환하면 콜백이 실행되지 않습니다. 이 것은 가장 흔한 옵션입니다. 이 방식으로 콜백의 실행 할 여부를 검사하는 몇가지 다른 메소드를 등록할 수 있습니다.
+
+<ruby>
+class Order < ActiveRecord::Base
+  before_save :normalize_card_number, :if => :paid_with_card?
+end
+</ruby>
+
+h4(#using-a-string-with-if-and-unless). +:if+와 +:unless+에 문자열 사용하기
+
++eval+로 실행되는 유효한 루비 코드의 문자열도 이용할 수 있습니다. 문자열이 정말 짧은 조건을 표현할때 이 옵션을 이용하세요.
+
+<ruby>
+class Order < ActiveRecord::Base
+  before_save :normalize_card_number, :if => "paid_with_card?"
+end
+</ruby>
+
+h4(#using-a-proc-with-if-and-unless). +:if+와 +:unless+에 Proc 사용하기
+
+마지막으로, +:if+와 +:unless+에 호출될 Proc 객체를 연결하는 것도 가능합니다. +Proc+ 객체는 분리된 메소드 대신에 그때마다 즉시 처리하는 조건을 제공합니다. 이 옵션은 한줄 코드에 가장 적합합니다.
+
+<ruby>
+class Order < ActiveRecord::Base
+  before_save :normalize_card_number,
+    :if => Proc.new { |order| order.paid_with_card? }
+end
+</ruby>
+
+h4(#multiple-conditions-for-callbacks). 콜백을 위한 다중 조건
+
+조건부 콜백을 작성할때, 같은 콜백 선언에서 +:if+와 +:unless+ 둘다 섞어 사용할 수 있습니다.
+
+<ruby>
+class Comment < ActiveRecord::Base
+  after_create :send_email_to_author, :if => :author_wants_emails?,
+    :unless => Proc.new { |comment| comment.post.ignore_comments? }
+end
+</ruby>
+
+h3(#callback-classes). 콜백 클래스
+
+때로 여러분이 작성할 콜백 메소드는 다른 모델에 재사용 할만 하기도 합니다. 액티브 레코드에는 콜백 메소드를 캡슐화한 클래스를 만드는 것도 가능합니다. 그래서 그들을 재사용하는건 매우 쉽습니다. 
+
+여기에 +PictureFile+ 모델을 위한 +after_destroy+ 콜백을 클래스로 만든 예제가 있습니다.
+
+<ruby>
+class PictureFileCallbacks
+  def after_destroy(picture_file)
+    File.delete(picture_file.filepath)
+      if File.exists?(picture_file.filepath)
+  end
+end
+</ruby>
+
+클래스 내부의 선언된 콜백 메소드는 인자로 모델 객체를 받습니다. 이제 이런 방식으로 사용할 수 있습니다.:
+
+<ruby>
+class PictureFile < ActiveRecord::Base
+  after_destroy PictureFileCallbacks.new
+end
+</ruby>
+
+인스턴스 메소드로서 콜백을 선언했으므로, 새로운 +PictureFileCallbacks+ 객체를 만들어야 한다는 점에 유의하세요. 때로 클래스 메소드로서 그것을 선언하는 것이 좀 더 이해하기 편합니다.
+
+<ruby>
+class PictureFileCallbacks
+  def self.after_destroy(picture_file)
+    File.delete(picture_file.filepath)
+      if File.exists?(picture_file.filepath)
+  end
+end
+</ruby>
+
+만약 콜백 메소드가 이런 방법으로 선언되었다면, +PictureFileCallbacks+ 객체를 만들어 줄 필요가 없습니다.
+
+<ruby>
+class PictureFile < ActiveRecord::Base
+  after_destroy PictureFileCallbacks
+end
+</ruby>
+
+여러분은 콜백 클래스내에 원하는 만큼 많은 콜백을 선언할 수 있습니다.
+
+h3(#observers). 옵저버(Observers)
+
+옵저버는 콜백과 유사하지만 중요한 다른점이 있습니다. 콜백은 그것의 목적이 직접 관계없는 코드로 모델을 더럽힐 수 있는데 반하여, 옵저버는 모델의 바깥에서 같은 기능 추가를 할수 있습니다. 예를들어, +User+ 모델은 결코 수락 이메일을 전송하는 코드를 포함하지 않아야 한다고 논의 되었습니다. 모델에 직접 관계하지 않는 코드를 콜백을 사용할때 마다, 여러분은 콜백 대신에 옵저버 사용을 원할 것입니다.
+
+h4(#creating-observers). 옵저버 만들기
+
+예를들어, 매번 새로운 사용자가 만들어질때 메일을 발송하기를 원하는 +User+ 모델이 있다고 상상하겠습니다. 메일 보내기는 모델의 목적과 직접적인 관계가 없기 때문에, 우리는 이 기능을 옵저버에 담고 싶습니다.
+
+<shell>
+rails generate observer User
+</shell>
+
+<ruby>
+class UserObserver < ActiveRecord::Observer
+  def after_create(model)
+    # code to send confirmation email...
+  end
+end
+</ruby>
+
+콜백 클래스 같이, 옵저버의 메소드는 인자로 대상 모델을 받습니다.
+
+h4(#registering-observers). 옵저버 등록하기
+
+옵저버는 관습적으로 +app/models+ 디렉토리에 위치하고, +config/application.rb+ 파일에서 등록합니다. 예를들어, +UserObserver+는 +app/models/user_observer.rb+ 파일로 저장되고, +config/application.rb+ 내에서 이런 방식으로 등록합니다.:
+
+<ruby>
+# Activate observers that should always be running
+config.active_record.observers = :user_observer
+</ruby>
+
+평소처럼, +config/environments+의 세팅은 +config/application.rb+ 내에 세팅보다 우선합니다. 그래서 만약 옵저버가 모든 환경에서 실행되는걸 원하지 않는다면, 간단하게 특정 환경만 지정해서 등록할 수 있습니다.
+
+h4(#sharing-observers). 옵저버 공유하기
+
+기본적으로, 레일즈는 간단히 감시할 모델을 찾기위해서 옵저버의 이름에서 "Observer"를 제거합니다. 그렇지만 옵저버도 여러 모델에 재사용할 수 있고, 그래서 옵저버가 감시할 모델을 직접 지정할 수도 있습니다.
+
+<ruby>
+class MailerObserver < ActiveRecord::Observer
+  observe :registration, :user
+
+  def after_create(model)
+    # code to send confirmation email...
+  end
+end
+</ruby>
+
+이 예제에서는, +after_create+ 메소드는 +Registration+이나 +Uer+가 생성될때마다 호출됩니다. 이 새로운 +MailerObserver+도 효과를 보려면 +config/application.rb+ 내에서 등록해야 한다는 점에 유의하세요.
+
+<ruby>
+# Activate observers that should always be running
+config.active_record.observers = :mailer_observer
+</ruby>
+
+h3. Changelog
+
+* July 20, 2010: Fixed typos and rephrased some paragraphs for clarity. "Jaime Iniesta":http://jaimeiniesta.com
+* May 24, 2010: Fixed document to validate XHTML 1.0 Strict. "Jaime Iniesta":http://jaimeiniesta.com
+* May 15, 2010: Validation Errors section updated by "Emili Parreño":http://www.eparreno.com
+* March 7, 2009: Callbacks revision by Trevor Turk
+* February 10, 2009: Observers revision by Trevor Turk
+* February 5, 2009: Initial revision by Trevor Turk
+* January 9, 2009: Initial version by "Cássio Marques":credits.html#cmarques
+
+h3. Changelog for Korean Translation
+* 2011년 3월 1일 1차 완료 by "Sangmin Ryu":http://neocoin.net

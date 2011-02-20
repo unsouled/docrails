@@ -1,0 +1,186 @@
+<% content_for :page_title do %>
+Ruby on Rails 가이드
+<% end %>
+
+<% content_for :header_section do %>
+<h2>루비 온 레일즈 가이드 (<%= ENV['RAILS_VERSION'] || 'edge' %>)</h2>
+
+<% if @edge %>
+<p>
+  이 문서들은 현재 
+  <a href="http://github.com/rails/rails/tree/master">master branch</a>을
+  기반으로한 <b>Edge Guides</b>입니다.
+</p>
+<p>
+  If you are looking for the ones for the stable version please check
+  <a href="http://guides.rubyonrails.org">http://guides.rubyonrails.org</a> instead.
+</p>
+<% else %>
+<p>
+  이 문서는 Rails 3를 위한 새로운 가이드 입니다. Rails 2.3 을 위한 문서는 다음의 링크에서 볼 수 있습니다.
+  <a href="http://guides.rubyonrails.org/v2.3.8/">http://guides.rubyonrails.org/v2.3.8/</a>.
+</p>
+<% end %>
+<p>
+  이 가이드는 생산적인 레일즈 개발과 각 구성 요소의 동작 이해에
+  초점을 맞추고 있습니다.
+</p>
+
+<% end %>
+
+<% content_for :index_section do %>
+<div id="subCol">
+  <dl>
+    <dd class="warning">레일즈 가이든는 <a href="http://hackfest.rubyonrails.org">Guides hackfest</a> 결과의 일환이며 진행 중입니다.</dd>
+    <dd class="work-in-progress">이 아이콘이 표시된 곳은 현재 '작성중'이라는 걸 의미하니다. 진행 중인 문서 역시 유용하지만, 불완전한 정보나 간혹, 잘못된 내용을 포함할 수 있습니다. 내용을 리뷰하고 저자에게 코멘트나 수정 제안으로 기여 할 수 있습니다.</dd>
+  </dl>
+</div>
+<% end %>
+
+<h3>시작</h3>
+
+<dl>
+<%= guide('레일즈 시작하기', 'getting_started.html') do %>
+  <p>레일즈를 설치하고 첫 어플리케이션을 만드는데 필요한 내용</p>
+<% end %>
+</dl>
+
+<h3>모델</h3>
+
+<dl>
+<%= guide("레일즈 데이터베이스 마이그레이션", 'migrations.html') do %>
+  <p>이 가이드는 데이터베이스 변경을 위한 액티브 레코드 마이그레이션에 관한 구조와 관습을 기술합니다.</p>
+<% end %>
+
+<%= guide("액티브 레코드 데이터 검증(Validation)과 콜백(Callback)", 'active_record_validations_callbacks.html') do %>
+  <p>이 가이드는 액티브 레코드의 데이터 검증(Validation)과 Callback(콜벡)을 사용 방법을 기술합니다.</p>
+<% end %>
+
+<%= guide("액티브 레코드 관계(Association)", 'association_basics.html') do %>
+  <p>이 가이드는 액티브 레코드가 제공하는 관계(Association)를 기술합니다.</p>
+<% end %>
+
+<%= guide("액티브 레코드 쿼리 인터페이스", 'active_record_querying.html') do %>
+  <p>이 가이드는 액티브 레코드가 제공하는 쿼리 인터페이스에 대한 내용을 기술합니다.</p>
+<% end %>
+</dl>
+
+<h3>뷰</h3>
+
+<dl>
+<%= guide("레이아웃(Layouts)과 렌더링(Rendering)", 'layouts_and_rendering.html') do %>
+  <p>이 가이드는 액션 컨트롤러와 액션 뷰의 레이아웃 기본 요소를 기술합니다. (렌더링과 리다이렉트, content_for 블록과 partial 활용을 포함합니다.)</p>
+<% end %>
+
+<%= guide("액션 뷰 폼 핼퍼(Action View Form Helpers)", 'form_helpers.html', :work_in_progress => true) do %>
+  <p>내장된 폼 핼퍼 가이드</p>
+<% end %>
+</dl>
+
+<h3>컨트롤러</h3>
+
+<dl>
+<%= guide("액션 컨트롤러 둘러보기", 'action_controller_overview.html') do %>
+  <p>이 가이드는 어플리케이션에서 컨트롤러가 웹요청에 대하여 어떻게 동작하는지 기술합니다. 세션, 필터, 쿠키 데이터 스트리밍과 예외 발생관련 내용을 포함합니다.  </p>
+<% end %>
+
+<%= guide("외부 요청에 대한 레일즈 라우팅", 'routing.html') do %>
+  <p>이 가이드는 고객이 접하는 레일즈 라우팅에 대한 내용을 기술합니다. 라우팅의 사용 방법을 알려면 이 가이드 부터 보세요.</p>
+<% end %>
+</dl>
+
+<h3>심화 내용</h3>
+
+<dl>
+
+<%= guide("액티브 서포트(Active Support) 확장(Core Extensions)", 'active_support_core_extensions.html') do %>
+  <p>이 가이드는 액티브 서포트에서 정의된 루비 확장에 대한 문서입니다. </p>
+<% end %>
+
+<%= guide("레일즈 국제화I(nternationalization) API", 'i18n.html') do %>
+  <p>이 가이드는 국제화 지원에 해단 내용을 다루고 있씁니다. 다른 언어의 지원과 복수형에 대한 규칙, 그리고 국가별 날짜/시간 포멧 등을 포함합니다.</p>
+<% end %>
+
+<%= guide("액션 메일러의 기본", 'action_mailer_basics.html', :work_in_progress => true) do %>
+  <p>이 가이드는 액션 메일러를 이용해서 메일을 주고 받는 방법을 다룹니다.</p>
+<% end %>
+
+<%= guide("레일즈 어플리케이션 테스트하기", 'testing.html', :work_in_progress => true) do %>
+  <p>이 가이드는 레일즈에서 더 이해하기 쉬운 유닛 테스트와 기능 테스트를 안내합니다. 이 글은 &quot;테스트란 무엇인가?&quot; 부터 테스트 관련 API까지의 모든것을 다룹니다.</p>
+<% end %>
+
+<%= guide("레일즈 어플리케이션의 보안", 'security.html') do %>
+  <p>이 가이드는 웹 어플리케이션에서 일반적인 보안 문제와 이를 레일즈에서 피하는 방법을 안내합니다.</p>
+<% end %>
+
+<%= guide("레일즈 어플리케이션 디버깅", 'debugging_rails_applications.html') do %>
+  <p>이 가이드는 레일즈 어플리케이션의 디버깅을 기술합니다. 이 문서는 몇가지 다른 방법과 여러분 코드의 "뒤편에서" 동작하는 방법을 다룹니다.</p>
+<% end %>
+
+<%= guide("레일즈 어플리케이션 성능 테스트하기", 'performance_testing.html') do %>
+  <p>이 가이드는 루비 온 레일즈 어플리케이션 상에서 다양한 성능 측정 방법을 다룹니다.</p>
+<% end %>
+
+<%= guide("레일즈 어플리케이션 설정", 'configuring.html') do %>
+  <p>이 문서는 레일즈 어플리케이션의 기본 설정에 대해 기술합니다.</p>
+<% end %>
+
+<%= guide("레일즈 커멘드라인 도구와 Rake 테스크", 'command_line.html', :work_in_progress => true) do %>
+  <p>이 문서는 레일즈가 제공하는 커멘드라인 도구와 rake 테스크를 다룹니다.</p>
+<% end %>
+
+<%= guide("레일즈를 이용한 캐싱", 'caching_with_rails.html', :work_in_progress => true) do %>
+  <p>레일즈 상에서 다양한 캐싱 기술</p>
+<% end %>
+</dl>
+
+<h3>레일즈 확장하기</h3>
+
+<dl>
+  <%= guide("레일즈 플러그인 작성의 기본", 'plugins.html', :work_in_progress => true) do %>
+    <p>이 가이드는 레일즈의 기능을 확장하는 플러그인 제작을 다룹니다.</p>
+  <% end %>
+
+  <%= guide("렉 위의 레일즈(Rails on Rack)", 'rails_on_rack.html') do %>
+    <p>이 문서는 렉을 이용한 레일즈 통합, 다른 렉 컴포넌트와 연결을 다룹니다.</p>
+  <% end %>
+
+  <%= guide("레일즈 제너레이터(Generator) 제작과 수정", 'generators.html') do %>
+    <p>이 가이드는 새로운 제너레이터(Generator)를 추가하거나, 레일즈에 내장된 제너레이터를 교체하는 내용을 다룹니다.(예, scaffold(발판) 제너레이터의 테스트 부분을 교체하는 것)</p>
+  <% end %>
+</dl>
+
+<h3>루비 온 레이즈에 기여하기</h3>
+
+<dl>
+  <%= guide("루비 온 레이즈에 기여하기", 'contributing_to_ruby_on_rails.html') do %>
+    <p>레일즈는 &quot;다른 프레임워크와&quot; 다르지 않습니다. 이 가이드는 여러분이 레일즈 개발에 도움을 줄수 있는 다양한 방법들을 기술합니다. </p>
+  <% end %>
+
+  <%= guide('API 문서 가이드라인', 'api_documentation_guidelines.html') do %>
+    <p>이 가이드는 루비 온 레일즈의 API 문서화 가이드 라인입니다.</p>
+  <% end %>
+
+  <%= guide('루비 온 레일즈 가이드에 대한 가이드라인', 'ruby_on_rails_guides_guidelines.html') do %>
+    <p>이 가이드는 루비 온 레일즈 가이드에 대한 가이드라인입니다.</p>
+  <% end %>
+</dl>
+
+<h3>Release Notes</h3>
+
+<dl>
+<%= guide("Ruby on Rails 3.0 Release Notes", '3_0_release_notes.html') do %>
+  <p>Release notes for Rails 3.0.</p>
+<% end %>
+
+<%= guide("Ruby on Rails 2.3 Release Notes", '2_3_release_notes.html') do %>
+  <p>Release notes for Rails 2.3.</p>
+<% end %>
+
+<%= guide("Ruby on Rails 2.2 Release Notes", '2_2_release_notes.html') do %>
+  <p>Release notes for Rails 2.2.</p>
+<% end %>
+<%= guide("한국어 번역에 대하여", 'about_korean_translation.html') do %>
+  <p>번역을 위한 용어 사전 정보와 상태 정보를 포함하고 있습니다.</p>
+<% end %>
+</dl>
