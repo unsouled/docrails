@@ -774,7 +774,7 @@ end
 <% end %>
 </erb>
 
-필드를 비운채 폼을 실행하면, 기본적으로 스타일을 비록 읽어버릴 지라도, 여러분은 흔히 뒤로가기를 합니다.:
+필드를 비운채 폼을 실행하면, 기본적으로 스타일을 비록 잃어버릴 지라도, 여러분은 흔히 뒤로가기를 합니다.:
 To get the idea, if you submit the form with empty fields you typically get this back, though styles are indeed missing by default:
 
 !images/error_messages.png(Error messages)!
@@ -819,10 +819,10 @@ h4(#customizing-the-error-messages-html). 에러 메세지 HTML 원하는데로 
 
 기본적으로, 에러를 가진 폼 필드는 +field_with_errors+ CSS 클래스를 가진 +div+ 요소 감싸여서 출력됩니다. 그렇지만, 이것을 덮어 쓰는건 가능합니다.
 
-The way form fields with errors are treated is defined by +ActionView::Base.field_error_proc+. This is a +Proc+ that receives two parameters:
+에러를 포함한 폼 필드를 취급하는 방법은 +ActionView::Base.field_error_proc+에 의해 정의됩니다. 이것은 두개의 인자를 받아들이는 +Proc+ 입니다.
 
-* A string with the HTML tag
-* An instance of +ActionView::Helpers::InstanceTag+.
+* HTML 태그를 이용한 문자열
+* +ActionView::Helpers::InstanceTag+의 인스턴스
 
 Here is a simple example where we change the Rails behaviour to always display the error messages in front of each of the form fields with errors. The error messages will be enclosed by a +span+ element with a +validation-error+ CSS class. There will be no +div+ element enclosing the +input+ element, so we get rid of that red border around the text field. You can use the +validation-error+ CSS class to style it anyway you want.
 
