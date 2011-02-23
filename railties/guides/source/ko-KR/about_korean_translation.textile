@@ -88,6 +88,9 @@ h3(#word-dict). 영어 - 한국어 용어 사전
 | observer | 옵저버 |
 | bang version | bang (빵!) 버전 |
 | collection | 컬렉션 |
+| confirmation | 확인 |
+| presence | 존재 |
+| alias | 별명(alias) |
 
 
 h3(#translation-state). Translation 진행 상태
