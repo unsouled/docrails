@@ -36,7 +36,7 @@ h3(#word-dict). 영어 - 한국어 용어 사전
 | Action View | 액션 뷰 |
 | Redirect(ing) | 리다이렉트 |
 | block | 블록 |
-| partial | partial |
+| partial | 조각(partial), 조각 뷰 |
 | form | 폼 |
 | helper | 헬퍼 |
 | built-in | 내장된 |
@@ -63,7 +63,7 @@ h3(#word-dict). 영어 - 한국어 용어 사전
 | escape | 이스케이프 |
 | Collection| 컬렉션 |
 | tag | 태그 |
-| nested | nestetd |
+| nested | 중첩(nestetd) |
 | primary key | 기본키(primary key) |
 | foreign key | 외래키(foreign key) |
 | timestamp | 타임스탬프 |
