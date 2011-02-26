@@ -154,7 +154,7 @@ end
 
 h4. generate(what, args)
 
-주어진 인자로 레일즈 제너레이터를 실행시킵니다.  For example, I love to scaffold some whenever I’m playing with Rails :
+주어진 인자로 레일즈 제너레이터를 실행시킵니다.  예를 들어, 레일즈를 가지고 놀 때마다 발판 코드를 만들기를 원한다면 :
 
 <ruby>
 generate(:scaffold, "person", "name:string", "address:text", "age:number")
@@ -208,7 +208,7 @@ end
 
 h4. ask(question)
 
-+ask()+ 는 사용자로부터 피드백을 받고 템플릿 내에서 사용할 수 있게 합니다. Lets say you want your user to name the new shiny library you’re adding :
++ask()+ 는 사용자로부터 피드백을 받고 템플릿 내에서 사용할 수 있게 합니다.  사용자에게 당신이 추가하고 있는 새로운 라이브러리의 이름을 짓게 하고 싶다면 :
 
 <ruby>
 lib_name = ask("What do you want to call the shiny library ?")
@@ -222,7 +222,7 @@ CODE
 
 h4. yes?(question) 혹은 no?(question)
 
-These methods let you ask questions from templates and decide the flow based on the user’s answer. Lets say you want to freeze rails only if the user want to :
+이 메소드들은 템플릿에서 사용자의 답변에 따른 흐름을 결정할 수 있게 해 줍니다.  만약 사용자가 원할때만 레일즈를 freeze 시키기를 원한다면 :
 
 <ruby>
 rake("rails:freeze:gems") if yes?("Freeze rails gems ?")
