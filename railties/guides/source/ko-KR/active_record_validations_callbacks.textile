@@ -916,9 +916,9 @@ h4#(after_initialize-and-after_find). +after_initialize+ 와 +after_find+
 
 +after_initialize+는 +new+를 사용하든 데이터베이스에서 정보를 로드하든, 엑티브 레코드 객체가 생성될 때마다 호출 됩니다. 그것은 직접 엑티브 레코드의 +initialize+ 메소드를 덮어쓰고(override) 싶을때 덮어쓰지 않고 기능을 추가할 수 있어서 유용합니다. 
 
-The +after_find+ callback will be called whenever Active Record loads a record from the database. +after_find+ is called before +after_initialize+ if both are defined.
++after_find+ 콜백은 데이터베이스에서 엑티브 레코드가 로드될 때마다 호출됩니다. +after_find+는 +after_initialize+ 전에 (양쪽 모두 정의되어 있다면,) 호출됩니다.
 
-The +after_initialize+ and +after_find+ callbacks are a bit different from the others. They have no +before_*+ counterparts, and the only way to register them is by defining them as regular methods. If you try to register +after_initialize+ or +after_find+ using macro-style class methods, they will just be ignored. This behaviour is due to performance reasons, since +after_initialize+ and +after_find+ will both be called for each record found in the database, significantly slowing down the queries.
++after_initialize+ 와 +after_find+ 콜백은 다른 콜백과 약간 다릅니다. 그들에게는 반대 메소드인 +before_*+가 존재하지 않고, 표준 메소드처럼 정의하는 것이 그들을 등록할 수 있는 유일한 방법입니다. 만약 +after_initialize+ 나 +after_find+를 매크로 형태로 등록하려 시도하면, 이들은 무시됩니다. 이러한 동작은 성능면의 이유에 기인합니다. 왜냐하면, +after_initialize+와 +after_find+ 메소드가 데이터베이스에서 각 레코드를 호출할때마다 불리고, 눈에 띄게 쿼리를 느리게 만들수 있습니다.
 
 <ruby>
 class User < ActiveRecord::Base
@@ -941,9 +941,9 @@ You have initialized an object!
 => #<User id: 1>
 </ruby>
 
-h3. Running Callbacks
+h3(#running-callbacks). 콜백 실행하기
 
-The following methods trigger callbacks:
+이어지는 메소드들은 콜백에게 방아쇠 역할을 합니다.:
 
 * +create+
 * +create!+
@@ -961,7 +961,7 @@ The following methods trigger callbacks:
 * +update_attributes!+
 * +valid?+
 
-Additionally, the +after_find+ callback is triggered by the following finder methods:
+추가로, +after_find+ 콜백에게 이어지는 찾기 메소드들이 방아쇠 역할을 합니다.
 
 * +all+
 * +first+
@@ -971,11 +971,11 @@ Additionally, the +after_find+ callback is triggered by the following finder met
 * +find_by_<em>attribute</em>!+
 * +last+
 
-The +after_initialize+ callback is triggered every time a new object of the class is initialized.
++after_initialize+ 콜백은 클래스의 새로운 객체가 초기화 될때 항상 실행됩니다.
 
-h3. Skipping Callbacks
+h3(skipping-callbacks). 콜백 건너뛰기
 
-Just as with validations, it's also possible to skip callbacks. These methods should be used with caution, however, because important business rules and application logic may be kept in callbacks. Bypassing them without understanding the potential implications may lead to invalid data.
+그냥 데이터 검증으로서, 콜백을 건너뛰는 것도 가능하다. 이 메소드는 신중하게 사용해야하는데, 왜냐하면 중요한 비지니스 규칙과 어플리케이션 로직이 아마도 콜백안에 남아 있을지도 모르기 때문이다. 잠재적인 함축 의미의 이해 없이 우회 한다면 잘못된 데이터를 유발할 수 있다.
 
 * +decrement+
 * +decrement_counter+
