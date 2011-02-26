@@ -43,7 +43,7 @@ h3(#word-dict). 영어 - 한국어 용어 사전
 | Controller | 컨트롤러 |
 | Model | 모델 |
 | Active Support | 엑티브 서포트 |
-| Action Mailer | 엑션 메일(메일러) |
+| Action Mailer | 액션 메일(메일러) |
 | routing | 라우팅 |
 | Generator | 제너레이터(Generator) |
 | RubyGems | 루비잼 |
