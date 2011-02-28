@@ -91,6 +91,9 @@ h3(#word-dict). 영어 - 한국어 용어 사전
 | confirmation | 확인 |
 | presence | 존재 |
 | alias | 별명(alias) |
+| transaction | 트랜잭션 |
+| chain | 체인 |
+| exception | 예외 |
 
 
 h3(#translation-state). Translation 진행 상태

@@ -2,7 +2,7 @@ h2. 엑티브 레코드 데이터 검증(Validation)과 콜백(Callback)
 
 이 가이드는 엑티브 레코드 객체의 생명 주기에 관여하는 방법을 안내합니다. 엑티브 레코드가 데이터베이스에 정보를 입력하기 전에 객체의 데이터 검증을 어떻게 할 것인지, 그리고 객체의 생명 주기에서 정확한 부분에 원하는 작업을 수행하는 방법을 배울 것입니다.
 
-이 가이드를 읽고 주어진 개념을 시험한 후, 다음 내용을 할 수 있는 것을 기대합니다.:
+이 가이드를 읽고 주어진 개념을 시험한 후, 다음 내용을 할 수 있기를 기대합니다.:
 
 * 엑티브 레코드 객체의 생명 주기에 대한 이해
 * 내장된 엑티브 레코드 데이터 검증 헬퍼 사용 방법
@@ -242,13 +242,13 @@ class Account < ActiveRecord::Base
 end
 </ruby>
 
-+validates_exclusion_of+ 헬퍼는 +:in+ 옵션을 통해서 검증 대상 속성이 허락하지 않는 값들의 집합을 받습니다. +:in+ 옵션은 +:within+의 별명(alias)을 가지고 있는데, 이 이름이 사용하기 좋다면, 같은 목적으로 +:within+을 사용할 수 있습니다. 이 예제는 +:message+을 이용해서, 여러분이 속성의 값을 메세지 속에 포함시키는 방법을 보여줍니다.
++validates_exclusion_of+ 헬퍼는 +:in+ 옵션을 통해서 검증 대상 속성이 허락하지 않는 값 집합을 받습니다. +:in+ 옵션은 +:within+의 별명(alias)을 가지고 있는데, 이 이름이 사용하기 좋다면, 같은 목적으로 +:within+을 사용할 수 있습니다. 이 예제는 +:message+을 이용해서, 여러분이 속성의 값을 메세지 속에 포함시키는 방법을 보여줍니다.
 
 +validates_exclusion_of+를 위한 기본 에러 메세지는  "_is reserved_" 입니다.
 
 h4. +validates_format_of+ (포맷 검증)
 
-이 헬퍼는 +:with+ 옵션으로 입력된 정규식을 이용해서 속성으 ㅣ값을 검증합니다.
+이 헬퍼는 +:with+ 옵션으로 입력된 정규식을 이용해서 속성의 값을 검증합니다.
 
 <ruby>
 class Product < ActiveRecord::Base
@@ -270,7 +270,7 @@ class Coffee < ActiveRecord::Base
 end
 </ruby>
 
-+validates_inclusion_of+ 헬퍼는 +:in+ 옵션을 통해서 검증 대상 속성이 허락하는 값들의 집합을 받습니다. +:in+ 옵션은 +:within+의 별명(alias)을 가지고 있는데, 이 이름이 사용하기 좋다면, 같은 목적으로 +:within+을 사용할 수 있습니다. 이 예제는 +:message+을 이용해서, 여러분이 속성의 값을 메세지 속에 포함시키는 방법을 보여줍니다.
++validates_inclusion_of+ 헬퍼는 +:in+ 옵션을 통해서 검증 대상 속성이 허락하는 값 집합을 받습니다. +:in+ 옵션은 +:within+의 별명(alias)을 가지고 있는데, 이 이름이 사용하기 좋다면, 같은 목적으로 +:within+을 사용할 수 있습니다. 이 예제는 +:message+을 이용해서, 여러분이 속성의 값을 메세지 속에 포함시키는 방법을 보여줍니다.
 
 +validates_inclusion_of+을 위한 에러 메세지는  "_is not included in the list_" 입니다. 
 
@@ -290,7 +290,7 @@ end
 가능한 길이 제약 옵션은 다음과 같습니다.:
 
 * +:minimum+ - 속성은 최소한 주어진 길이보다 작을 수 없습니다.
-* +:maximum+ - 속성은 주어진 길이보다 길수 없습니다.
+* +:maximum+ - 속성은 주어진 길이보다 길 수 없습니다.
 * +:in+ (or +:within+) - 속성의 길이는 반드시 주어진 범위내여야 합니다. 이 옵션의 값은 반드시 범위(range)여야 합니다.
 * +:is+ - 속성의 길이는 주어진 값과 동일해야 합니다.
 
@@ -328,8 +328,7 @@ h4. +validates_numericality_of+ (숫자 검증)
 /\A[+-]?\d+\Z/
 </ruby>
 
-정규식으로 속성의 값을 검증할 것입니다. 다른 방법으로 +Float+를 이용해서 숫자 변환을 시도할 것입니다.
-regular expression to validate the attribute's value. Otherwise, it will try to convert the value to a number using +Float+.
+정규식으로 속성의 값을 검증할 것입니다. 만약 그렇지 않으면, +Float+를 이용해서 숫자 변환을 시도할 것입니다.
 
 WARNING. 위의 정규식이 값의 마지막에 개행(newline) 문자를 허용한다는 점을 유의하세요.
 
@@ -387,8 +386,7 @@ end
 
 속성에 같은 값을 가진 레코드 여부를 알아내기 위해서, 모델 테이블에 SQL 구문 실행으로 검증합니다.
 
-+:scope+ 옵션으로 유일성 검사 제한에 다른 속성을 지정해서 사용할 수 있습니다.:
-There is a +:scope+ option that you can use to specify other attributes that are used to limit the uniqueness check:
++:scope+ 옵션으로 유일성 검사 제한에 다른 속성을 함께 지정해서 사용할 수 있습니다.:
 
 <ruby>
 class Holiday < ActiveRecord::Base
@@ -431,8 +429,8 @@ end
 
 검증 클래스는 기본적으로 두가지의 속성을 가집니다.:
 
-* +record+ - the record to be validated
-* +options+ - the extra options that were passed to +validates_with+
+* +record+ - 검증할 레코드
+* +options+ - +validates_with+에 넘길 추가 옵션
 
 다른 모든 검증과 같이, +validates_with+도 +:if+, +:unless+ 그리고 +:on+ 옵션을 받아들입니다. 만약 여러분이 다른 옵션을 넘긴다면, 이들 옵션은 검증 클레스의 +options+로 전달됩니다.  
 
@@ -466,7 +464,7 @@ end
 
 h3(common-validation-options). 공통 검증 옵션
 
-모든 헬퍼가 사용할 수 있는 공통 옵션이 몇가지 있습니다. +:if+와 +:unless+를 제외한 이들 옵션은 나중에 "상태에 따른 검증":#conditional-validation 에서 논의 될 것입니다.
+모든 헬퍼가 사용할 수 있는 공통 옵션이 몇가지 있습니다. +:if+와 +:unless+를 제외한 이들 옵션은 나중에 "조건부 검증":#conditional-validation 에서 논의 될 것입니다.
 
 h4. +:allow_nil+ (nil 허용)
 
@@ -513,13 +511,13 @@ class Person < ActiveRecord::Base
 end
 </ruby>
 
-h3(#conditional-validation). 상태에 따른 검증
+h3(#conditional-validation). 조건부 검증
 
 때로, 영리하게 제공한 조건을 만족할때만 객체를 검증할 필요가 있습니다. +:if+와 +:unless+ 옵션에 심볼(symbol), 문자열 혹은 +Proc+을 전달해서 이를 수행할 수 있습니다. 아마 검증을 *반드시* 해야할때 +:if+ 옵션을 사용해야 할 것입니다.것입니다. 만약 검증을 *반드시 해야 않을때는*, +:unless+ 옵션을 사용해야 할 겁니다.
 
-h4(using-a-symbol-with-if-and-unless). +:if+와 +:unless+에 심볼(Symbol) 사용하기
+h4(#using-a-symbol-with-if-and-unless). +:if+와 +:unless+에 심볼(Symbol) 사용하기
 
-+:if+와 +:unless+ 옵션과 검증이 실행되기 전에 실행될 이름의 심볼(Symbol)을 연결할 수 있습니다. 이것은 옵션의 가장 흔한 사용 방법입니다.
++:if+와 +:unless+ 옵션과 검증이 일어나기 직전에 실행될 메소드 이름의 심볼(Symbol)을 연결할 수 있습니다. 이것은 옵션의 가장 흔한 사용 방법입니다.
 
 <ruby>
 class Order < ActiveRecord::Base
@@ -533,7 +531,7 @@ end
 
 h4(#using-a-string-with-if-and-unless). +:if+와 +:unless+에 문자열 사용하기
 
-+eval+로 실행되는 유요한 루비코드의 문자열도 이용할 수 있습니다. 문자열이 정말 짧은 조건을 표현할때 이 옵션을 이용하세요.
++eval+로 실행되는 유효한 루비 코드의 문자열도 이용할 수 있습니다. 문자열이 정말 짧은 조건을 표현할때 이 옵션을 이용하세요.
 
 <ruby>
 class Person < ActiveRecord::Base
@@ -541,7 +539,7 @@ class Person < ActiveRecord::Base
 end
 </ruby>
 
-h4(#using-a-proc-with-if-and-unless+). +:if+와 +:unless+에 Proc 사용하기
+h4(#using-a-proc-with-if-and-unless). +:if+와 +:unless+에 Proc 사용하기
 
 마지막으로, +:if+와 +:unless+에 호출될 Proc 객체를 연결하는 것도 가능합니다. +Proc+ 객체는 분리된 메소드 대신에 그때마다 즉시 처리하는 조건을 제공합니다. 이 옵션은 한줄 코드에 가장 적합합니다.
 
@@ -577,8 +575,7 @@ class Invoice < ActiveRecord::Base
 end
 </ruby>
 
-여러분의 검증 헬퍼를 만들고 몇가지 다른 모델에 이를 재사용할 수 있습니다. 예를들어, 설문조사를 관리하는 어플리케이션은 선택 결과의 집합과 관계있는 필드를 표현하게 만드는게 유용하다는 점을 알 수 있습니다.
-You can even create your own validation helpers and reuse them in several different models. For example, an application that manages surveys may find it useful to express that a certain field corresponds to a set of choices:
+여러분의 검증 헬퍼를 만들고 다른 모델에 이를 재사용할 수 있습니다. 예를들어, 설문조사를 관리하는 어플리케이션은 선택 결과의 집합과 관계있는 필드로 검증을 표현하면 유용합니다.
 
 <ruby>
 ActiveRecord::Base.class_eval do
@@ -774,8 +771,7 @@ end
 <% end %>
 </erb>
 
-필드를 비운채 폼을 실행하면, 기본적으로 스타일을 비록 잃어버릴 지라도, 여러분은 흔히 뒤로가기를 합니다.:
-To get the idea, if you submit the form with empty fields you typically get this back, though styles are indeed missing by default:
+이해를 위해서, 필드를 비운채 실행하면 기본적으로 스타일은 좀 잃어버리더라도 다음과 같은 화면을 확인할 수 있습니다. 
 
 !images/error_messages.png(Error messages)!
 
@@ -811,7 +807,7 @@ h4(#customizing-the-error-messages-css). 에러 메세지 CSS 원하는데로 �
 * +#errorExplanation p+ - +div+ 요소의 헤더 바로 다음에 등장하는 에러 메세지를 포함하는 단락에 대한 스타일
 * +#errorExplanation ul li+ - 개발 에러 메세지를 가진 리스트를 위한 스타일
 
-예제를 위한 발판 작업(Scaffolding)은 위에서 보이듯이 붉은색 계열의 스타일로 정의된 +public/stylesheets/scaffold.css+를 생성한다.
+예제를 위한 발판 작업(Scaffolding)은 위에서 보이듯이 붉은색 계열의 스타일로 정의된 +public/stylesheets/scaffold.css+를 생성합니다.
 
 CSS 클래스(class)와 아이디(id)는 양쪽 헬퍼 모두 +:class+와 +:id+ 옵션 변경 변경할 수 있습니다.
 
@@ -880,8 +876,7 @@ protected 나 private 로 콜백 메소드를 선언하는 것은 좋은 습관�
 
 h3(#available-callbacks). 사용 가능한 콜백
 
-여기에 사용 가능한 엑티브 레코드 콜백 전체 리스트가 있습니다. 개별 연상 호출되는 순서로 나열되어 있습니다.
-Here is a list with all the available Active Record callbacks, listed in the same order in which they will get called during the respective operations:
+여기에 사용 가능한 엑티브 레코드 콜백 전체 리스트가 있습니다. 저마다의 작업 중에 호출되는 순서로 나열되어 있습니다.:
 
 h4(#creating-an-object). 객체 생성하기(Create)
 
@@ -912,13 +907,13 @@ h4(#destroying-an-object). 객체 삭제하기(Destroy)
 WARNING. +after_save+는 생성, 갱신 양쪽 모든 상황에서 실행되지만, 그외 모든 _after_ 는 +after_create+ 와 +after_update+ 콜백 같이 좀 더 구체적인 시점을 지정하기 때문에, 호출되는 매크로의 순서가 그리 중요하지는 않습니다. 
 
 
-h4#(after_initialize-and-after_find). +after_initialize+ 와 +after_find+
+h4(#after_initialize-and-after_find). +after_initialize+ 와 +after_find+
 
 +after_initialize+는 +new+를 사용하든 데이터베이스에서 정보를 로드하든, 엑티브 레코드 객체가 생성될 때마다 호출 됩니다. 그것은 직접 엑티브 레코드의 +initialize+ 메소드를 덮어쓰고(override) 싶을때 덮어쓰지 않고 기능을 추가할 수 있어서 유용합니다. 
 
-The +after_find+ callback will be called whenever Active Record loads a record from the database. +after_find+ is called before +after_initialize+ if both are defined.
++after_find+ 콜백은 데이터베이스에서 엑티브 레코드가 로드될 때마다 호출됩니다. +after_find+는 +after_initialize+ 전에 (양쪽 모두 정의되어 있다면,) 호출됩니다.
 
-The +after_initialize+ and +after_find+ callbacks are a bit different from the others. They have no +before_*+ counterparts, and the only way to register them is by defining them as regular methods. If you try to register +after_initialize+ or +after_find+ using macro-style class methods, they will just be ignored. This behaviour is due to performance reasons, since +after_initialize+ and +after_find+ will both be called for each record found in the database, significantly slowing down the queries.
++after_initialize+ 와 +after_find+ 콜백은 다른 콜백과 약간 다릅니다. 그들에게는 반대 메소드인 +before_*+가 존재하지 않고, 표준 메소드처럼 정의하는 것이 그들을 등록할 수 있는 유일한 방법입니다. 만약 +after_initialize+ 나 +after_find+를 매크로 형태로 등록하려 시도하면, 이들은 무시됩니다. 이러한 동작 방식은 성능 때문입니다. 왜냐하면, +after_initialize+와 +after_find+ 메소드는 데이터베이스에서 각 레코드를 호출할때마다 불리고, 이는 눈에 띄게 요청을 느리게 만들수 있습니다.
 
 <ruby>
 class User < ActiveRecord::Base
@@ -941,9 +936,9 @@ You have initialized an object!
 => #<User id: 1>
 </ruby>
 
-h3. Running Callbacks
+h3(#running-callbacks). 콜백 실행하기
 
-The following methods trigger callbacks:
+이어지는 메소드들은 콜백에게 방아쇠 역할을 합니다.:
 
 * +create+
 * +create!+
@@ -961,7 +956,7 @@ The following methods trigger callbacks:
 * +update_attributes!+
 * +valid?+
 
-Additionally, the +after_find+ callback is triggered by the following finder methods:
+추가로, +after_find+ 콜백에게 이어지는 찾기 메소드들이 방아쇠 역할을 합니다.
 
 * +all+
 * +first+
@@ -971,11 +966,11 @@ Additionally, the +after_find+ callback is triggered by the following finder met
 * +find_by_<em>attribute</em>!+
 * +last+
 
-The +after_initialize+ callback is triggered every time a new object of the class is initialized.
++after_initialize+ 콜백은 클래스의 새로운 객체가 초기화 될때 항상 실행됩니다.
 
-h3. Skipping Callbacks
+h3(skipping-callbacks). 콜백 건너뛰기
 
-Just as with validations, it's also possible to skip callbacks. These methods should be used with caution, however, because important business rules and application logic may be kept in callbacks. Bypassing them without understanding the potential implications may lead to invalid data.
+그냥 데이터 검증으로서, 콜백을 건너뛰는 것도 가능하다. 이 메소드는 신중하게 사용해야하는데, 왜냐하면 중요한 비지니스 규칙과 어플리케이션 로직이 아마도 콜백안에 남아 있을지도 모르기 때문이다. 잠재적인 함축 의미의 이해 없이 우회 한다면 잘못된 데이터를 유발할 수 있다.
 
 * +decrement+
 * +decrement_counter+
@@ -988,17 +983,17 @@ Just as with validations, it's also possible to skip callbacks. These methods sh
 * +update_all+
 * +update_counters+
 
-h3. Halting Execution
+h3(halting-execution). 실행 중지
 
-As you start registering new callbacks for your models, they will be queued for execution. This queue will include all your model's validations, the registered callbacks, and the database operation to be executed.
+모델에 새로운 콜백 등록 시작할때, 이들의 작업은 큐에 쌓입니다. 이 큐는 모델의 데이터 검증, 등록된 콜백, 그리고 실행을 위한 데이터베이스 작업들을 모두 포함합니다.
 
-The whole callback chain is wrapped in a transaction. If any <em>before</em> callback method returns exactly +false+ or raises an exception the execution chain gets halted and a ROLLBACK is issued; <em>after</em> callbacks can only accomplish that by raising an exception.
+전체 콜백 체인은 트랜잭션에서 실행됩니다. 만약 어떠한 <em>before</em> 콜백 메소드가 정확히 +false+를 반환하거나, 예외(exception)가 발생하면, 실행 체인은 중지되고, ROLLBACK 이 발생됩니다.;<em>after</em> 콜백은 오직 예외가 발생될때만 이렇게 동작합니다.
 
-WARNING. Raising an arbitrary exception may break code that expects +save+ and friends not to fail like that. The +ActiveRecord::Rollback+ exception is thought precisely to tell Active Record a rollback is going on. That one is internally captured but not reraised.
+WARNING. 임의 예외 발생은 아마도 실패한 +save+ 류의 코드들을 중지 시킵니다. +ActiveRecord::Rollback+ 예외는 엑티브 레코드에게 롤백을 하라고 전달합니다. 이 예외는 내부적으로 잡히고, 상위로 전파되지 않습니다.
 
-h3. Relational Callbacks
+h3(#relational-callbacks). 관계형 콜백
 
-Callbacks work through model relationships, and can even be defined by them. Let's take an example where a user has many posts. In our example, a user's posts should be destroyed if the user is destroyed. So, we'll add an +after_destroy+ callback to the +User+ model by way of its relationship to the +Post+ model.
+콜백은 관계를 통해서 동작하고,관계에 의해 정의될 수도 있습니다. 한 사용자가 많은 글(post)를 가지고 있는 예제를 생각해 봅시다. 예제에서 사용자의 글(post)는 만약 사용자가 삭제되면, 함께 삭제되어야 합니다. 그래서 +User+ 모델과 +Post+ 모델간의 관계를 이용해서 +after_destroy+ 콜백을 +User+ 모델에 추가할 것입니다.
 
 <ruby>
 class User < ActiveRecord::Base
@@ -1022,13 +1017,13 @@ Post destroyed
 => #<User id: 1>
 </ruby>
 
-h3. Conditional Callbacks
+h3(#Conditional-callbacks). 조건부 콜백
 
-Like in validations, we can also make our callbacks conditional, calling them only when a given predicate is satisfied. You can do that by using the +:if+ and +:unless+ options, which can take a symbol, a string or a +Proc+. You may use the +:if+ option when you want to specify when the callback *should* get called. If you want to specify when the callback *should not* be called, then you may use the +:unless+ option.
+데이터 검증과 비슷하게, 콜백도 제공된 조건을 만족할때만 동작하도록 만들 수 있습니다. +:if+ 와 +:unless+ 옵션에 심볼, 문자열 혹은 +Proc+을 넘겨서 수행할 수 있습니다. +:if+ 옵션은 주어진 조건에서 *반드시 실행*하고 싶을때 사용할 수 있습니다. 만약, 조건에서 *반드시 실행하기 싶지 않으면*, +:unless+을 사용할 수 있습니다.
 
-h4. Using +:if+ and +:unless+ with a Symbol
+h4(#using-a-symbol-with-if-and-unless). +:if+와 +:unless+에 심볼(Symbol) 사용하기
 
-You can associate the +:if+ and +:unless+ options with a symbol corresponding to the name of a method that will get called right before the callback. When using the +:if+ option, the callback won't be executed if the method returns false; when using the +:unless+ option, the callback won't be executed if the method returns true. This is the most common option. Using this form of registration it's also possible to register several different methods that should be called to check if the callback should be executed.
++:if+와 +:unless+ 옵션과 콜백 바로 전에 실행될 메소드 이름의 심볼(Symbol)을 연결할 수 있습니다. +:if+ 옵션을 사용중, 만약 해당 메소드가 거짓(false)을 반환하면 콜백은 실행되지 않습니다.; +:unless+ 옵션 사용중에는 해당 메소드가 참(true)를 반환하면 콜백이 실행되지 않습니다. 이 것은 가장 흔한 옵션입니다. 이 방식으로 콜백의 실행 할 여부를 검사하는 몇가지 다른 메소드를 등록할 수 있습니다.
 
 <ruby>
 class Order < ActiveRecord::Base
@@ -1036,9 +1031,9 @@ class Order < ActiveRecord::Base
 end
 </ruby>
 
-h4. Using +:if+ and +:unless+ with a String
+h4(#using-a-string-with-if-and-unless). +:if+와 +:unless+에 문자열 사용하기
 
-You can also use a string that will be evaluated using +eval+ and needs to contain valid Ruby code. You should use this option only when the string represents a really short condition.
++eval+로 실행되는 유효한 루비 코드의 문자열도 이용할 수 있습니다. 문자열이 정말 짧은 조건을 표현할때 이 옵션을 이용하세요.
 
 <ruby>
 class Order < ActiveRecord::Base
@@ -1046,9 +1041,9 @@ class Order < ActiveRecord::Base
 end
 </ruby>
 
-h4. Using +:if+ and +:unless+ with a Proc
+h4(#using-a-proc-with-if-and-unless). +:if+와 +:unless+에 Proc 사용하기
 
-Finally, it's possible to associate +:if+ and +:unless+ with a +Proc+ object. This option is best suited when writing short validation methods, usually one-liners.
+마지막으로, +:if+와 +:unless+에 호출될 Proc 객체를 연결하는 것도 가능합니다. +Proc+ 객체는 분리된 메소드 대신에 그때마다 즉시 처리하는 조건을 제공합니다. 이 옵션은 한줄 코드에 가장 적합합니다.
 
 <ruby>
 class Order < ActiveRecord::Base
@@ -1057,9 +1052,9 @@ class Order < ActiveRecord::Base
 end
 </ruby>
 
-h4. Multiple Conditions for Callbacks
+h4(#multiple-conditions-for-callbacks). 콜백을 위한 다중 조건
 
-When writing conditional callbacks, it's possible to mix both +:if+ and +:unless+ in the same callback declaration.
+조건부 콜백을 작성할때, 같은 콜백 선언에서 +:if+와 +:unless+ 둘다 섞어 사용할 수 있습니다.
 
 <ruby>
 class Comment < ActiveRecord::Base
@@ -1068,11 +1063,11 @@ class Comment < ActiveRecord::Base
 end
 </ruby>
 
-h3. Callback Classes
+h3(#callback-classes). 콜백 클래스
 
-Sometimes the callback methods that you'll write will be useful enough to be reused by other models. Active Record makes it possible to create classes that encapsulate the callback methods, so it becomes very easy to reuse them.
+때로 여러분이 작성할 콜백 메소드는 다른 모델에 재사용 할만 하기도 합니다. 엑티브 레코드에는 콜백 메소드를 캡슐화한 클래스를 만드는 것도 가능합니다. 그래서 그들을 재사용하는건 매우 쉽습니다. 
 
-Here's an example where we create a class with an +after_destroy+ callback for a +PictureFile+ model.
+여기에 +PictureFile+ 모델을 위한 +after_destroy+ 콜백을 클래스로 만든 예제가 있습니다.
 
 <ruby>
 class PictureFileCallbacks
@@ -1083,7 +1078,7 @@ class PictureFileCallbacks
 end
 </ruby>
 
-When declared inside a class the callback method will receive the model object as a parameter. We can now use it this way:
+클래스 내부의 선언된 콜백 메소드는 인자로 모델 객체를 받습니다. 이제 이런 방식으로 사용할 수 있습니다.:
 
 <ruby>
 class PictureFile < ActiveRecord::Base
@@ -1091,7 +1086,7 @@ class PictureFile < ActiveRecord::Base
 end
 </ruby>
 
-Note that we needed to instantiate a new +PictureFileCallbacks+ object, since we declared our callback as an instance method. Sometimes it will make more sense to have it as a class method.
+인스턴스 메소드로서 콜백을 선언했으므로, 새로운 +PictureFileCallbacks+ 객체를 만들어야 한다는 점에 유의하세요. 때로 클래스 메소드로서 그것을 선언하는 것이 좀 더 이해하기 편합니다.
 
 <ruby>
 class PictureFileCallbacks
@@ -1102,7 +1097,7 @@ class PictureFileCallbacks
 end
 </ruby>
 
-If the callback method is declared this way, it won't be necessary to instantiate a +PictureFileCallbacks+ object.
+만약 콜백 메소드가 이런 방법으로 선언되었다면, +PictureFileCallbacks+ 객체를 만들어 줄 필요가 없습니다.
 
 <ruby>
 class PictureFile < ActiveRecord::Base
@@ -1110,15 +1105,15 @@ class PictureFile < ActiveRecord::Base
 end
 </ruby>
 
-You can declare as many callbacks as you want inside your callback classes.
+여러분은 콜백 클래스내에 원하는 만큼 많은 콜백을 선언할 수 있습니다.
 
-h3. Observers
+h3(#observers). 옵저버(Observers)
 
-Observers are similar to callbacks, but with important differences. Whereas callbacks can pollute a model with code that isn't directly related to its purpose, observers allow you to add the same functionality outside of a model. For example, it could be argued that a +User+ model should not include code to send registration confirmation emails. Whenever you use callbacks with code that isn't directly related to your model, you may want to consider creating an observer instead.
+옵저버는 콜백과 유사하지만 중요한 다른점이 있습니다. 콜백은 그것의 목적이 직접 관계없는 코드로 모델을 더럽힐 수 있는데 반하여, 옵저버는 모델의 바깥에서 같은 기능 추가를 할수 있습니다. 예를들어, +User+ 모델은 결코 수락 이메일을 전송하는 코드를 포함하지 않아야 한다고 논의 되었습니다. 모델에 직접 관계하지 않는 코드를 콜백을 사용할때 마다, 여러분은 콜백 대신에 옵저버 사용을 원할 것입니다.
 
-h4. Creating Observers
+h4(#creating-observers). 옵저버 만들기
 
-For example, imagine a +User+ model where we want to send an email every time a new user is created. Because sending emails is not directly related to our model's purpose, we could create an observer to contain this functionality.
+예를들어, 매번 새로운 사용자가 만들어질때 메일을 발송하기를 원하는 +User+ 모델이 있다고 상상하겠습니다. 메일 보내기는 모델의 목적과 직접적인 관계가 없기 때문에, 우리는 이 기능을 옵저버에 담고 싶습니다.
 
 <shell>
 rails generate observer User
@@ -1132,22 +1127,22 @@ class UserObserver < ActiveRecord::Observer
 end
 </ruby>
 
-As with callback classes, the observer's methods receive the observed model as a parameter.
+콜백 클래스 같이, 옵저버의 메소드는 인자로 대상 모델을 받습니다.
 
-h4. Registering Observers
+h4(#registering-observers). 옵저버 등록하기
 
-Observers are conventionally placed inside of your +app/models+ directory and registered in your application's +config/application.rb+ file. For example, the +UserObserver+ above would be saved as +app/models/user_observer.rb+ and registered in +config/application.rb+ this way:
+옵저버는 관습적으로 +app/models+ 디렉토리에 위치하고, +config/application.rb+ 파일에서 등록합니다. 예를들어, +UserObserver+는 +app/models/user_observer.rb+ 파일로 저장되고, +config/application.rb+ 내에서 이런 방식으로 등록합니다.:
 
 <ruby>
 # Activate observers that should always be running
 config.active_record.observers = :user_observer
 </ruby>
 
-As usual, settings in +config/environments+ take precedence over those in +config/application.rb+. So, if you prefer that an observer doesn't run in all environments, you can simply register it in a specific environment instead.
+평소처럼, +config/environments+의 세팅은 +config/application.rb+ 내에 세팅보다 우선합니다. 그래서 만약 옵저버가 모든 환경에서 실행되는걸 원하지 않는다면, 간단하게 특정 환경만 지정해서 등록할 수 있습니다.
 
-h4. Sharing Observers
+h4(#sharing-observers). 옵저버 공유하기
 
-By default, Rails will simply strip "Observer" from an observer's name to find the model it should observe. However, observers can also be used to add behaviour to more than one model, and so it's possible to manually specify the models that our observer should observe.
+기본적으로, 레일즈는 간단히 감시할 모델을 찾기위해서 옵저버의 이름에서 "Observer"를 제거합니다. 그렇지만 옵저버도 여러 모델에 재사용할 수 있고, 그래서 옵저버가 감시할 모델을 직접 지정할 수도 있습니다.
 
 <ruby>
 class MailerObserver < ActiveRecord::Observer
@@ -1159,7 +1154,7 @@ class MailerObserver < ActiveRecord::Observer
 end
 </ruby>
 
-In this example, the +after_create+ method would be called whenever a +Registration+ or +User+ was created. Note that this new +MailerObserver+ would also need to be registered in +config/application.rb+ in order to take effect.
+이 예제에서는, +after_create+ 메소드는 +Registration+이나 +Uer+가 생성될때마다 호출됩니다. 이 새로운 +MailerObserver+도 효과를 보려면 +config/application.rb+ 내에서 등록해야 한다는 점에 유의하세요.
 
 <ruby>
 # Activate observers that should always be running
@@ -1175,3 +1170,6 @@ h3. Changelog
 * February 10, 2009: Observers revision by Trevor Turk
 * February 5, 2009: Initial revision by Trevor Turk
 * January 9, 2009: Initial version by "Cássio Marques":credits.html#cmarques
+
+h3. Changelog for Korean Translation
+* 2011년 3월 1일 1차 완료 by "Sangmin Ryu":http://neocoin.net
