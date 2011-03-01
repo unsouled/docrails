@@ -100,15 +100,15 @@ h5(#Action-Mailer). 액션 메일러(Action Mailer)
 
 h5(#Active-Model). 액티브 모델(Active Model)
 
-엑티브 모델은 액션 팩(Action Pack) 서비스와 ORM(Object Relation Mapping) 잼과 인터페이스를 정의합니다.(ORM으로, 액티브 레코드(Active Record)가 있습니다.) 액티브 모델은 여러분이 원한다면, 다른 ORM 프레임워크를 사용할 수 있게 합니다.
+액티브 모델은 액션 팩(Action Pack) 서비스와 ORM(Object Relation Mapping) 잼과 인터페이스를 정의합니다.(ORM으로, 액티브 레코드(Active Record)가 있습니다.) 액티브 모델은 여러분이 원한다면, 다른 ORM 프레임워크를 사용할 수 있게 합니다.
 
 h5(#Active-Record). 액티브 레코드(Active Record)
 
-엑티브 레코드는 레일즈 어플리케이션에서 모델의 기초입니다. 엑티브 레코드는 데이터베이스 추상화와 기본 CRUD 기능, 고급 검색 능력과 객체들 간의 관계를 정의하는 기능을 제공합니다.
+액티브 레코드는 레일즈 어플리케이션에서 모델의 기초입니다. 액티브 레코드는 데이터베이스 추상화와 기본 CRUD 기능, 고급 검색 능력과 객체들 간의 관계를 정의하는 기능을 제공합니다.
 
 h5(#Active-Resource). 액티브 리소스(Active Resource)
 
-액티브 리소스는 비지니스 객체와 RESTful 웹 서비스간의 연결 관리를 위한 프레임워크 입니다. 엑티브 리소스는 웹 기반의 자원을 로컬 객체의 CRUD 처럼 매핑시킵니다.
+액티브 리소스는 비지니스 객체와 RESTful 웹 서비스간의 연결 관리를 위한 프레임워크 입니다. 액티브 리소스는 웹 기반의 자원을 로컬 객체의 CRUD 처럼 매핑시킵니다.
 
 h5(#Active-Support). 액티브 서포트(Active Support)
 
@@ -448,7 +448,7 @@ class Post < ActiveRecord::Base
 end
 </ruby>
 
-이 파일에는 별 내용이 없습니다. - 그러나 +Post+ 클레스는 +ActiveRecord::Base+를 상속합니다. 엑티브 레코드(Active Record)는 레일즈 모델을 자유롭게 다루는데 훌륭한 기능을 제공합니다. 기본 데이터베이스 CRUD(생성(Create), 읽기(Read), 갱신(Update), 삭제(Destroy) 기능, 데이터 검증, 복잡한 검색과 복합적인 모델 관계 지원  이런 것들을 포함합니다.
+이 파일에는 별 내용이 없습니다. - 그러나 +Post+ 클레스는 +ActiveRecord::Base+를 상속합니다. 액티브 레코드(Active Record)는 레일즈 모델을 자유롭게 다루는데 훌륭한 기능을 제공합니다. 기본 데이터베이스 CRUD(생성(Create), 읽기(Read), 갱신(Update), 삭제(Destroy) 기능, 데이터 검증, 복잡한 검색과 복합적인 모델 관계 지원  이런 것들을 포함합니다.
 
 h4(#Adding-Some-Validataion). 몇 가지 데이터 검증(Validation) 추가하기
 
@@ -510,7 +510,7 @@ end
 
 +Post.all+은 현재 데이터베이스에 있는 모든 글(posts) 정보를 +Post+ 모델로 반환하는 메소드 입니다. 이 호출의 결과는 글(post)의 배열이고 +@posts+ 변수에 저장됩니다.
 
-TIP: 엑티브 레코드(Active Record)에 관한 더 자세한 정보는 "엑티브 레코드 쿼리 인터페이스":active_record_querying.html 글을 참고하세요.
+TIP: 액티브 레코드(Active Record)에 관한 더 자세한 정보는 "액티브 레코드 쿼리 인터페이스":active_record_querying.html 글을 참고하세요.
 
 +respond_to+ 블록은 이 액션에 대한 HTML과 XML 양쪽 모두 취급합니다. 브라우저에게 "http://localhost:3000/posts.xml":http://localhost:3000/posts.xml 요청하게 하면, XML 포멧의 글 목록(posts)을 확인할 수 있습니다. 액션 이름에 연결되는 HTML 포멧은 +app/views/posts/+ 폴더 안에서 찾을 수 있습니다. 레일즈는 액션에서 사용되는 모든 인스턴스 변수를 뷰안에서 사용할 수 있게 구성되어 있습니다. +app/views/posts/index.html.erb+ 내용 입니다.:
 
@@ -775,7 +775,7 @@ def destroy
 end
 </ruby>
 
-엑티브 레코드 인스턴스의 +destroy+ 메소드는 데이터베이스의 관련 레코드를 삭제합니다. 이 작업이 완료되면, 보여줄 정보가 존재하지 않아서, 레일즈는 사용자 브라우저를 모델을 위한 index 뷰로 리다이렉트 시킵니다.
+액티브 레코드 인스턴스의 +destroy+ 메소드는 데이터베이스의 관련 레코드를 삭제합니다. 이 작업이 완료되면, 보여줄 정보가 존재하지 않아서, 레일즈는 사용자 브라우저를 모델을 위한 index 뷰로 리다이렉트 시킵니다.
 
 h3(#Adding-a-Second-Model). 두번째 모델 추가하기
 
@@ -803,7 +803,7 @@ class Comment < ActiveRecord::Base
 end
 </ruby>
 
-이 파일은 이전에 보았던 +post.rb+ 모델과 매우 비슷합니다. 다른 점은 +belongs_to :post+ 가 존재하는 건데, 이건 엑티브 레코드의 _관계(association)_ 을 정의하는 규칙입니다. 이 가이드의 다음 색션에서 관계(association)에 대해서 조금 더 배우게 될 겁니다. 
+이 파일은 이전에 보았던 +post.rb+ 모델과 매우 비슷합니다. 다른 점은 +belongs_to :post+ 가 존재하는 건데, 이건 액티브 레코드의 _관계(association)_ 을 정의하는 규칙입니다. 이 가이드의 다음 색션에서 관계(association)에 대해서 조금 더 배우게 될 겁니다. 
 
 모델과 더불어, 레일즈는 이와 대응하는 데이터베이스 테이블 생성 마이그레이션도 만듭니다.: 
 
@@ -844,7 +844,7 @@ $ rake db:migrate
 
 h4(#Associating-Models). 모델 관계 설정하기
 
-엑티브 레코드 관계(Association)은 두개의 모델의 관계를 손쉽게 정의하게 만들어 줍니다. 글(Post)와 댓글(Comment)의 경우에 관계는 다음과 같이 표현할 수 있습니다.:
+액티브 레코드 관계(Association)은 두개의 모델의 관계를 손쉽게 정의하게 만들어 줍니다. 글(Post)와 댓글(Comment)의 경우에 관계는 다음과 같이 표현할 수 있습니다.:
 
 * 각 댓글(comment)는 하나의 글(Post)에 속한다.
 * 하나의 글(Post)는 많은 댓글(comment)를 가질수 있다.
@@ -871,7 +871,7 @@ end
 
 이 두개의 정의는 자동으로 멋진 기능을 추가합니다. 예를 들자면, 글 정보를 가지고 있는 +@post+ 인스턴스 변수를 가지고 있다면, +@post.comments+ 코드를 통해서 글에 속한 모든 댓들(comment)의 배열을 가지고 올 수 있습니다.
 
-TIP: 엑티브 레코드 관계(Associations)에 대한 더 많은 정보는 "엑티브 레코드 Association(관계)":association_basics.html 가이드를 참고하세요.
+TIP: 액티브 레코드 관계(Associations)에 대한 더 많은 정보는 "액티브 레코드 Association(관계)":association_basics.html 가이드를 참고하세요.
 
 h4(#Adding-a-Route-for-Comments). 댓글(Comments)를 위한 라우팅 규칙 추가하기
 

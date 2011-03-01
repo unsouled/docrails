@@ -2,14 +2,14 @@ h2. 마이그레이션
 
 마이그레이션은 체계적이고 유기적인 수단으로 데이터베이스를 변경할 수 있는 편리한 방법입니다. 여러분은 손수 SQL을 수정할 수 있습니다. 그러나 수정후에 다른 개발자들에게 수정 사항을 알려줘야할 책임을 가지게 될겁니다. 그리고 다음에 제품을 배포 할때도 변경 사항이 실행되는지 이를 지켜봐야만 합니다.
 
-엑티브 레코드는 이미 실행된 마이그레이션을 추적합니다. 그래서 여러분이 해야할 일은 소스를 업데이트 하고 +rake db:migrate+ 명령을 실행하는 일 뿐입니다. 엑티브 레코드는 실행해야 할 마이그레이션만 작업을 진행합니다. 그리고 여러분의 데이터베이스의 구조에 부합하는 +db/schema.rb+ 파일도 갱신합니다.
+액티브 레코드는 이미 실행된 마이그레이션을 추적합니다. 그래서 여러분이 해야할 일은 소스를 업데이트 하고 +rake db:migrate+ 명령을 실행하는 일 뿐입니다. 액티브 레코드는 실행해야 할 마이그레이션만 작업을 진행합니다. 그리고 여러분의 데이터베이스의 구조에 부합하는 +db/schema.rb+ 파일도 갱신합니다.
 
-마이그레이션은 루비를 이용해서 이러한 변경 사항을 기술합니다. 이것의 굉장한 점은, 대부분의 엑티브 레코드의 기능처럼 데이터베이스에 독립적이라는 것 입니다.: +SELECT *+ 의 다양한 변화에 비한다면야, +CREATE TABLE+의 정확한 문법에 대해서 크게 걱정할 필요가 없습니다. (데이터베이스의 특별한 기능들을 위해 기존 SQL도 사용할 수 있습니다.) 예를 들어, 개발에서는 SQLite3 를 사용하지만, 제품에서는 MySQL을 사용할 수 있죠. 
+마이그레이션은 루비를 이용해서 이러한 변경 사항을 기술합니다. 이것의 굉장한 점은, 대부분의 액티브 레코드의 기능처럼 데이터베이스에 독립적이라는 것 입니다.: +SELECT *+ 의 다양한 변화에 비한다면야, +CREATE TABLE+의 정확한 문법에 대해서 크게 걱정할 필요가 없습니다. (데이터베이스의 특별한 기능들을 위해 기존 SQL도 사용할 수 있습니다.) 예를 들어, 개발에서는 SQLite3 를 사용하지만, 제품에서는 MySQL을 사용할 수 있죠. 
 
 여러분은 다음 내용의 마이그레이션 관한 모든걸 배울 수 있습니다.:
 
 * 제너레이터(generators) 사용하고 만들기
-* 엑티브 레코드가 제공하는 데이터베이스 관리 메소드
+* 액티브 레코드가 제공하는 데이터베이스 관리 메소드
 * 마이그레이션을 관리하는 Rake 태스크
 * 마이그레이션과 +schema.rb+ 의 관계
 
@@ -38,7 +38,7 @@ class CreateProducts < ActiveRecord::Migration
 end
 </ruby>
 
-이 마이그레이션은 문자열 컬럼 +name+과 텍스트 컬럼 +description+으로 구성된 +products+ 테이블을 추가합니다. 기본키(primary key) 컬럼 +id+도 역시 추가됩니다. 그렇지만 기본키에 관한 세팅은 기본 설정입니다. 엑티브 레코드가 자동으로 생성하는 타임스탬프 컬럼인 +created_at+ 과 +updated_at+도 추가됩니다. 이 마이그레이션은 간단하게 테이블을 삭제하는 것으로 되돌릴 수 있습니다.
+이 마이그레이션은 문자열 컬럼 +name+과 텍스트 컬럼 +description+으로 구성된 +products+ 테이블을 추가합니다. 기본키(primary key) 컬럼 +id+도 역시 추가됩니다. 그렇지만 기본키에 관한 세팅은 기본 설정입니다. 액티브 레코드가 자동으로 생성하는 타임스탬프 컬럼인 +created_at+ 과 +updated_at+도 추가됩니다. 이 마이그레이션은 간단하게 테이블을 삭제하는 것으로 되돌릴 수 있습니다.
 
 마이그레이션은 스키마의 변경에만 그치는게 아닙니다. 마이그레이션을 데이터베이스내의 잘못된 데이터를 고치거나, 새로운 필드를 만드는데도 사용할 수 있습니다.:
 
@@ -65,7 +65,7 @@ h4(#migrations-are-classes). 마이그레이션은 클래스이다.
 
 마이그레이션은 +up+(필요한 변경 사항을 수행합니다.)과 +down+(변경 사항을 되돌립니다.)을 구현한 <tt>ActiveRecord::Migration</tt>의 서브 클래스 입니다.
 
-엑티브 레코드는 데이터베이스 독립적인 방법으로 일반 데이터 정의 태스크를 수행하는 메소드들을 제공합니다. (여러분은 나중에 이에 관해서 자세히 배울 것입니다.):
+액티브 레코드는 데이터베이스 독립적인 방법으로 일반 데이터 정의 태스크를 수행하는 메소드들을 제공합니다. (여러분은 나중에 이에 관해서 자세히 배울 것입니다.):
 
 * +create_table+
 * +change_table+
@@ -132,7 +132,7 @@ class CreateProducts < ActiveRecord::Migration
 end
 </ruby>
 
-여러분이 원하는 컬럼을 얼마든지 name/type 형태로 추가할 수 있습니다. 기본값으로, +t.timestamps+가 추가되어 있습니다.(이 구문으로 생성된 +updated_at+과 +created_at+ 컬럼은 엑티브 레코드에 의해서 자동으로 채워집니다.)
+여러분이 원하는 컬럼을 얼마든지 name/type 형태로 추가할 수 있습니다. 기본값으로, +t.timestamps+가 추가되어 있습니다.(이 구문으로 생성된 +updated_at+과 +created_at+ 컬럼은 액티브 레코드에 의해서 자동으로 채워집니다.)
 
 h4(#creating-a-standalone-migration). 독립적인(Standalone) 마이그레이션 만들기
 
@@ -260,9 +260,9 @@ end
 
 이 코드는 +ENGINE=BLACKHOLE+을 테이블 생성하는 SQL 구문에 추가할 것입니다. (MySQL은 기본 값은 +ENGIN=InnoDB+ 입니다.)
 
-엑티브 레코드가 지원하는 타입은 +:primary_key+, +:string+, +:text+, +:integer+, +:float+, +:decimal+, +:datetime+, +:timestamp+, +:time+, +:date+, +:binary+, +:boolean+ 입니다.
+액티브 레코드가 지원하는 타입은 +:primary_key+, +:string+, +:text+, +:integer+, +:float+, +:decimal+, +:datetime+, +:timestamp+, +:time+, +:date+, +:binary+, +:boolean+ 입니다.
 
-이들은 각 데이터베이스에 적합한 타입으로 짝지어 집니다. 예를들어서 MySQL을 사용할때 +:string+은 +VARCHAR(255)+와 짝지어 집니다. 섹시하지 않은(non-sexy) 문법을 사용하면, 엑티브 레코드가 지원하지 않는 타입의 컬럼도 만들수 있습니다. 예를들어
+이들은 각 데이터베이스에 적합한 타입으로 짝지어 집니다. 예를들어서 MySQL을 사용할때 +:string+은 +VARCHAR(255)+와 짝지어 집니다. 섹시하지 않은(non-sexy) 문법을 사용하면, 액티브 레코드가 지원하지 않는 타입의 컬럼도 만들수 있습니다. 예를들어
 
 <ruby>
 create_table :products do |t|
@@ -298,7 +298,7 @@ rename_column :products, :upccode, :upc_code
 
 h4(#special-helpers). 특별한 헬퍼
 
-엑티브 레코드는 공통의 기능에 대해 몇가지 간단한 방법을 제공합니다. 가장 자주 쓰이는 예가 +created_at+과 +updated_at+ 컬럼을 함께 추가할때, 이를 메소드로 수행 할 수 있습니다.:
+액티브 레코드는 공통의 기능에 대해 몇가지 간단한 방법을 제공합니다. 가장 자주 쓰이는 예가 +created_at+과 +updated_at+ 컬럼을 함께 추가할때, 이를 메소드로 수행 할 수 있습니다.:
 
 <ruby>
 create_table :products do |t|
@@ -322,7 +322,7 @@ create_table :products do |t|
 end
 </ruby>
 
-이 코드는 정확한 타입을 가진 +category_id+ 컬럼을 만듭니다. 컬럼의 이름이 아니라 모델의 이름을 넘기는 부분에 주목하세요. 엑티브 레코드는 여러분을 위해 +id+를 이름에 추가합니다. 만약, 여러 형과 +belongs_to+ 관계를 가지고 있다면, +references+에 필요한 컬럼 정보도 추가해야 합니다.:
+이 코드는 정확한 타입을 가진 +category_id+ 컬럼을 만듭니다. 컬럼의 이름이 아니라 모델의 이름을 넘기는 부분에 주목하세요. 액티브 레코드는 여러분을 위해 +id+를 이름에 추가합니다. 만약, 여러 형과 +belongs_to+ 관계를 가지고 있다면, +references+에 필요한 컬럼 정보도 추가해야 합니다.:
 
 <ruby>
 create_table :products do |t|
@@ -333,7 +333,7 @@ end
 
 NOTE: +references+ 헬퍼는 외래키(foreign key) 제약사항을 추가하지는 않습니다. 이를 위해서 +execute+를 이용하거나, "외래키(foreign key) 지원":#active-record-and-referential-integrity 을 추가하는 플러그인을 사용하세요.
 
-엑티브 레코드가 제공하는 헬퍼가 만족스럽지 않으면 +execute+ 함수로 원하는 SQL을 실행하세요.
+액티브 레코드가 제공하는 헬퍼가 만족스럽지 않으면 +execute+ 함수로 원하는 SQL을 실행하세요.
 
 개별 메소드에 대한 더 자세한 내용과 예제는 API 문서를 참고하세요. 상세한 문서들은 다음과 같습니다. "<tt>ActiveRecord::ConnectionAdapters::SchemaStatements</tt>":http://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/SchemaStatements.html (이 문서는 +up+과 +down+ 내에서 사용할수 있는 메소드 정보를 제공합니다.), "<tt>ActiveRecord::ConnectionAdapters::TableDefinition</tt>":http://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/TableDefinition.html (이 문서는 +creat_table+을 사용할때 객체가 실행하는 블록내에서 사용할 수 있는 메소드 정보를 제공합니다.), 그리고 "<tt>ActiveRecord::ConnectionAdapters::Table</tt>":http://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/Table.html (이 문서는 +change_table+을 사용할때 객체가 실행하는 블록에서 사용할 수 있는 메소드 정보를 제공합니다.).
 
@@ -378,7 +378,7 @@ h3(#running-migrations). 마이그레이션 실행하기
 
 +db:migrate+ 실행하면 데이터베이스 구조에 부합하는 db/schema.rb 파일을 업데이트하는 +db:schema:dump+ 태스크도 실행하는 걸 기억하세요. 
 
-원하는 버전을 지정하면, 엑티브 레코드는 필요한 마이그레이션(up 혹은 down)을 정해진 버전까지만 실행합니다. 버전은 마이그레이션 파일 앞 부분의 숫자 접두어 입니다. 예를 들어서 버전 20080906120000을 실행하려 이렇게 합니다.
+원하는 버전을 지정하면, 액티브 레코드는 필요한 마이그레이션(up 혹은 down)을 정해진 버전까지만 실행합니다. 버전은 마이그레이션 파일 앞 부분의 숫자 접두어 입니다. 예를 들어서 버전 20080906120000을 실행하려 이렇게 합니다.
 
 <shell>
 rake db:migrate VERSION=20080906120000
@@ -422,7 +422,7 @@ h4(#being-specific). 지정 하기
 rake db:migrate:up VERSION=20080906120000
 </shell>
 
-이 명령은 20080906120000 마이그레이션의 +up+ 메소드를 실행합니다. 이 태스크는 마이그레이션이 이미 실행되었는지 여부도 검사합니다. 그래서 예컨데, +db:migrate:up VERSION=20080906120000+ 명령은 엑티브 레코드가 이미 20080906120000 버전을 실행했다고 생각되면 아무 것도 수행하지 않습니다.
+이 명령은 20080906120000 마이그레이션의 +up+ 메소드를 실행합니다. 이 태스크는 마이그레이션이 이미 실행되었는지 여부도 검사합니다. 그래서 예컨데, +db:migrate:up VERSION=20080906120000+ 명령은 액티브 레코드가 이미 20080906120000 버전을 실행했다고 생각되면 아무 것도 수행하지 않습니다.
 
 h4(#being-talkative). 결과 출력하기
 
@@ -482,7 +482,7 @@ end
 20080906170109 CreateProducts: migrated (10.0097s)
 </shell>
 
-만약, 엑티브 레코드 실행중에 출력을 원하지 않을때, +rake db:migrate VERBOSE=false+ 명령어로 실행하면 어떠한 출력도 하지 않을 겁니다.
+만약, 액티브 레코드 실행중에 출력을 원하지 않을때, +rake db:migrate VERBOSE=false+ 명령어로 실행하면 어떠한 출력도 하지 않을 겁니다.
 
 h3(#using-models-in-your-migrations). 여러분의 마이그레이션에서 모델 사용하기
 
@@ -510,7 +510,7 @@ end
 
 h4(#dealing-with-changing-models). 모델 변경 처리하기
 
-성능 때문에 컬럼에 관한 정보는 객체에 임시 저장(Cached)됩니다. 예를들어, 여러분이 테이블에 컬럼을 추가하고 나서 연관된 모델을 이용해서 새로운 데이터를 입력하려고 하면 모델은 과거 컬럼 정보를 이용하려 합니다. +reset_column_information+ 메소드를 이용하면 엑티브 레코드에게 강제로 컬럼 정보를 다시 읽으라고 명령할 수 있습니다. 예를 들면 다음과 같습니다.:
+성능 때문에 컬럼에 관한 정보는 객체에 임시 저장(Cached)됩니다. 예를들어, 여러분이 테이블에 컬럼을 추가하고 나서 연관된 모델을 이용해서 새로운 데이터를 입력하려고 하면 모델은 과거 컬럼 정보를 이용하려 합니다. +reset_column_information+ 메소드를 이용하면 액티브 레코드에게 강제로 컬럼 정보를 다시 읽으라고 명령할 수 있습니다. 예를 들면 다음과 같습니다.:
 
 <ruby>
 class AddPartNumberToProducts < ActiveRecord::Migration
@@ -534,13 +534,13 @@ h3(#schema-dumping-and-you). 스키마 덤프와 여러분
 
 h4(#what-are-schema-files-for). 스키마 파일은 무엇을 위해 존재하는가?
 
-마이그레이션은 아마도 데이터베이스를 위한 믿을만한 소스가 되지는 못합니다. 이 부분은 +db/schema.rb+ 나 엑티브 레코드가 데이터베이스 조사해서 생성한 SQL 파일의 역할이죠. 이 파일은 사용자가 손수 수정 하도록 의도된 파일이 아닙니다. 단지 현재 데이터베이스의 상태를 표현합니다. 
+마이그레이션은 아마도 데이터베이스를 위한 믿을만한 소스가 되지는 못합니다. 이 부분은 +db/schema.rb+ 나 액티브 레코드가 데이터베이스 조사해서 생성한 SQL 파일의 역할이죠. 이 파일은 사용자가 손수 수정 하도록 의도된 파일이 아닙니다. 단지 현재 데이터베이스의 상태를 표현합니다. 
 
 어플리케이션의 새로운 인스턴스를 배포할때 마이그레이션의 전체 과정을 재현할 필요는 없습니다. (그리고 이건 에러가 발생하기도 쉽죠) 현재 스키마의 기술된 내용을 데이터베이스에 적재하는 편이 훨씬 단순하고 빠릅니다.
 
 예를 들어, 테스트 데이터베이스를 만드는 방법을 생각해보죠.:현재 개발 데이터베이스를 덤프하고(+db/schema.rb+ 든 +db/development.sql+ 이든) 나서 테스트 데이터베이스에 이것을 적재합니다. 
 
-스키마 파일은 엑티브 레코드가 어떠한 속성(attribute)를 가지고 있는지 한눈에 보기에도 유용합니다. 이 정보는 모델의 코드에 들어 있지 않고, 흔히 여러 마이그레이션에 흩어 집니다. 그러나, 스키마 파일안에는 모든 정보가 담겨있죠. "annotate_models":http://agilewebdevelopment.com/plugins/annotate_models 플러그인은 이런 정보를 각 모델의 상단에 요약해서 주석으로 붙여주는데, 이것도 흥미 있을 겁니다. 
+스키마 파일은 액티브 레코드가 어떠한 속성(attribute)를 가지고 있는지 한눈에 보기에도 유용합니다. 이 정보는 모델의 코드에 들어 있지 않고, 흔히 여러 마이그레이션에 흩어 집니다. 그러나, 스키마 파일안에는 모든 정보가 담겨있죠. "annotate_models":http://agilewebdevelopment.com/plugins/annotate_models 플러그인은 이런 정보를 각 모델의 상단에 요약해서 주석으로 붙여주는데, 이것도 흥미 있을 겁니다. 
 
 h4(#types-of-schema-dumps). 스키마 덤프의 유형
 
@@ -566,11 +566,11 @@ ActiveRecord::Schema.define(:version => 20080906171750) do
 end
 </ruby>
 
-많은 방법 중 이것이 가장 정확합니다.  데이터베이스를 조사하고 +create_table+, +add_index+ 등을 이용하여 구조화된 표현으로 이 파일이 만들어 집니다. 이 파일은 데이터베이스 독립적이기 때문에 엑티브 레코드를 지원하는 어떤 데이터베이스에도 적재할 수 있습니다. 만약 여러분이 어플리케이션을 배포할때 다양한 데이터베이스를 대상으로 한다면 이는 매우 유용합니다. 
+많은 방법 중 이것이 가장 정확합니다.  데이터베이스를 조사하고 +create_table+, +add_index+ 등을 이용하여 구조화된 표현으로 이 파일이 만들어 집니다. 이 파일은 데이터베이스 독립적이기 때문에 액티브 레코드를 지원하는 어떤 데이터베이스에도 적재할 수 있습니다. 만약 여러분이 어플리케이션을 배포할때 다양한 데이터베이스를 대상으로 한다면 이는 매우 유용합니다. 
 
 그렇지만, 교환 조건(trade-off)가 있죠.:+db/schema.rb+는 데이터베이스에 특화된 표현을 할수 없습니다. 가령 외래키(foreign key) 제약 사항, 트리거(trigger)나 저장 프로시저(stored procedure) 같은거 말이죠. 마이그레이션 중에 여러분은 맞춤형 SQL 구문을 실행수 있지만, 스키마 덤프 엔진은 데이터베이스에서 그러한 구문을 만들어 낼 수 없습니다. 만약 이런 기능을 만드시 사용해야한다면 스키마 포맷의 세팅을 +:sql+로 하세요.
 
-엑티브 레코드의 스키마 덤프 엔진 대신에, 해당 데이터베이스에 특화된 도구(+db:structure:dump+ Rake 태스크를 통해서)를 사용해서 +db/#{Rails.env}_structure.sql+에 데이터베이스의 구조를 덤프 할 수 있습니다. 예를들어, PostgresSQL을 위해서는 +pg_dump+ 유틸리티를 사용하고, MySQL을 위해서는 다양한 테이블에 대한 +SHOW CREATE TABLE+을 결과를 파일에 저장하면 됩니다. 스키마를 데이터베이스에 적재하는 방법은 내부에 포함된 SQL 구문 실행으로 간단하게 수행할 수 있습니다.
+액티브 레코드의 스키마 덤프 엔진 대신에, 해당 데이터베이스에 특화된 도구(+db:structure:dump+ Rake 태스크를 통해서)를 사용해서 +db/#{Rails.env}_structure.sql+에 데이터베이스의 구조를 덤프 할 수 있습니다. 예를들어, PostgresSQL을 위해서는 +pg_dump+ 유틸리티를 사용하고, MySQL을 위해서는 다양한 테이블에 대한 +SHOW CREATE TABLE+을 결과를 파일에 저장하면 됩니다. 스키마를 데이터베이스에 적재하는 방법은 내부에 포함된 SQL 구문 실행으로 간단하게 수행할 수 있습니다.
 
 당연히, 이는 데이터베이스의 구조를 완벽하게 복제할 수 있는 방법이지만, 이 방법은 데이터베이스 이외의 저장 수단에는 스키마 정보를 로딩할 수 없게됩니다.
 
@@ -580,13 +580,13 @@ h4(#schema-dumps-and-source-control). 스키마 덤프와 소스 컨트롤
 
 스키마 덤프는 여러분의 데이터베이스의 스키마를 위한 믿을 만한 소스입니다. 그래서 이를 소스 컨트롤에 포함 시키는걸 강력히 추천합니다.
 
-h3(#active-record-and-referential-integrity). 엑티브 레코드와 참조 무결성
+h3(#active-record-and-referential-integrity). 액티브 레코드와 참조 무결성
 
-엑티브 레코드의 방법은 데이터베이스보다 여러분의 모델을 더 영리하게 만들기를 주장합니다. 가령, 트리거(trigger)나 외래키 제약 사항(constraint) 같은 요소 같이 영리함(intelligence)을 데이터베이스로 맡기는 요소를 과도하게 사용하는 방법을 권장하지 않습니다.
+액티브 레코드의 방법은 데이터베이스보다 여러분의 모델을 더 영리하게 만들기를 주장합니다. 가령, 트리거(trigger)나 외래키 제약 사항(constraint) 같은 요소 같이 영리함(intelligence)을 데이터베이스로 맡기는 요소를 과도하게 사용하는 방법을 권장하지 않습니다.
 
 +validates :foreign_key, :uniqueness => true+과 같은 데이터 검증(validation)은 모델에서 데이터의 무결성을 지킬수 있는 방법입니다. 관계(association)에서 +:dependent+ 옵션은 부모 모델이 삭제되면 자동으로 자식 모델도 삭제합니다. 어플리케이션 레벨의 이러한 동작만으로 완전히 참조 무결성을 보장할 수는 없습니다. 그래서 몇몇 분들은 외래키 제약 사항을 더 많이 사용합니다.
 
-엑티브 레코드는 그러한 요소에 대해서 직접적인 어떤 도구도 지원하지는 않지만, +execute+ 메소드로 SQL을 실행할 수 있습니다. 이와 관련한 다양한 플러그도 있습니다. 가령 "foreign_key_migrations":http://github.com/harukizaemon/redhillonrails/tree/master/foreign_key_migrations/ 플러그인은 외래키 추가 기능을 엑티브 레코드에 제공합니다. (+db/schema.rb+에 외래키 정보를 덤프하는 것도 포함합니다.)
+액티브 레코드는 그러한 요소에 대해서 직접적인 어떤 도구도 지원하지는 않지만, +execute+ 메소드로 SQL을 실행할 수 있습니다. 이와 관련한 다양한 플러그도 있습니다. 가령 "foreign_key_migrations":http://github.com/harukizaemon/redhillonrails/tree/master/foreign_key_migrations/ 플러그인은 외래키 추가 기능을 액티브 레코드에 제공합니다. (+db/schema.rb+에 외래키 정보를 덤프하는 것도 포함합니다.)
 
 h3. Changelog
 
