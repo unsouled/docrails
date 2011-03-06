@@ -64,7 +64,7 @@ gem "nokogiri"
 rake "gems:install"
 </ruby>
 
-And let Rails take care of installing the required gems if they’re not already installed.
+그러면 설치가 되지 않은 필요한 젬이 있다면 레일즈가 설치를 합니다.
 
 h4. add_source(source, options = {})
 
@@ -93,9 +93,9 @@ plugin 'authentication', :git => 'git://github.com/foor/bar.git',
                          :submodule => true
 </ruby>
 
-Please note that you need to +git :init+ before you can install a plugin as a submodule.
+서브모듈로 플러그인을 설치하기 전에 +git :init+ 을 해 줘야한다는 걸 기억하십시오.
 
-Or use plain old SVN :
+혹은 SVN 을 이용할 수 있습니다 :
 
 <ruby>
 plugin 'usingsvn', :svn => 'svn://example.com/usingsvn/trunk'
@@ -105,7 +105,7 @@ h4. vendor/lib/file/initializer(filename, data = nil, &block)
 
 +config/initializer+ 디렉토리에 initializer 를 추가합니다.
 
-Lets say you like using +Object#not_nil?+ and +Object#not_blank?+ :
++Object#not_nil?+ 와 +Object#not_blank?+ 를 사용하고 싶다면 :
 
 <ruby>
 initializer 'bloatlol.rb', <<-CODE
@@ -136,7 +136,7 @@ That’ll create +app/components+ directory and put +foo.rb+ in there.
 
 h4. rakefile(filename, data = nil, &block)
 
-Creates a new rake file under +lib/tasks+ with the supplied tasks :
++lib/tasks+ 에 주어진 태스크를 포함한 새 rake 파일을 생성합니다 :
 
 <ruby>
 rakefile("bootstrap.rake") do
@@ -150,11 +150,11 @@ rakefile("bootstrap.rake") do
 end
 </ruby>
 
-The above creates +lib/tasks/bootstrap.rake+ with a +boot:strap+ rake task.
+위 코드는 +boot:strap+ rake 태스크를 포함한 +lib/tasks/bootstrap.rake+ 를 생성합니다.
 
 h4. generate(what, args)
 
-Runs the supplied rails generator with given arguments. For example, I love to scaffold some whenever I’m playing with Rails :
+주어진 인자로 레일즈 제너레이터를 실행시킵니다.  For example, I love to scaffold some whenever I’m playing with Rails :
 
 <ruby>
 generate(:scaffold, "person", "name:string", "address:text", "age:number")
@@ -162,7 +162,7 @@ generate(:scaffold, "person", "name:string", "address:text", "age:number")
 
 h4. run(command)
 
-Executes an arbitrary command. Just like the backticks. Let's say you want to remove the +public/index.html+ file :
+임의의 명령어를 수행합니다.  backtick(`) 과 비슷합니다. +public/index.html+ 파일을 지우길 원한다면 : 
 
 <ruby>
 run "rm public/index.html"
@@ -170,19 +170,19 @@ run "rm public/index.html"
 
 h4. rake(command, options = {})
 
-Runs the supplied rake tasks in the Rails application. Let's say you want to migrate the database :
+레일즈 어플리케이션의 Rake 태스크를 실행합니다.  데이터베이스를 마이그레이션하고 싶다면 :
 
 <ruby>
 rake "db:migrate"
 </ruby>
 
-You can also run rake tasks with a different Rails environment :
+또한 다른 레일즈 환경의 rake 태스크를 실행할 수 있습니다 :
 
 <ruby>
 rake "db:migrate", :env => 'production'
 </ruby>
 
-Or even use sudo :
+sudo 를 사용할 수도 있습니다 :
 
 <ruby>
 rake "gems:install", :sudo => true
@@ -190,7 +190,7 @@ rake "gems:install", :sudo => true
 
 h4. route(routing_code)
 
-This adds a routing entry to the +config/routes.rb+ file. In above steps, we generated a person scaffold and also removed +public/index.html+. Now to make +PeopleController#index+ as the default page for the application :
++config/routes.rb+ 파일에 라우팅 항목을 추가합니다.  아래와 같이 하면, person 스캐폴드를 생성하고 +public/index.html' 도 삭제해 줍니다.  그러면 +PeopleController#index+ 가 어플리케이션의 기본 페이지가 됩니다.
 
 <ruby>
 route "root :to => 'person#index'"
