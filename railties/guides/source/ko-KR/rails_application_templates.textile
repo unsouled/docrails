@@ -121,9 +121,9 @@ end
 CODE
 </ruby>
 
-Similarly +lib()+ creates a file in the +lib/+ directory and +vendor()+ creates a file in the +vendor/+ directory.
+비슷하게 +lib()+ 은 +lib/+ 디렉토리에 파일을 만들고, +vendor()+ 는 +vendor/+ 디렉토리에 파일을 만듭니다.
 
-There is even +file()+, which accepts a relative path from +Rails.root+ and creates all the directories/file needed :
++file()+ 도 있어서, +Rails.root+ 로 부터의 상대경로에 필요한 디렉토리/파일을 만들 수 있습니다 :
 
 <ruby>
 file 'app/components/foo.rb', <<-CODE
@@ -132,7 +132,7 @@ end
 CODE
 </ruby>
 
-That’ll create +app/components+ directory and put +foo.rb+ in there.
++app/components+ 디렉토리를 만들고 그 안에 +foo.rb+ 를 넣습니다.
 
 h4. rakefile(filename, data = nil, &block)
 
@@ -162,7 +162,7 @@ generate(:scaffold, "person", "name:string", "address:text", "age:number")
 
 h4. run(command)
 
-임의의 명령어를 수행합니다.  backtick(`) 과 비슷합니다. +public/index.html+ 파일을 지우길 원한다면 : 
+임의의 명령어를 수행합니다.  backtick(`) 과 비슷합니다. +public/index.html+ 파일을 지우길 원한다면 :
 
 <ruby>
 run "rm public/index.html"
@@ -190,7 +190,7 @@ rake "gems:install", :sudo => true
 
 h4. route(routing_code)
 
-+config/routes.rb+ 파일에 라우팅 항목을 추가합니다.  아래와 같이 하면, person 스캐폴드를 생성하고 +public/index.html' 도 삭제해 줍니다.  그러면 +PeopleController#index+ 가 어플리케이션의 기본 페이지가 됩니다.
++config/routes.rb+ 파일에 라우팅 항목을 추가합니다.  아래와 같이 하면, person 스캐폴드를 생성하고 +public/index.html+ 도 삭제해 줍니다.  그러면 +PeopleController#index+ 가 어플리케이션의 기본 페이지가 됩니다.
 
 <ruby>
 route "root :to => 'person#index'"
@@ -220,7 +220,7 @@ end
 CODE
 </ruby>
 
-h4. yes?(question) or no?(question)
+h4. yes?(question) 혹은 no?(question)
 
 These methods let you ask questions from templates and decide the flow based on the user’s answer. Lets say you want to freeze rails only if the user want to :
 
