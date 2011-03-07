@@ -1,23 +1,25 @@
-h2. Active Record Query Interface
+h2. 액티브 레코드 쿼리 인터페이스
 
-This guide covers different ways to retrieve data from the database using Active Record. By referring to this guide, you will be able to:
+아 가이드는 액티브 레코드를 이용해서 데이터베이스에서 자료를 가지고 오는 다양한 방법을 다룹니다. 이 가이드를 익히면 여러분은 다음을 내용을 알 수 있습니다.:
 
-* Find records using a variety of methods and conditions
-* Specify the order, retrieved attributes, grouping, and other properties of the found records
-* Use eager loading to reduce the number of database queries needed for data retrieval
-* Use dynamic finders methods
-* Check for the existence of particular records
-* Perform various calculations on Active Record models
+* 다양한 메소드와 조건을 이용해서 레코드 찾기
+* 검색한 레코드의 순서 지정, 속성 가져오기, 그룹 짓기 그리고 다른 요소들 
+* 데이터 조회 쿼리 요청을 줄이기 위한 Eager Loading 사용
+* 동적(Dynamic) finder 메소드 사용
+* 특정 레코드의 존재여부 검사
+* 액티브 레코드 모델에서 다양한 계산 수행
 
 endprologue.
 
-WARNING. This Guide is based on Rails 3.0. Some of the code shown here will not work in other versions of Rails.
+WARNING. 이 가이드는 레일즈 3.0에 기초합니다. 기존 버전의 레일즈에서는 이 문서의 코드가 동작하지 않을 수 있습니다.
 
-If you're used to using raw SQL to find database records then, generally, you will find that there are better ways to carry out the same operations in Rails. Active Record insulates you from the need to use SQL in most cases.
+WARNING. 이 가이드의 원본은 영문 버전인 "Active Record Query Interface":http://guides.rubyonrails.org/active_record_querying.html 입니다. 번역 과정에서 원본과 차이가 발생할 수 있습니다. 번역본은 원본의 참고로 생각해 주세요.
 
-Code examples throughout this guide will refer to one or more of the following models:
+만약 여러분이 데이터베이스의 레코드를 찾기 위해 표준 SQL을 이용한다면, 일반적으로 여러분은 레일즈로 동일 작업에 대하여 더 좋은 방법을 알게 될 것입니다. 액티브 레코드는 SQL 사용이 필요한 많은 경우에서 여러분을 해방 시킵니다.
 
-TIP: All of the following models use +id+ as the primary key, unless specified otherwise.
+이 가이드의 코드 예제는 다음의 한가지 혹은 그 이상의 모델을 참고합니다.:
+
+TIP: 특별한 경우가 아니면, 아래의 모든 모델은 +id+를 기본키로 사용합니다.
 
 <ruby>
 class Client < ActiveRecord::Base
@@ -45,13 +47,13 @@ class Role < ActiveRecord::Base
 end
 </ruby>
 
-Active Record will perform queries on the database for you and is compatible with most database systems (MySQL, PostgreSQL and SQLite to name a few). Regardless of which database system you're using, the Active Record method format will always be the same.
+액티브 레코드는 데이터베이스 상에서 쿼리를 실행하며 대부분의 데이터베이스와 호환됩니다. (MySQL, PostgresSQL, SQLite). 여러분이 사용하는 데이터베이스가 상이해도, 액티브 레코드 메소드 사용 방식은 항상 동일합니다.
 
-h3. Retrieving Objects from the Database
+h3(#retrieving-objects-from-the-database). 데이터베이스에서 객체 조회하기
 
-To retrieve objects from the database, Active Record provides several finder methods. Each finder method allows you to pass arguments into it to perform certain queries on your database without writing raw SQL.
+데이터베이스에서 객체를 조회하기 위해, 액티브 레코드는 몇가지 찾기(finder) 메소드를 제공합니다. 각 찾기 메소드는 기본 SQL을 사용하지 않고, 데이터베이스에 정확한 쿼리를 수행하기 위해서 인자를 받습니다.
 
-The methods are:
+메소드는 다음과 같습니다.:
 * +where+
 * +select+
 * +group+
@@ -65,111 +67,112 @@ The methods are:
 * +from+
 * +having+
 
-All of the above methods return an instance of <tt>ActiveRecord::Relation</tt>.
+위의 모든 메소드는 <tt>ActiveRecord::Relation</tt>의 인스턴스를 반환합니다.
 
-Primary operation of <tt>Model.find(options)</tt> can be summarized as:
+<tt>Model.find(options)</tt>의 주요 동작은 다음으로 요약됩니다.:
 
-* Convert the supplied options to an equivalent SQL query.
-* Fire the SQL query and retrieve the corresponding results from the database.
-* Instantiate the equivalent Ruby object of the appropriate model for every resulting row.
-* Run +after_find+ callbacks if any.
+* 옵션을 동일 SQL 쿼리로 변환
+* SQL 쿼리를 실행하고, 데이터베이스에서 관련 결과를 검색
+* 모든 결과 열을 수용하는 적절한 루비 객체의 인스턴스를 생성
+* +after_find+ 콜백 실행
 
-h4. Retrieving a Single Object
+h4(retrieving-a-single-object). 단일 객체 검색
 
-Active Record lets you retrieve a single object using three different ways.
+액티브 레코드는 단일 객체 조회를 위해 3가지 다른 방법을 제공합니다.
 
-h5. Using a Primary Key
+h5(#using-a-primary-key). 기본키 이용하기
 
-Using <tt>Model.find(primary_key)</tt>, you can retrieve the object corresponding to the supplied _primary key_ and matching the supplied options (if any). For example:
+<tt>Model.find(primary_key)</tt>를 사용해서, 주어진 _기본키(primary key)_와 조건에 일치하는 객체를 찾을 수 있습니다. 예를들어:
 
 <ruby>
-# Find the client with primary key (id) 10.
+# 기본키(id) 10 을 가지고 client 찾기
 client = Client.find(10)
 => #<Client id: 10, first_name: => "Ryan">
 </ruby>
 
-SQL equivalent of the above is:
+위와 동일한 SQL은 다음과 같습니다.:
 
 <sql>
 SELECT * FROM clients WHERE (clients.id = 10)
 </sql>
 
-<tt>Model.find(primary_key)</tt> will raise an +ActiveRecord::RecordNotFound+ exception if no matching record is found.
+만약 일치하는 레코드가 존재하지 않으면, <tt>Model.find(primary_key)</tt> 호출은 +ActiveRecord::RecordNotFound+을 발생시킵니다.
 
-h5. +first+
+h5(#first). +first+
 
-<tt>Model.first</tt> finds the first record matched by the supplied options. For example:
+<tt>Model.first</tt>는 주어진 조건과 일치하는 첫번째 레코드를 찾습니다. 예를들어:
 
 <ruby>
 client = Client.first
 => #<Client id: 1, first_name: "Lifo">
 </ruby>
 
-SQL equivalent of the above is:
+위와 동일한 SQL은 다음과 같습니다.:
 
 <sql>
 SELECT * FROM clients LIMIT 1
 </sql>
 
-<tt>Model.first</tt> returns +nil+ if no matching record is found. No exception will be raised.
+만약 일치하는 레코드가 없다면, <tt>Model.first</tt>는 +nil+을 반환합니다. 예외가 발생하지는 않습니다.
 
-h5. +last+
+h5(#last). +last+
 
-<tt>Model.last</tt> finds the last record matched by the supplied options. For example:
+<tt>Model.last</tt>는 주어진 조건과 일치하는 마지막 레코드를 찾습니다. 예를들어:
 
 <ruby>
 client = Client.last
 => #<Client id: 221, first_name: "Russel">
 </ruby>
 
-SQL equivalent of the above is:
+위와 동일한 SQL은 다음과 같습니다.:
 
 <sql>
 SELECT * FROM clients ORDER BY clients.id DESC LIMIT 1
 </sql>
 
-<tt>Model.last</tt> returns +nil+ if no matching record is found. No exception will be raised.
+만약 일치하는 레코드가 없다면, <tt>Model.last</tt>는 +nil+을 반환합니다. 예외가 발생하지는 않습니다.
 
-h4. Retrieving Multiple Objects
+h4(#retrieving-multiple-objects). 복수 객체 검색
 
-h5. Using Multiple Primary Keys
+h5(#using-multiple-primary-keys). 복수 기본키 사용하기
 
-<tt>Model.find(array_of_primary_key)</tt> also accepts an array of _primary keys_. An array of all the matching records for the supplied _primary keys_ is returned. For example:
+<tt>Model.find(array_of_primary_key)</tt>는 +기본키(primary key)+의 배열도 허용합니다. 주어진 +여러 기본키+와 일치하는 모든 레코드 배열이 반환됩니다. 예를들어:
 
 <ruby>
-# Find the clients with primary keys 1 and 10.
+# 기본키 1과 0에 해당하는 client 객체 찾기
 client = Client.find(1, 10) # Or even Client.find([1, 10])
 => [#<Client id: 1, first_name: => "Lifo">, #<Client id: 10, first_name: => "Ryan">]
 </ruby>
 
-SQL equivalent of the above is:
+위와 동일한 SQL은 다음과 같습니다.:
 
 <sql>
 SELECT * FROM clients WHERE (clients.id IN (1,10))
 </sql>
 
-WARNING: <tt>Model.find(array_of_primary_key)</tt> will raise an +ActiveRecord::RecordNotFound+ exception unless a matching record is found for <strong>all</strong> of the supplied primary keys.
+WARNING: <tt>Model.find(array_of_primary_key)</tt>는 입력된 여러 기본키 값들과 일치하는 레코드를 <strong>모두</strong> 찾을수 없다면 +ActiveRecord::RecordNotFound+ 예외를 발생합니다. (한개라도 못찾으면 발생)
 
-h4. Retrieving Multiple Objects in Batches
+h4(#retrieving-multiple-objects-in-batches). 일괄 작업(Batch)에서 여러 객체 검색하기
 
-Sometimes you need to iterate over a large set of records. For example to send a newsletter to all users, to export some data, etc.
+때로 많은 양의 레코드를 순회할 필요가 있습니다. 예를들어, 모든 사용자에게 뉴스레터를 보낼때나, 필요한 데이터를 빼낼때(export) 등 말이죠.
 
-The following may seem very straight forward at first:
+다음 코드는 아마도 맨 처음으로 곧바로 생각할 수 있는 방법일 겁니니다.:
 
 <ruby>
-# Very inefficient when users table has thousands of rows.
+# 열의 수가 수천개가 되는 사용자 테이블이라면 매우 비효율적입니다.
 User.all.each do |user|
   NewsLetter.weekly_deliver(user)
 end
 </ruby>
 
+그러나 테이블의 전체 열의 수가 매우 크다면, 위의 접근 방식은 아마도 
 But if the total number of rows in the table is very large, the above approach may vary from being under performant to just plain impossible.
 
-This is because +User.all.each+ makes Active Record fetch _the entire table_, build a model object per row, and keep the entire array in the memory. Sometimes that is just too many objects and demands too much memory.
++User.all.each+는 액티브 레코드로 하여금 _전체 테이블_ 정보를 가지고 오게 만들고, 각 행마다 모델 객체를 만들며 메모리에 전체 배열을 유지하게 하기 때문입니다. 때로는 너무 많은 객체를 만들고 굉장히 많은 매모리를 차지합니다.
 
-h5. +find_each+
+h5(#find_each). +find_each+
 
-To efficiently iterate over a large table, Active Record provides a batch finder method called +find_each+:
+큰 테이블을 효율적으로 순회하기 위해서, 액티브 레코드는 +find_each+로 불리는 일괄 작업용 파인더 메소드를 제공합니다.:
 
 <ruby>
 User.find_each do |user|
@@ -177,11 +180,11 @@ User.find_each do |user|
 end
 </ruby>
 
-*Configuring the batch size*
+*일괄 작업(batch) 크기 설정*
 
-Behind the scenes +find_each+ fetches rows in batches of +1000+ and yields them one by one. The size of the underlying batches is configurable via the +:batch_size+ option.
++find_each+는 기본적으로 1000개 단위로 열을 가지고 와서 하나씩 블록을 실행합니다. 이 단위는 +:batch_size+ 옵션을 통해서 설정할 수 있습니다. 
 
-To fetch +User+ records in batch size of +5000+:
++User+ 레코드를 +5000+개 단위로 가지고 와서 처리하려면:
 
 <ruby>
 User.find_each(:batch_size => 5000) do |user|
@@ -189,7 +192,7 @@ User.find_each(:batch_size => 5000) do |user|
 end
 </ruby>
 
-*Starting batch find from a specific primary key*
+*정해진 기본키 부터 일괄 작업(batch) 조회 시작하기*
 
 Records are fetched in ascending order on the primary key, which must be an integer. The +:start+ option allows you to configure the first ID of the sequence if the lowest is not the one you need. This may be useful for example to be able to resume an interrupted batch process if it saves the last processed ID as a checkpoint.
 
