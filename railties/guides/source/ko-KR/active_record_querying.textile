@@ -194,9 +194,11 @@ end
 
 *정해진 기본키 부터 일괄 작업(batch) 조회 시작하기*
 
-Records are fetched in ascending order on the primary key, which must be an integer. The +:start+ option allows you to configure the first ID of the sequence if the lowest is not the one you need. This may be useful for example to be able to resume an interrupted batch process if it saves the last processed ID as a checkpoint.
+WARNING: +find_each+는 레일즈 2.3.8까지만 존재하며, 이후 버전에서는 제거되었습니다. +find_in_batches+를 사용하세요.
 
-To send newsletters only to users with the primary key starting from +2000+:
+레코드는 정수형 기본키에 의해 오름차순으로 불립니다. +:start+ 옵션으로 최소 기본키를 설정할 수 있으며, 이 옵션은  이미 처리된 마지막 ID를 체크포인트 용도로 저장했다가, 다시 그 지점부터 일괄 작업을 재시작할때 유용하게 사용할 수 있습니다.
+
+기본키 +2000+ 이상의 사용자에게만 뉴스레터를 보내려면:
 
 <ruby>
 User.find_each(:batch_size => 5000, :start => 2000) do |user|
@@ -204,9 +206,9 @@ User.find_each(:batch_size => 5000, :start => 2000) do |user|
 end
 </ruby>
 
-*Additional options*
+*부가 옵션*
 
-+find_each+ accepts the same options as the regular +find+ method. However, +:order+ and +:limit+ are needed internally and hence not allowed to be passed explicitly.
++find_each+는 표준 +find+ 메소드와 동일한 옵션을 허용합니다. 그렇지만 +:order+와 +:limit+는 내부적으로 필요해서 이 옵션들은 명시적으로 넘길수 없습니다.
 
 h5. +find_in_batches+
 
